@@ -10,10 +10,11 @@ import { NavigationContainer } from '@react-navigation/native';
 
 const theme = {
   ...DefaultTheme,
+  roundness: 2,
   colors: {
     ...DefaultTheme.colors,
-    primary: 'tomato',
-    accent: 'yellow',
+    primary: '#3498db',
+    accent: '#f1c40f',
   },
 };
 
