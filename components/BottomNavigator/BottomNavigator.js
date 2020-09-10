@@ -11,14 +11,21 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Diary from '../../screens/Diary';
 import MyGoal from '../../screens/MyGoal';
 import Nutrition from '../../screens/Nutrition';
-import StackNavigator from '../StackNavigator/StackNavigator';
+import { useTheme } from '@react-navigation/native';
+import { withTheme } from 'react-native-paper';
 
 const Tab = createMaterialBottomTabNavigator();
 
-const BottomNavigator = () => {
+const BottomNavigator = (props) => {
+  const { colors } = props.theme;
+
   return (
     <Tab.Navigator
-      initialRouteName="diary"
+      initialRouteName="diary-tab"
+      activeColor={colors.primary}
+      barStyle={{ backgroundColor: colors.white }}
+      shifting={true}
+      
       >
       <Tab.Screen
         name="diary-tab"
@@ -26,8 +33,9 @@ const BottomNavigator = () => {
         options={{
           tabBarLabel: 'Diary',
           tabBarIcon: ({ color }) => (
-            <Icon name="notebook" color={color} size={20} />
+            <Icon name="notebook" color={color} size={15} />
           ),
+          title: 'Diary',
         }}
       />
       <Tab.Screen
@@ -36,8 +44,9 @@ const BottomNavigator = () => {
         options={{
           tabBarLabel: 'My Goal',
           tabBarIcon: ({ color }) => (
-            <Icon name="trophy" color={color} size={20} />
+            <Icon name="trophy" color={color} size={15} />
           ),
+          title: 'My Goal',
         }}
       />
       <Tab.Screen
@@ -46,13 +55,13 @@ const BottomNavigator = () => {
         options={{
           tabBarLabel: 'Nutrition',
           tabBarIcon: ({ color }) => (
-            <Icon name="nutrition" color={color} size={20} />
+            <Icon name="nutrition" color={color} size={15} />
           ),
+          title: 'Nutrition',
         }}
       />
-
     </Tab.Navigator>
   );
 };
 
-export default BottomNavigator;
+export default withTheme(BottomNavigator);

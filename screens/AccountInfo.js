@@ -11,7 +11,7 @@ const AccountInfo = ({ navigation }) => {
 const { container } = styles
  return(
   <View style={container}>
-    <Text>AccountInfo</Text>
+    <Text>Account Info</Text>
   </View>
   )
 }

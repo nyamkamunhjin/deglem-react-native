@@ -9,8 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
  * @function DrawerContent
  **/
 const DrawerContent = (props) => {
-
-  const {navigation} = props;
+  const { navigation } = props;
   return (
     <View style={styles.drawerContainer}>
       <DrawerContentScrollView {...props}>
@@ -23,7 +22,7 @@ const DrawerContent = (props) => {
             size={50}
           />
           <View style={{ flexDirection: 'column' }}>
-            <Title style={styles.title}>Mangoni juus uuyaa</Title>
+            <Title style={styles.title}>Muknhjin Nyamdorj</Title>
             <Caption style={styles.caption}>@nyamkamunhjin</Caption>
           </View>
         </View>
@@ -44,7 +43,6 @@ const DrawerContent = (props) => {
             label="My Goal"
             onPress={() => {
               navigation.navigate('mygoal-tab');
-
             }}
           />
           <Drawer.Item
@@ -54,7 +52,6 @@ const DrawerContent = (props) => {
             label="Nutrition"
             onPress={() => {
               navigation.navigate('nutrition-tab');
-
             }}
           />
           <Drawer.Item
@@ -64,7 +61,6 @@ const DrawerContent = (props) => {
             label="Edit Info"
             onPress={() => {
               navigation.navigate('account-info');
-
             }}
           />
         </Drawer.Section>
