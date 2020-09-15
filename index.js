@@ -37,10 +37,11 @@ const theme = {
   fonts: configureFonts(fontConfig),
   colors: {
     ...DefaultTheme.colors,
-    primary: '#ff8f00',
-    accent: '#c56000',
+    primary: '#ffa202',
+    accent: '#85cdff',
+    triadic: '#8bff58',
     white: '#ffffff',
-    icons: '',
+    // icons: '',
     // text: '#ffffff'
   },
 };
