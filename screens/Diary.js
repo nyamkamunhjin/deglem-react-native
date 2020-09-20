@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text, withTheme } from 'react-native-paper';
-import * as Progress from 'react-native-progress';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import FoodTable from '../components/FoodTable/FoodTable';
+import Swiper from 'react-native-swiper';
+import CalendarSwipe from '../components/CalendarSwipe/CalendarSwipe';
+import DiaryProgress from '../components/DiaryProgress/DiaryProgress';
 
 /**
  * @author
@@ -21,7 +23,7 @@ const testData = {
       food: {
         serving: { size: 100, unit: 'gram', servingPerContainer: 1 },
         _id: '5f6082d1467bac0f6bd69686',
-        name: 'Milk, human',
+        name: 'Milk, Cow',
         calories: 70,
         protein: 1.03,
         totalCarbohydrates: 6.89,
@@ -78,28 +80,17 @@ const testData = {
 
 const Diary = ({ navigation, theme }) => {
   const { colors, fonts } = theme;
-  const [current, setCurrent] = useState(testData)
+  const [current, setCurrent] = useState(testData);
   const [diaries, setDiaries] = useState([testData, testData, testData]);
 
   const getDiaryByDate = (date, diaries) => {
-    diaries.filter(diary => {
+    diaries.filter((diary) => {
       return diary.date === date;
-    })
-  }
-
+    });
+  };
 
   const styles = StyleSheet.create({
-    container: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      textAlign: 'center',
-      margin: 5,
-      borderRadius: 10,
-    },
-    circles: {
-      margin: 10,
-      // height: 500
-    },
+    
     addButton: {
       alignSelf: 'flex-end',
       width: 150,
@@ -108,49 +99,29 @@ const Diary = ({ navigation, theme }) => {
     },
   });
 
-  const {
-    container,
-    circles,
-  } = styles;
+  const { container, circles, date } = styles;
 
-  const [progress, setProgress] = useState(0);
+  
   useEffect(() => {
-    setProgress(2400 / 2500);
   }, []);
 
   return (
-    <View>
-      <ScrollView>
-        <View style={container}>
-          <Progress.Circle
-            // indeterminate={true}
-            style={circles}
-            progress={progress}
-            size={150}
-            strokeCap={'round'}
-            allowFontScaling={true}
-            formatText={() => (
-              <Text
-                style={{ fontFamily: fonts.light.fontFamily, fontSize: 15 }}>
-                567/2500
-              </Text>
-            )}
-            showsText={true}
-            thickness={5}
-            animated={true}
-            color={colors.triadic}
-            // unfilledColor={colors.disabled}
-            borderWidth={0}
-            endAngle={0.5}
-            // fill={colors.triadic}
+    <React.Fragment>
+      <View>
+        <CalendarSwipe />
+        <DiaryProgress progress={2400/2500} />
+        <ScrollView>
+          <FoodTable name="Breakfast" foods={current.breakfast} />
+          <FoodTable name="Lunch" foods={current.lunch} />
+          <FoodTable name="Dinner" foods={current.dinner} />
+          <FoodTable
+            name="Snacks"
+            backgroundColor={colors.triadic}
+            foods={current.snacks}
           />
-        </View>
-        <FoodTable name="Breakfast" foods={current.breakfast}/>
-        <FoodTable name="Lunch" foods={current.lunch}/>
-        <FoodTable name="Dinner" foods={current.dinner}/>
-        <FoodTable name="Snacks" backgroundColor={colors.triadic} foods={current.snacks}/>
-      </ScrollView>
-    </View>
+        </ScrollView>
+      </View>
+    </React.Fragment>
   );
 };
 
