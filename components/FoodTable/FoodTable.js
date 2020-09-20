@@ -15,24 +15,25 @@ const FoodTable = (props) => {
   const { foods } = props;
 
   const styles = StyleSheet.create({
-    container: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      textAlign: 'center',
-
-      margin: 5,
-      borderRadius: 10,
-    },
     foodTable: {
       backgroundColor: backgroundColor || colors.accent,
       margin: 5,
       borderRadius: 10,
+      shadowOffset: {
+        width: 1,
+        height: 1,
+      },
+      shadowColor: '#000',
+      shadowOpacity: 1,
+      shadowRadius: 1,
+      elevation: 1,
     },
     addButton: {
       alignSelf: 'flex-end',
       width: 150,
       textAlign: 'right',
       borderBottomRightRadius: 10,
+      overflow: 'hidden',
     },
   });
 
@@ -45,7 +46,7 @@ const FoodTable = (props) => {
           <DataTable.Title>{name}</DataTable.Title>
           <DataTable.Title numeric>Serving</DataTable.Title>
           <DataTable.Title numeric>
-            {foods.reduce((acc, obj) => acc + obj.food.calories, 0)}
+            {parseInt(foods.reduce((acc, obj) => acc + obj.food.calories * obj.serving, 0))}
           </DataTable.Title>
         </DataTable.Header>
         {foods.map((data) => {
@@ -55,7 +56,7 @@ const FoodTable = (props) => {
               onPress={() => console.log('pressed Row')}>
               <DataTable.Cell>{data.food.name}</DataTable.Cell>
               <DataTable.Cell numeric>{data.serving}</DataTable.Cell>
-              <DataTable.Cell numeric>{data.food.calories}</DataTable.Cell>
+              <DataTable.Cell numeric>{parseInt(data.food.calories * data.serving)}</DataTable.Cell>
             </DataTable.Row>
           );
         })}
