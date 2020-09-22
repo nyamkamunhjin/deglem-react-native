@@ -39,24 +39,34 @@ const FoodTable = (props) => {
 
   const { foodTable, addButton } = styles;
 
+  const countCalories = (foods) => {
+    if (foods) {
+      return parseInt(
+        foods.reduce((acc, obj) => acc + obj.food.calories * obj.serving, 0),
+      );
+    } else {
+      return 0;
+    }
+  };
+
   return (
     <View style={foodTable}>
       <DataTable>
         <DataTable.Header>
           <DataTable.Title>{name}</DataTable.Title>
           <DataTable.Title numeric>Serving</DataTable.Title>
-          <DataTable.Title numeric>
-            {parseInt(foods.reduce((acc, obj) => acc + obj.food.calories * obj.serving, 0))}
-          </DataTable.Title>
+          <DataTable.Title numeric>{countCalories(foods)}</DataTable.Title>
         </DataTable.Header>
-        {foods.map((data) => {
+        {foods && foods.map((data) => {
           return (
             <DataTable.Row
               key={data._id}
               onPress={() => console.log('pressed Row')}>
               <DataTable.Cell>{data.food.name}</DataTable.Cell>
               <DataTable.Cell numeric>{data.serving}</DataTable.Cell>
-              <DataTable.Cell numeric>{parseInt(data.food.calories * data.serving)}</DataTable.Cell>
+              <DataTable.Cell numeric>
+                {parseInt(data.food.calories * data.serving)}
+              </DataTable.Cell>
             </DataTable.Row>
           );
         })}

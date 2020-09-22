@@ -24,9 +24,7 @@ const BottomNavigator = (props) => {
       initialRouteName="diary-tab"
       activeColor={colors.primary}
       barStyle={{ backgroundColor: colors.white }}
-      shifting={true}
-      
-      >
+      shifting={true}>
       <Tab.Screen
         name="diary-tab"
         component={Diary}

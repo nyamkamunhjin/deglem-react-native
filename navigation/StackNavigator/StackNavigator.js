@@ -6,7 +6,7 @@ import Diary from '../../screens/Diary';
 import AccountInfo from '../../screens/AccountInfo';
 import BottomNavigator from '../BottomNavigator/BottomNavigator';
 import { withTheme } from 'react-native-paper';
-import Header from '../Header/Header';
+import Header from '../../components/Header/Header';
 import { getHeaderTitle } from '../../functions/getHeaderTitle';
 
 /**

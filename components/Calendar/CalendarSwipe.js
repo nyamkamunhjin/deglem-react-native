@@ -10,7 +10,7 @@ const CalendarSwipe = ({
   arrowLeftOnPress,
   arrowRightOnPress,
   dateOnPress,
-  date
+  date,
 }) => {
   return (
     <View style={styles.date}>

@@ -5,9 +5,12 @@ import React from 'react';
 import { AppRegistry, StatusBar } from 'react-native';
 import App from './App';
 import { name as appName } from './app.json';
-import { DefaultTheme, Provider as PaperProvider, configureFonts } from 'react-native-paper';
+import {
+  DefaultTheme,
+  Provider as PaperProvider,
+  configureFonts,
+} from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
-
 
 const fontConfig = {
   default: {
@@ -30,10 +33,10 @@ const fontConfig = {
   },
 };
 
-const theme = {
+export const theme = {
   ...DefaultTheme,
   roundness: 2,
-  myOwnProperty: true, 
+  myOwnProperty: true,
   fonts: configureFonts(fontConfig),
   colors: {
     ...DefaultTheme.colors,
@@ -46,15 +49,15 @@ const theme = {
   },
 };
 
-export default function Main() {
+function Main() {
   return (
     <PaperProvider theme={theme}>
       <NavigationContainer>
-      <StatusBar backgroundColor={theme.colors.primary} />
+        <StatusBar backgroundColor={theme.colors.primary} />
         <App />
       </NavigationContainer>
     </PaperProvider>
   );
 }
 
-AppRegistry.registerComponent(appName, () => (Main));
+AppRegistry.registerComponent(appName, () => Main);

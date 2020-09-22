@@ -1,0 +1,125 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components DiaryProgress render test 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "borderRadius": 10,
+      "justifyContent": "center",
+      "margin": 5,
+      "textAlign": "center",
+    }
+  }
+>
+  <View
+    indeterminateAnimationDuration={1000}
+    style={
+      Array [
+        Object {
+          "backgroundColor": "transparent",
+          "overflow": "hidden",
+        },
+        Object {
+          "margin": 10,
+        },
+      ]
+    }
+  >
+    <ARTSurfaceView
+      style={
+        Array [
+          Object {
+            "transform": Array [
+              Object {
+                "rotate": "0deg",
+              },
+            ],
+          },
+          Object {
+            "height": 150,
+            "width": 150,
+          },
+        ]
+      }
+    >
+      <ARTShape
+        d={
+          Array [
+            0,
+            75,
+            2.5,
+            2,
+            75,
+            2.5,
+          ]
+        }
+        fill={null}
+        opacity={1}
+        stroke="#007aff"
+        strokeCap={1}
+        strokeDash={null}
+        strokeJoin={1}
+        strokeWidth={5}
+        transform={
+          Array [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+          ]
+        }
+      />
+    </ARTSurfaceView>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "borderRadius": 70,
+          "height": 140,
+          "justifyContent": "center",
+          "left": 5,
+          "position": "absolute",
+          "top": 5,
+          "width": 140,
+        }
+      }
+    >
+      <Text
+        allowFontScaling={true}
+        style={
+          Array [
+            Object {
+              "color": "rgba(0, 122, 255, 1)",
+              "fontSize": 31.11111111111111,
+              "fontWeight": "300",
+            },
+            undefined,
+          ]
+        }
+      >
+        <Text
+          style={
+            Array [
+              Object {
+                "color": "#000000",
+                "fontFamily": "System",
+                "fontWeight": "400",
+                "textAlign": "left",
+              },
+              Object {
+                "fontFamily": "System",
+                "fontSize": 15,
+              },
+            ]
+          }
+        >
+          567/2500
+        </Text>
+      </Text>
+    </View>
+  </View>
+</View>
+`;

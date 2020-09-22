@@ -14,6 +14,6 @@ const getHeaderTitle = (route) => {
     case 'nutrition-tab':
       return 'Nutrition';
   }
-}
+};
 
-export { getHeaderTitle }
+export { getHeaderTitle };

@@ -7,11 +7,11 @@ import { Text, withTheme } from 'react-native-paper';
  * @author
  * @function DiaryProgress
  **/
-const DiaryProgress = ({ theme, progress}) => {
+const DiaryProgress = ({ theme, progress }) => {
   const { colors, fonts } = theme;
   const { container, circles } = styles;
 
-
+  const test = (num) => num * 2;
 
   return (
     <View style={container}>
