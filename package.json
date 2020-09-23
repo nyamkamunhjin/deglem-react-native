@@ -7,7 +7,9 @@
     "ios": "react-native run-ios",
     "start": "react-native start --host 127.0.0.1 --reset-cache",
     "start-wsl2": "npx react-native start ",
-    "android-wsl2": "npx react-native run-android --variant=debug --deviceId emulator-5554",
+    "android-wsl2-emu": "npx react-native run-android --variant=debug --deviceId emulator-5554",
+    "android-wsl2": "npx react-native run-android --variant=debug --deviceId HT6CT0201672",
+
     "test": "jest",
     "lint": "eslint ."
   },

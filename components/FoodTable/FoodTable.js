@@ -57,10 +57,10 @@ const FoodTable = (props) => {
           <DataTable.Title numeric>Serving</DataTable.Title>
           <DataTable.Title numeric>{countCalories(foods)}</DataTable.Title>
         </DataTable.Header>
-        {foods && foods.map((data) => {
+        {foods && foods.map((data, index) => {
           return (
             <DataTable.Row
-              key={data._id}
+              key={index}
               onPress={() => console.log('pressed Row')}>
               <DataTable.Cell>{data.food.name}</DataTable.Cell>
               <DataTable.Cell numeric>{data.serving}</DataTable.Cell>

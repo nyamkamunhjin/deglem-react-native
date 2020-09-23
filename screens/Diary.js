@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Modal, Portal, Text, withTheme } from 'react-native-paper';
 
@@ -8,6 +8,8 @@ import CalendarSwipe from '../components/Calendar/CalendarSwipe';
 import DiaryProgress from '../components/DiaryProgress/DiaryProgress';
 import { Calendar, CalendarList } from 'react-native-calendars';
 import axios from 'axios';
+import { formatDate } from '../functions/functions';
+
 /**
  * @author
  * @function Diary
@@ -22,6 +24,9 @@ const Diary = ({ navigation, theme }) => {
     '2020-09-22': { selected: true },
   });
 
+  // refs
+  const swiper = useRef(null);
+
   const handleDateSelect = (day) => {
     // console.log(day)
     let pair = {};
@@ -33,6 +38,21 @@ const Diary = ({ navigation, theme }) => {
     setShowModal(false);
   };
 
+  const handleCalendarButton = (date, to) => {
+    let newDate = new Date(date);
+    newDate.setDate(newDate.getDate() + to);
+    newDate = formatDate(newDate)
+    
+    let pair = {};
+    pair[newDate] = { selected: true };
+    // console.log(pair);
+    setSelectedDate(pair);
+    setDiaryByDate(newDate, diaries);
+
+    // swipe animation
+    swiper.current.scrollBy(to)
+  };
+
   const setDiaryByDate = (date, diaries) => {
     // console.log(diaries);
     const diary = diaries.find((diary) => {
@@ -40,7 +60,7 @@ const Diary = ({ navigation, theme }) => {
     });
     console.log('filtering diary: ', diary);
     if (diary) setCurrent(diary);
-    else setCurrent({})
+    else setCurrent({});
     console.log('current:', current);
   };
 
@@ -61,30 +81,42 @@ const Diary = ({ navigation, theme }) => {
 
   return (
     <React.Fragment>
-      <View>
-        <Portal>
-          <Modal visible={showModal} onDismiss={() => setShowModal(false)}>
-            <CalendarList
-              horizontal={true}
-              pagingEnabled={true}
-              // current={selectedDate}
-              markedDates={selectedDate}
-              onDayPress={handleDateSelect}
-              // markingType='period'
-              theme={{
-                selectedDayBackgroundColor: colors.primary,
-                selectedDayTextColor: '#ffffff',
-              }}
-            />
-          </Modal>
-        </Portal>
-        <CalendarSwipe
-          arrowLeftOnPress={null}
-          arrowRightOnPress={null}
-          dateOnPress={() => setShowModal(true)}
-          date={Object.keys(selectedDate)[0]}
-        />
-        <ScrollView style={{ marginBottom: 50 }}>
+      <Portal>
+        <Modal visible={showModal} onDismiss={() => setShowModal(false)}>
+          <CalendarList
+            horizontal={true}
+            pagingEnabled={true}
+            // current={selectedDate}
+            markedDates={selectedDate}
+            onDayPress={handleDateSelect}
+            // markingType='period'
+            theme={{
+              selectedDayBackgroundColor: colors.primary,
+              selectedDayTextColor: '#ffffff',
+            }}
+          />
+        </Modal>
+      </Portal>
+      <CalendarSwipe
+        arrowLeftOnPress={() => handleCalendarButton(Object.keys(selectedDate)[0], -1)}
+        arrowRightOnPress={() => handleCalendarButton(Object.keys(selectedDate)[0], 1)}
+        dateOnPress={() => setShowModal(true)}
+        date={Object.keys(selectedDate)[0]}
+      />
+      <Swiper
+        showsButtons={false}
+        showsPagination={false}
+        bounces={true}
+        removeClippedSubviews={true}
+        ref={swiper}
+        scrollEnabled={false}
+        // pagingEnabled={false}
+        // loadMinimal={true}
+        // loop={true}
+        // style={{ backgroundColor: 'green' }}
+        onIndexChanged={(index) => console.log(index)}
+      >
+        <ScrollView>
           <DiaryProgress progress={2400 / 2500} />
           <FoodTable name="Breakfast" foods={current.breakfast} />
           <FoodTable name="Lunch" foods={current.lunch} />
@@ -95,7 +127,18 @@ const Diary = ({ navigation, theme }) => {
             foods={current.snacks}
           />
         </ScrollView>
-      </View>
+        <ScrollView>
+          <DiaryProgress progress={2400 / 2500} />
+          <FoodTable name="Breakfast" foods={current.breakfast} />
+          <FoodTable name="Lunch" foods={current.lunch} />
+          <FoodTable name="Dinner" foods={current.dinner} />
+          <FoodTable
+            name="Snacks"
+            backgroundColor={colors.triadic}
+            foods={current.snacks}
+          />
+        </ScrollView>
+      </Swiper>
     </React.Fragment>
   );
 };
