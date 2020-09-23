@@ -9,7 +9,6 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import DiaryProgress from '../components/DiaryProgress/DiaryProgress';
 
-
 describe('components', () => {
   test('DiaryProgress render test', async () => {
     const tree = render(<DiaryProgress />);
