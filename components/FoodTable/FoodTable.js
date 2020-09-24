@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { withTheme, DataTable, Button } from 'react-native-paper';
-import * as Progress from 'react-native-progress';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { countCalories } from '../../functions/functions';
 
 /**
  * @author
@@ -38,17 +38,6 @@ const FoodTable = (props) => {
   });
 
   const { foodTable, addButton } = styles;
-
-  const countCalories = (foods) => {
-    if (foods) {
-      return parseInt(
-        foods.reduce((acc, obj) => acc + obj.food.calories * obj.serving, 0),
-      );
-    } else {
-      return 0;
-    }
-  };
-
   return (
     <View style={foodTable}>
       <DataTable>
@@ -62,6 +51,7 @@ const FoodTable = (props) => {
             return (
               <DataTable.Row
                 key={index}
+                onLongPress={props.onLongPress || null}
                 onPress={() => console.log('pressed Row')}>
                 <DataTable.Cell>{data.food.name}</DataTable.Cell>
                 <DataTable.Cell numeric>{data.serving}</DataTable.Cell>

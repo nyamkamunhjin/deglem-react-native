@@ -1,41 +1,39 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { Modal, Portal, Text, withTheme } from 'react-native-paper';
+import React, { useEffect, useState } from 'react';
+import { ScrollView } from 'react-native';
+import { Dialog, Portal, withTheme, Button } from 'react-native-paper';
 
 import FoodTable from '../components/FoodTable/FoodTable';
-import Swiper from 'react-native-swiper';
+
 import CalendarSwipe from '../components/Calendar/CalendarSwipe';
 import DiaryProgress from '../components/DiaryProgress/DiaryProgress';
-import { Calendar, CalendarList } from 'react-native-calendars';
+import { Calendar } from 'react-native-calendars';
 import axios from 'axios';
-import { formatDate } from '../functions/functions';
+import { countCalories, formatDate } from '../functions/functions';
 
 /**
  * @author
  * @function Diary
  **/
 
-const Diary = ({ navigation, theme }) => {
+const Diary = ({ theme }) => {
   const { colors, fonts } = theme;
   const [current, setCurrent] = useState({});
   const [diaries, setDiaries] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  const [showCalendarModal, setShowCalendarModal] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
   const [selectedDate, setSelectedDate] = useState({
     '2020-09-22': { selected: true },
   });
-
-  // refs
-  // const swiper = useRef(null);
+  const [totalCalories, setTotalCalories] = useState(0);
 
   const handleDateSelect = (day) => {
-    // console.log(day)
     let pair = {};
     pair[day.dateString] = { selected: true };
-    // console.log(pair);
-    setSelectedDate(pair);
-    // setDiaryByDate(day.dateString, diaries);
 
-    setShowModal(false);
+    setSelectedDate(pair);
+
+    setShowCalendarModal(false);
   };
 
   const handleCalendarButton = (date, to) => {
@@ -45,13 +43,24 @@ const Diary = ({ navigation, theme }) => {
 
     let pair = {};
     pair[newDate] = { selected: true };
-    // console.log(pair);
-    setSelectedDate(pair);
-    // setDiaryByDate(newDate, diaries);
 
-    // swipe animation
-    // swiper.current.scrollBy(to);
+    setSelectedDate(pair);
   };
+
+  useEffect(() => {
+    const calculateTotalCalories = (today) => {
+      const { breakfast, lunch, dinner, snacks } = today;
+
+      return (
+        countCalories(breakfast) +
+        countCalories(lunch) +
+        countCalories(dinner) +
+        countCalories(snacks)
+      );
+    };
+
+    setTotalCalories(calculateTotalCalories(current));
+  }, [current]);
 
   useEffect(() => {
     const setDiaryByDate = (date, diaries) => {
@@ -84,7 +93,9 @@ const Diary = ({ navigation, theme }) => {
   return (
     <React.Fragment>
       <Portal>
-        <Modal visible={showModal} onDismiss={() => setShowModal(false)}>
+        <Dialog
+          visible={showCalendarModal}
+          onDismiss={() => setShowCalendarModal(false)}>
           <Calendar
             // horizontal={true}
             pagingEnabled={true}
@@ -98,8 +109,18 @@ const Diary = ({ navigation, theme }) => {
             }}
             enableSwipeMonths={true}
           />
-        </Modal>
+        </Dialog>
+        <Dialog
+          visible={showDeleteDialog}
+          onDismiss={() => setShowDeleteDialog(false)}>
+          <Dialog.Title>Diary</Dialog.Title>
+          <Dialog.Actions>
+            <Button onPress={() => console.log('Cancel')}>Cancel</Button>
+            <Button onPress={() => console.log('Remove')}>Remove</Button>
+          </Dialog.Actions>
+        </Dialog>
       </Portal>
+
       <CalendarSwipe
         arrowLeftOnPress={() =>
           handleCalendarButton(Object.keys(selectedDate)[0], -1)
@@ -107,19 +128,31 @@ const Diary = ({ navigation, theme }) => {
         arrowRightOnPress={() =>
           handleCalendarButton(Object.keys(selectedDate)[0], 1)
         }
-        dateOnPress={() => setShowModal(true)}
+        dateOnPress={() => setShowCalendarModal(true)}
         date={Object.keys(selectedDate)[0]}
       />
-
       <ScrollView>
-        <DiaryProgress progress={2400 / 2500} />
-        <FoodTable name="Breakfast" foods={current.breakfast} />
-        <FoodTable name="Lunch" foods={current.lunch} />
-        <FoodTable name="Dinner" foods={current.dinner} />
+        <DiaryProgress progress={totalCalories} limit={2500} />
+        <FoodTable
+          name="Breakfast"
+          foods={current.breakfast}
+          onLongPress={() => setShowDeleteDialog(true)}
+        />
+        <FoodTable
+          name="Lunch"
+          foods={current.lunch}
+          onLongPress={() => setShowDeleteDialog(true)}
+        />
+        <FoodTable
+          name="Dinner"
+          foods={current.dinner}
+          onLongPress={() => setShowDeleteDialog(true)}
+        />
         <FoodTable
           name="Snacks"
           backgroundColor={colors.triadic}
           foods={current.snacks}
+          onLongPress={() => setShowDeleteDialog(true)}
         />
       </ScrollView>
     </React.Fragment>

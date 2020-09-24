@@ -14,4 +14,14 @@ function formatDate(date) {
   return [year, month, day].join('-');
 }
 
-export { formatDate };
+const countCalories = (foods) => {
+  if (foods) {
+    return parseInt(
+      foods.reduce((acc, obj) => acc + obj.food.calories * obj.serving, 0),
+    );
+  } else {
+    return 0;
+  }
+};
+
+export { formatDate, countCalories };

@@ -50,6 +50,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 5,
     height: 50,
+    borderRadius: 10,
+    margin: 5,
     shadowOffset: {
       width: 0,
       height: 1,
