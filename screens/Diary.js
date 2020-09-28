@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { Dialog, Portal, withTheme, Button } from 'react-native-paper';
-
 import FoodTable from '../components/FoodTable/FoodTable';
-
 import CalendarSwipe from '../components/Calendar/CalendarSwipe';
 import DiaryProgress from '../components/DiaryProgress/DiaryProgress';
 import { Calendar } from 'react-native-calendars';
@@ -17,7 +15,7 @@ import { BACKEND_URL } from '../env.config';
  **/
 
 const Diary = ({ navigation, theme }) => {
-  const { colors, fonts } = theme;
+  const { colors } = theme;
   const [current, setCurrent] = useState({});
   const [diaries, setDiaries] = useState([]);
   const [showCalendarModal, setShowCalendarModal] = useState(false);
@@ -70,13 +68,13 @@ const Diary = ({ navigation, theme }) => {
       const diary = diaries.find((data) => {
         return formatDate(data.date) === date;
       });
-      console.log('filtering diary: ', diary);
+      // console.log('filtering diary: ', diary);
       if (diary) {
         setCurrent(diary);
       } else {
         setCurrent({});
       }
-      console.log('current:', current);
+      // console.log('current:', current);
     };
 
     setDiaryByDate(Object.keys(selectedDate)[0], diaries);
@@ -86,12 +84,14 @@ const Diary = ({ navigation, theme }) => {
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios.get(
-        `${BACKEND_URL}/api/users/dailylog?user_id=5f607f85a586e00e416f2124&range=2&date=2020-09-25`,
+        `${BACKEND_URL}/api/users/dailylog?user_id=5f607f85a586e00e416f2124&range=2&date=${
+          Object.keys(selectedDate)[0]
+        }`,
       );
       setDiaries(result.data);
     };
     fetchData();
-  }, []);
+  }, [selectedDate]);
 
   return (
     <React.Fragment>
@@ -140,26 +140,30 @@ const Diary = ({ navigation, theme }) => {
           name="Breakfast"
           foods={current.breakfast}
           onLongPress={() => setShowDeleteDialog(true)}
-          addFood={() => navigation.navigate('add-food')}
+          selectedDate={Object.keys(selectedDate)[0]}
+          // addFood={() => navigation.navigate('add-food')}
         />
         <FoodTable
           name="Lunch"
           foods={current.lunch}
           onLongPress={() => setShowDeleteDialog(true)}
-          addFood={() => navigation.navigate('add-food')}
+          selectedDate={Object.keys(selectedDate)[0]}
+          // addFood={() => navigation.navigate('add-food')}
         />
         <FoodTable
           name="Dinner"
           foods={current.dinner}
           onLongPress={() => setShowDeleteDialog(true)}
-          addFood={() => navigation.navigate('add-food')}
+          selectedDate={Object.keys(selectedDate)[0]}
+          // addFood={() => navigation.navigate('add-food')}
         />
         <FoodTable
           name="Snacks"
           backgroundColor={colors.triadic}
           foods={current.snacks}
           onLongPress={() => setShowDeleteDialog(true)}
-          addFood={() => navigation.navigate('add-food')}
+          selectedDate={Object.keys(selectedDate)[0]}
+          // addFood={() => navigation.navigate('add-food')}
         />
       </ScrollView>
     </React.Fragment>

@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { withTheme, DataTable, Button } from 'react-native-paper';
@@ -10,7 +11,8 @@ import { countCalories } from '../../functions/functions';
  **/
 
 const FoodTable = (props) => {
-  const { name, backgroundColor, addFood } = props;
+  const { name, backgroundColor } = props;
+  const navigation = useNavigation();
   const { colors } = props.theme;
   const { foods } = props;
 
@@ -67,7 +69,12 @@ const FoodTable = (props) => {
         style={addButton}
         mode="contained"
         icon={({ color }) => <Icon name="plus" size={15} color={color} />}
-        onPress={addFood}
+        onPress={() =>
+          navigation.navigate('add-food', {
+            name,
+            selectedDate: props.selectedDate,
+          })
+        }
         uppercase={false}>
         Add
       </Button>

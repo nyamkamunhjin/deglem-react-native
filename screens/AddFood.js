@@ -16,6 +16,7 @@ import { BACKEND_URL } from '../env.config';
  **/
 const AddFood = (props) => {
   const { colors } = props.theme;
+  const { navigation } = props;
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResult, setSearchResult] = useState([]);
@@ -68,7 +69,13 @@ const AddFood = (props) => {
             searchResult.map((res, index) => (
               <DataTable.Row
                 key={index}
-                onPress={() => console.log('pressed Row')}>
+                onPress={() =>
+                  navigation.navigate('edit-food', {
+                    addTo: props.route.params.name,
+                    selectedDate: props.route.params.selectedDate,
+                    ...res,
+                  })
+                }>
                 <DataTable.Cell>{res.document.name}</DataTable.Cell>
                 <DataTable.Cell numeric>
                   {`${res.document.serving.size} ${res.document.serving.unit}`}
