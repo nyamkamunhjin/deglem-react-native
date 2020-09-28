@@ -11,7 +11,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Diary from '../../screens/Diary';
 import MyGoal from '../../screens/MyGoal';
 import Nutrition from '../../screens/Nutrition';
-import { useTheme } from '@react-navigation/native';
 import { withTheme } from 'react-native-paper';
 
 const Tab = createMaterialBottomTabNavigator();

@@ -10,7 +10,7 @@ import { countCalories } from '../../functions/functions';
  **/
 
 const FoodTable = (props) => {
-  const { name, backgroundColor } = props;
+  const { name, backgroundColor, addFood } = props;
   const { colors } = props.theme;
   const { foods } = props;
 
@@ -67,7 +67,7 @@ const FoodTable = (props) => {
         style={addButton}
         mode="contained"
         icon={({ color }) => <Icon name="plus" size={15} color={color} />}
-        onPress={() => console.log('food')}
+        onPress={addFood}
         uppercase={false}>
         Add
       </Button>
