@@ -53,6 +53,7 @@ const EditFood = ({ route, navigation }) => {
       .then((res) => {
         console.log(res.data);
         navigation.dispatch(StackActions.popToTop());
+        navigation.navigate('Diary');
       })
       .catch((err) => {
         console.log(err);

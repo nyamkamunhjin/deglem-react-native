@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { Dialog, Portal, withTheme, Button } from 'react-native-paper';
@@ -8,6 +9,7 @@ import { Calendar } from 'react-native-calendars';
 import axios from 'axios';
 import { countCalories, formatDate } from '../functions/functions';
 import { BACKEND_URL } from '../env.config';
+import { useNavigationState } from '@react-navigation/native';
 
 /**
  * @author
@@ -22,7 +24,7 @@ const Diary = ({ navigation, theme }) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const [selectedDate, setSelectedDate] = useState({
-    '2020-09-25': { selected: true },
+    '2020-10-02': { selected: true },
   });
   const [totalCalories, setTotalCalories] = useState(0);
 
@@ -46,6 +48,25 @@ const Diary = ({ navigation, theme }) => {
     setSelectedDate(pair);
   };
 
+  // handle refresh
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('refreshed');
+      const fetchData = async () => {
+        const result = await axios.get(
+          `${BACKEND_URL}/api/users/dailylog?user_id=5f607f85a586e00e416f2124&range=2&date=${
+            Object.keys(selectedDate)[0]
+          }`,
+        );
+        setDiaries(result.data);
+      };
+      fetchData();
+    });
+
+    return unsubscribe;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigation]);
+
   useEffect(() => {
     const calculateTotalCalories = (today) => {
       const { breakfast, lunch, dinner, snacks } = today;
@@ -64,22 +85,20 @@ const Diary = ({ navigation, theme }) => {
   useEffect(() => {
     // eslint-disable-next-line no-shadow
     const setDiaryByDate = (date, diaries) => {
-      // console.log(diaries);
       const diary = diaries.find((data) => {
         return formatDate(data.date) === date;
       });
-      // console.log('filtering diary: ', diary);
+
       if (diary) {
         setCurrent(diary);
       } else {
         setCurrent({});
       }
-      // console.log('current:', current);
     };
 
     setDiaryByDate(Object.keys(selectedDate)[0], diaries);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDate, diaries]);
+  }, [diaries]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,12 +119,9 @@ const Diary = ({ navigation, theme }) => {
           visible={showCalendarModal}
           onDismiss={() => setShowCalendarModal(false)}>
           <Calendar
-            // horizontal={true}
             pagingEnabled={true}
-            // current={selectedDate}
             markedDates={selectedDate}
             onDayPress={handleDateSelect}
-            // markingType='period'
             theme={{
               selectedDayBackgroundColor: colors.primary,
               selectedDayTextColor: '#ffffff',
@@ -141,21 +157,18 @@ const Diary = ({ navigation, theme }) => {
           foods={current.breakfast}
           onLongPress={() => setShowDeleteDialog(true)}
           selectedDate={Object.keys(selectedDate)[0]}
-          // addFood={() => navigation.navigate('add-food')}
         />
         <FoodTable
           name="Lunch"
           foods={current.lunch}
           onLongPress={() => setShowDeleteDialog(true)}
           selectedDate={Object.keys(selectedDate)[0]}
-          // addFood={() => navigation.navigate('add-food')}
         />
         <FoodTable
           name="Dinner"
           foods={current.dinner}
           onLongPress={() => setShowDeleteDialog(true)}
           selectedDate={Object.keys(selectedDate)[0]}
-          // addFood={() => navigation.navigate('add-food')}
         />
         <FoodTable
           name="Snacks"
@@ -163,7 +176,6 @@ const Diary = ({ navigation, theme }) => {
           foods={current.snacks}
           onLongPress={() => setShowDeleteDialog(true)}
           selectedDate={Object.keys(selectedDate)[0]}
-          // addFood={() => navigation.navigate('add-food')}
         />
       </ScrollView>
     </React.Fragment>
