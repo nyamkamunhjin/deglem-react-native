@@ -1,89 +1,131 @@
+import { StackActions } from '@react-navigation/native';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import {
-  ActivityIndicator,
-  DataTable,
-  Searchbar,
-  withTheme,
-} from 'react-native-paper';
+import NumericInput from 'react-native-numeric-input';
+import { Button, DataTable } from 'react-native-paper';
 import { BACKEND_URL } from '../env.config';
 
 /**
  * @author
  * @function AddFood
  **/
-const AddFood = (props) => {
-  const { colors } = props.theme;
-  const { navigation } = props;
+const AddFood = ({ route, navigation }) => {
+  // console.log(route.params);
+  const [serving, setServing] = useState(1);
+  const { food, addTo, selectedDate } = route.params;
+  // console.log('addTo:', addTo);
+  const getAdditionalNutrients = (doc) => {
+    let temp = {
+      ...doc,
+    };
+    delete temp._id;
+    delete temp.name;
+    delete temp.protein;
+    delete temp.totalCarbohydrates;
+    delete temp.totalFat;
+    delete temp.serving;
+    delete temp.__v;
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResult, setSearchResult] = useState([]);
-  const [loadingBar, setLoadingBar] = useState(false);
-
-  const onChangeSearch = (query) => setSearchQuery(query);
-
-  const handleSearch = () => {
-    setLoadingBar(true);
-    if (searchQuery === '') {
-      setLoadingBar(false);
-      setSearchResult([]);
-    } else {
-      axios
-        .get(`${BACKEND_URL}/api/foods/search?query=${searchQuery}&limit=20`)
-        .then((res) => {
-          // console.log('results', res.data);
-          setSearchResult(res.data);
-          setLoadingBar(false);
-        });
-    }
+    return temp;
   };
 
-  const { container, searchbar } = styles;
+  const handleFoodAdd = async () => {
+    let data = {
+      user_id: '5f607f85a586e00e416f2124',
+      diary: {
+        date: selectedDate,
+        push: {},
+      },
+    };
+
+    data.diary.push[addTo.toLowerCase()] = [
+      {
+        serving: serving,
+        food: food._id,
+      },
+    ];
+
+    console.log(data);
+    await axios
+      .post(`${BACKEND_URL}/api/users/dailylog/food/add`, data)
+      .then((res) => {
+        console.log(res.data);
+        navigation.dispatch(StackActions.popToTop());
+        navigation.navigate('Diary');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
-    <View style={container}>
-      <Searchbar
-        style={searchbar}
-        placeholder="Search food"
-        onChangeText={onChangeSearch}
-        value={searchQuery}
-        onIconPress={handleSearch}
-        onSubmitEditing={handleSearch}
-      />
+    <View>
       <ScrollView>
         <DataTable>
-          <DataTable.Header>
-            <DataTable.Title>Food</DataTable.Title>
-            <DataTable.Title numeric>Serving</DataTable.Title>
-            <DataTable.Title numeric>Calories</DataTable.Title>
-          </DataTable.Header>
-          {loadingBar ? (
-            <ActivityIndicator
-              style={styles.loadingBar}
-              animating={true}
-              color={colors.primary}
-              size={'large'}
-            />
-          ) : (
-            searchResult.map((res, index) => (
-              <DataTable.Row
-                key={index}
-                onPress={() =>
-                  navigation.navigate('edit-food', {
-                    addTo: props.route.params.name,
-                    selectedDate: props.route.params.selectedDate,
-                    ...res,
-                  })
-                }>
-                <DataTable.Cell>{res.document.name}</DataTable.Cell>
-                <DataTable.Cell numeric>
-                  {`${res.document.serving.size} ${res.document.serving.unit}`}
+          <DataTable.Row>
+            <DataTable.Cell>{food.name}</DataTable.Cell>
+            <DataTable.Cell numeric>
+              <Button mode="contained" onPress={handleFoodAdd} color={'white'}>
+                Add
+              </Button>
+            </DataTable.Cell>
+          </DataTable.Row>
+          <DataTable.Row>
+            <DataTable.Cell>Serving size</DataTable.Cell>
+            <DataTable.Cell
+              numeric>{`${food.serving.size} ${food.serving.unit}`}</DataTable.Cell>
+          </DataTable.Row>
+          <DataTable.Row>
+            <DataTable.Cell>Number of serving</DataTable.Cell>
+            <DataTable.Cell numeric>
+              <NumericInput
+                // type="up-down"
+                valueType="real"
+                step={0.1}
+                totalWidth={100}
+                totalHeight={35}
+                rounded
+                value={serving}
+                onChange={(num) => setServing(num)}
+              />
+            </DataTable.Cell>
+          </DataTable.Row>
+
+          <View style={styles.main}>
+            <View style={styles.temp}></View>
+
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title style={styles.cell}>Carbs</DataTable.Title>
+                <DataTable.Title style={styles.cell}>Fat</DataTable.Title>
+                <DataTable.Title style={styles.cell}>Protein</DataTable.Title>
+              </DataTable.Header>
+              <DataTable.Row>
+                <DataTable.Cell style={styles.cell}>
+                  {food.totalCarbohydrates}
                 </DataTable.Cell>
-                <DataTable.Cell numeric>{res.document.calories}</DataTable.Cell>
+                <DataTable.Cell style={styles.cell}>
+                  {food.totalFat}
+                </DataTable.Cell>
+                <DataTable.Cell style={styles.cell}>
+                  {food.protein}
+                </DataTable.Cell>
               </DataTable.Row>
-            ))
-          )}
+            </DataTable>
+
+            <DataTable>
+              {Object.entries(getAdditionalNutrients(food)).map(
+                (entry, index) => (
+                  <DataTable.Row key={index}>
+                    <DataTable.Cell>{entry[0]}</DataTable.Cell>
+                    <DataTable.Cell numeric>{entry[1]}</DataTable.Cell>
+                  </DataTable.Row>
+                ),
+              )}
+            </DataTable>
+          </View>
         </DataTable>
       </ScrollView>
     </View>
@@ -91,15 +133,24 @@ const AddFood = (props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
-  searchbar: {
-    margin: 5,
-    borderRadius: 10,
-  },
-  loadingBar: {
+  container: {
+    flex: 1,
     justifyContent: 'center',
-    alignSelf: 'center',
-    marginTop: 20,
+    alignItems: 'center',
+  },
+  main: {
+    margin: 5,
+
+    alignItems: 'center',
+  },
+  temp: {
+    width: 150,
+    height: 150,
+    backgroundColor: 'orange',
+  },
+  cell: {
+    justifyContent: 'center',
   },
 });
-export default withTheme(AddFood);
+
+export default AddFood;

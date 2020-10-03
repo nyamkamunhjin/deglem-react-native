@@ -9,7 +9,6 @@ import { Calendar } from 'react-native-calendars';
 import axios from 'axios';
 import { countCalories, formatDate } from '../functions/functions';
 import { BACKEND_URL } from '../env.config';
-import { useNavigationState } from '@react-navigation/native';
 
 /**
  * @author
@@ -48,23 +47,27 @@ const Diary = ({ navigation, theme }) => {
     setSelectedDate(pair);
   };
 
+  const fetchData = async () => {
+    const result = await axios
+      .get(
+        `${BACKEND_URL}/api/users/dailylog?user_id=5f607f85a586e00e416f2124&range=2&date=${
+          Object.keys(selectedDate)[0]
+        }`,
+      )
+      .catch((err) => {
+        console.log('axios: ', err);
+      });
+    setDiaries(result.data);
+  };
   // handle refresh
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('refreshed');
-      const fetchData = async () => {
-        const result = await axios.get(
-          `${BACKEND_URL}/api/users/dailylog?user_id=5f607f85a586e00e416f2124&range=2&date=${
-            Object.keys(selectedDate)[0]
-          }`,
-        );
-        setDiaries(result.data);
-      };
+
       fetchData();
     });
 
     return unsubscribe;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation]);
 
   useEffect(() => {
@@ -97,18 +100,9 @@ const Diary = ({ navigation, theme }) => {
     };
 
     setDiaryByDate(Object.keys(selectedDate)[0], diaries);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diaries]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get(
-        `${BACKEND_URL}/api/users/dailylog?user_id=5f607f85a586e00e416f2124&range=2&date=${
-          Object.keys(selectedDate)[0]
-        }`,
-      );
-      setDiaries(result.data);
-    };
     fetchData();
   }, [selectedDate]);
 

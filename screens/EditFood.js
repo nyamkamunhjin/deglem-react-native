@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import NumericInput from 'react-native-numeric-input';
-import { Button, DataTable, List, Text, TextInput } from 'react-native-paper';
+import { Button, DataTable } from 'react-native-paper';
 import { BACKEND_URL } from '../env.config';
 
 /**
@@ -14,7 +14,12 @@ import { BACKEND_URL } from '../env.config';
 const EditFood = ({ route, navigation }) => {
   // console.log(route.params);
   const [serving, setServing] = useState(1);
-  const { document: food, addTo, selectedDate } = route.params;
+  const {
+    food: { _id },
+    food: { food },
+    addTo,
+  } = route.params;
+  // console.log(food);
   // console.log('addTo:', addTo);
   const getAdditionalNutrients = (doc) => {
     let temp = {
@@ -33,27 +38,19 @@ const EditFood = ({ route, navigation }) => {
 
   const handleFoodAdd = async () => {
     let data = {
-      user_id: '5f607f85a586e00e416f2124',
-      diary: {
-        date: selectedDate,
-        push: {},
-      },
+      filter: {},
+      update: {},
     };
 
-    data.diary.push[addTo.toLowerCase()] = [
-      {
-        serving: serving,
-        food: food._id,
-      },
-    ];
+    data.filter[`${addTo.toLowerCase()}._id`] = _id;
+    data.update[`${addTo.toLowerCase()}.$.serving`] = serving;
 
     console.log(data);
     await axios
-      .post(`${BACKEND_URL}/api/users/dailylog/food/add`, data)
+      .put(`${BACKEND_URL}/api/users/dailylog/food/update`, data)
       .then((res) => {
         console.log(res.data);
         navigation.dispatch(StackActions.popToTop());
-        navigation.navigate('Diary');
       })
       .catch((err) => {
         console.log(err);
@@ -68,7 +65,7 @@ const EditFood = ({ route, navigation }) => {
             <DataTable.Cell>{food.name}</DataTable.Cell>
             <DataTable.Cell numeric>
               <Button mode="contained" onPress={handleFoodAdd} color={'white'}>
-                Add
+                change
               </Button>
             </DataTable.Cell>
           </DataTable.Row>
@@ -152,4 +149,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
 export default EditFood;

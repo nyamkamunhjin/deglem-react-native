@@ -54,7 +54,12 @@ const FoodTable = (props) => {
               <DataTable.Row
                 key={index}
                 onLongPress={props.onLongPress || null}
-                onPress={() => console.log('pressed Row')}>
+                onPress={() =>
+                  navigation.navigate('edit-food', {
+                    addTo: name,
+                    food: data,
+                  })
+                }>
                 <DataTable.Cell>{data.food.name}</DataTable.Cell>
                 <DataTable.Cell numeric>{data.serving}</DataTable.Cell>
                 <DataTable.Cell numeric>
@@ -70,7 +75,7 @@ const FoodTable = (props) => {
         mode="contained"
         icon={({ color }) => <Icon name="plus" size={15} color={color} />}
         onPress={() =>
-          navigation.navigate('add-food', {
+          navigation.navigate('search-food', {
             name,
             selectedDate: props.selectedDate,
           })

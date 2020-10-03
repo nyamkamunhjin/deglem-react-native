@@ -1,13 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Diary from '../../screens/Diary';
 import AccountInfo from '../../screens/AccountInfo';
 import BottomNavigator from '../BottomNavigator/BottomNavigator';
 import { withTheme } from 'react-native-paper';
 import Header from '../../components/Header/Header';
 import { getHeaderTitle } from '../../functions/getHeaderTitle';
+import SearchFood from '../../screens/SearchFood';
 import AddFood from '../../screens/AddFood';
 import EditFood from '../../screens/EditFood';
 
@@ -48,14 +46,19 @@ const StackNavigator = (props) => {
         options={{ title: 'Edit Info' }}
       />
       <Stack.Screen
+        name="search-food"
+        component={SearchFood}
+        options={{ title: 'Search Food' }}
+      />
+      <Stack.Screen
         name="add-food"
         component={AddFood}
-        options={{ title: 'Add food' }}
+        options={{ title: 'Add Food' }}
       />
       <Stack.Screen
         name="edit-food"
         component={EditFood}
-        options={{ title: 'Edit food' }}
+        options={{ title: 'Edit Food' }}
       />
     </Stack.Navigator>
   );
