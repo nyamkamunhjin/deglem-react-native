@@ -17,11 +17,10 @@ import { BACKEND_URL } from '../env.config';
 
 const Diary = ({ navigation, theme }) => {
   const { colors } = theme;
-  const [current, setCurrent] = useState({});
-  const [diaries, setDiaries] = useState([]);
-  const [showCalendarModal, setShowCalendarModal] = useState(false);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
+  const [current, setCurrent] = useState({});
+  // const [diaries, setDiaries] = useState([]);
+  const [showCalendarModal, setShowCalendarModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState({
     '2020-10-02': { selected: true },
   });
@@ -32,7 +31,6 @@ const Diary = ({ navigation, theme }) => {
     pair[day.dateString] = { selected: true };
 
     setSelectedDate(pair);
-
     setShowCalendarModal(false);
   };
 
@@ -47,30 +45,7 @@ const Diary = ({ navigation, theme }) => {
     setSelectedDate(pair);
   };
 
-  const fetchData = async () => {
-    const result = await axios
-      .get(
-        `${BACKEND_URL}/api/users/dailylog?user_id=5f607f85a586e00e416f2124&range=2&date=${
-          Object.keys(selectedDate)[0]
-        }`,
-      )
-      .catch((err) => {
-        console.log('axios: ', err);
-      });
-    setDiaries(result.data);
-  };
-  // handle refresh
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      console.log('refreshed');
-
-      fetchData();
-    });
-
-    return unsubscribe;
-  }, [navigation]);
-
-  useEffect(() => {
+  const fetchData = () => {
     const calculateTotalCalories = (today) => {
       const { breakfast, lunch, dinner, snacks } = today;
 
@@ -82,25 +57,41 @@ const Diary = ({ navigation, theme }) => {
       );
     };
 
-    setTotalCalories(calculateTotalCalories(current));
-  }, [current]);
-
-  useEffect(() => {
-    // eslint-disable-next-line no-shadow
     const setDiaryByDate = (date, diaries) => {
-      const diary = diaries.find((data) => {
-        return formatDate(data.date) === date;
+      const diary = diaries.find((item) => {
+        return formatDate(item.date) === date;
       });
 
-      if (diary) {
-        setCurrent(diary);
-      } else {
-        setCurrent({});
-      }
+      setCurrent(diary || {});
+      setTotalCalories(calculateTotalCalories(diary || {}));
     };
 
-    setDiaryByDate(Object.keys(selectedDate)[0], diaries);
-  }, [diaries]);
+    axios
+      .get(
+        `${BACKEND_URL}/api/users/dailylog?user_id=5f607f85a586e00e416f2124&range=1&date=${
+          Object.keys(selectedDate)[0]
+        }`,
+      )
+      .then(({ data }) => {
+        setDiaryByDate(Object.keys(selectedDate)[0], data);
+      })
+      .catch((err) => {
+        console.log('axios: ', err);
+      });
+
+    // setDiaries(data);
+  };
+
+  // handle refresh
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('refreshed');
+
+      fetchData();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   useEffect(() => {
     fetchData();
@@ -123,15 +114,6 @@ const Diary = ({ navigation, theme }) => {
             enableSwipeMonths={true}
           />
         </Dialog>
-        <Dialog
-          visible={showDeleteDialog}
-          onDismiss={() => setShowDeleteDialog(false)}>
-          <Dialog.Title>Diary</Dialog.Title>
-          <Dialog.Actions>
-            <Button onPress={() => console.log('Cancel')}>Cancel</Button>
-            <Button onPress={() => console.log('Remove')}>Remove</Button>
-          </Dialog.Actions>
-        </Dialog>
       </Portal>
 
       <CalendarSwipe
@@ -149,27 +131,27 @@ const Diary = ({ navigation, theme }) => {
         <FoodTable
           name="Breakfast"
           foods={current.breakfast}
-          onLongPress={() => setShowDeleteDialog(true)}
           selectedDate={Object.keys(selectedDate)[0]}
+          fetchData={fetchData}
         />
         <FoodTable
           name="Lunch"
           foods={current.lunch}
-          onLongPress={() => setShowDeleteDialog(true)}
           selectedDate={Object.keys(selectedDate)[0]}
+          fetchData={fetchData}
         />
         <FoodTable
           name="Dinner"
           foods={current.dinner}
-          onLongPress={() => setShowDeleteDialog(true)}
           selectedDate={Object.keys(selectedDate)[0]}
+          fetchData={fetchData}
         />
         <FoodTable
           name="Snacks"
           backgroundColor={colors.triadic}
           foods={current.snacks}
-          onLongPress={() => setShowDeleteDialog(true)}
           selectedDate={Object.keys(selectedDate)[0]}
+          fetchData={fetchData}
         />
       </ScrollView>
     </React.Fragment>

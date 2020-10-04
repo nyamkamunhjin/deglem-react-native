@@ -85,9 +85,7 @@ const SearchFood = (props) => {
               </DataTable.Row>
             ))
           ) : (
-            <Text style={{ marginTop: 20, textAlign: 'center' }}>
-              No food found.
-            </Text>
+            <Text style={styles.text}>No food found.</Text>
           )}
         </DataTable>
       </ScrollView>
@@ -105,6 +103,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     marginTop: 20,
+  },
+  text: {
+    marginTop: 20,
+    textAlign: 'center',
   },
 });
 export default withTheme(SearchFood);

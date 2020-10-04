@@ -36,7 +36,7 @@ const EditFood = ({ route, navigation }) => {
     return temp;
   };
 
-  const handleFoodAdd = async () => {
+  const handleFoodUpdate = async () => {
     let data = {
       filter: {},
       update: {},
@@ -64,7 +64,10 @@ const EditFood = ({ route, navigation }) => {
           <DataTable.Row>
             <DataTable.Cell>{food.name}</DataTable.Cell>
             <DataTable.Cell numeric>
-              <Button mode="contained" onPress={handleFoodAdd} color={'white'}>
+              <Button
+                mode="contained"
+                onPress={handleFoodUpdate}
+                color={'white'}>
                 change
               </Button>
             </DataTable.Cell>
