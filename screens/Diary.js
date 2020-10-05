@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { Dialog, Portal, withTheme, Button } from 'react-native-paper';
 import FoodTable from '../components/FoodTable/FoodTable';
@@ -9,6 +9,7 @@ import { Calendar } from 'react-native-calendars';
 import axios from 'axios';
 import { countCalories, formatDate } from '../functions/functions';
 import { BACKEND_URL } from '../env.config';
+import cookieContext from '../context/cookie-context';
 
 /**
  * @author
@@ -17,7 +18,7 @@ import { BACKEND_URL } from '../env.config';
 
 const Diary = ({ navigation, theme }) => {
   const { colors } = theme;
-
+  const { cookies } = useContext(cookieContext);
   const [current, setCurrent] = useState({});
   // const [diaries, setDiaries] = useState([]);
   const [showCalendarModal, setShowCalendarModal] = useState(false);
@@ -66,17 +67,38 @@ const Diary = ({ navigation, theme }) => {
       setTotalCalories(calculateTotalCalories(diary || {}));
     };
 
-    axios
-      .get(
-        `${BACKEND_URL}/api/users/dailylog?user_id=5f607f85a586e00e416f2124&range=1&date=${
-          Object.keys(selectedDate)[0]
-        }`,
-      )
-      .then(({ data }) => {
-        setDiaryByDate(Object.keys(selectedDate)[0], data);
+    cookies
+      .get(BACKEND_URL)
+      .then((cookie) => {
+        // console.log(cookie);
+        if (Object.keys(cookie).length === 0) {
+          throw new Error('cookie empty');
+        }
+
+        const {
+          token: { value },
+        } = cookie;
+
+        axios
+          .get(
+            `${BACKEND_URL}/api/users/dailylog?user_id=5f607f85a586e00e416f2124&range=1&date=${
+              Object.keys(selectedDate)[0]
+            }`,
+            {
+              headers: {
+                Authorization: `Bearer ${value}`,
+              },
+            },
+          )
+          .then(({ data }) => {
+            setDiaryByDate(Object.keys(selectedDate)[0], data);
+          })
+          .catch((err) => {
+            console.log('axios: ', err);
+          });
       })
       .catch((err) => {
-        console.log('axios: ', err);
+        console.error(err);
       });
 
     // setDiaries(data);

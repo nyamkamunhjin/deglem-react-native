@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import {
   withTheme,
@@ -10,6 +10,7 @@ import {
   Dialog,
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import cookieContext from '../../context/cookie-context';
 import { BACKEND_URL } from '../../env.config';
 import { countCalories } from '../../functions/functions';
 
@@ -20,6 +21,8 @@ import { countCalories } from '../../functions/functions';
 
 const FoodTable = (props) => {
   const { name, backgroundColor, fetchData } = props;
+  const { cookies } = useContext(cookieContext);
+
   const navigation = useNavigation();
   const { colors } = props.theme;
   const { foods } = props;
@@ -53,19 +56,35 @@ const FoodTable = (props) => {
   const handleDeleteFood = (item) => {
     console.log(item.name, item._id);
 
-    axios
-      .delete(`${BACKEND_URL}/api/users/dailylog/food/delete`, {
-        headers: {
-          Authorization: 'Bearer 123',
-        },
-        params: {
-          name: item.name,
-          _id: item._id,
-        },
+    cookies
+      .get(BACKEND_URL)
+      .then((cookie) => {
+        // console.log(cookie);
+        if (Object.keys(cookie).length === 0) {
+          throw new Error('cookie empty');
+        }
+
+        const {
+          token: { value },
+        } = cookie;
+
+        axios
+          .delete(`${BACKEND_URL}/api/users/dailylog/food/delete`, {
+            headers: {
+              Authorization: `Bearer ${value}`,
+            },
+            params: {
+              name: item.name,
+              _id: item._id,
+            },
+          })
+          .then((res) => console.log({ data: res.data }))
+          .catch((err) => {
+            console.error({ err });
+          });
       })
-      .then((res) => console.log({ data: res.data }))
       .catch((err) => {
-        console.error({ err });
+        console.error(err);
       });
 
     // console.log(data);

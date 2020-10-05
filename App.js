@@ -1,16 +1,59 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
 import RootNavigator from './navigation/Drawer/Drawer';
-import BottomNavigator from './navigation/BottomNavigator/BottomNavigator';
-import { withTheme } from 'react-native-paper';
+import CookieContext from './context/cookie-context';
+import CookieManager from '@react-native-community/cookies';
+import { BACKEND_URL } from './env.config';
+import SignIn from './screens/SignIn';
 
 /**
  * @author
  * @function App
  **/
 const App = (props) => {
-  return <RootNavigator />;
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const logIn = ({ token, expires }) => {
+    CookieManager.set(BACKEND_URL, {
+      name: 'token',
+      value: token,
+      expires,
+    })
+      .then((done) => {
+        setLoggedIn(true);
+        console.log('done:', done);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const logOut = () => {
+    CookieManager.clearAll().then((success) => {
+      setLoggedIn(false);
+    });
+  };
+
+  useEffect(() => {
+    CookieManager.get(BACKEND_URL).then((cookie) => {
+      if (Object.keys(cookie).length !== 0) {
+        // console.log(CookieManager);
+        setLoggedIn(true);
+      }
+    });
+  }, [loggedIn]);
+
+  return (
+    <CookieContext.Provider
+      value={{
+        cookies: CookieManager,
+        logIn: logIn,
+        logOut: logOut,
+        loggedIn,
+      }}>
+      {<RootNavigator />}
+    </CookieContext.Provider>
+  );
 };
 
 export default App;

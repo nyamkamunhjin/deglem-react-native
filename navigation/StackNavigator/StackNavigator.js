@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import AccountInfo from '../../screens/AccountInfo';
 import BottomNavigator from '../BottomNavigator/BottomNavigator';
@@ -8,6 +8,8 @@ import { getHeaderTitle } from '../../functions/getHeaderTitle';
 import SearchFood from '../../screens/SearchFood';
 import AddFood from '../../screens/AddFood';
 import EditFood from '../../screens/EditFood';
+import SignIn from '../../screens/SignIn';
+import cookieContext from '../../context/cookie-context';
 
 /**
  * @author
@@ -18,8 +20,9 @@ const Stack = createStackNavigator();
 
 const StackNavigator = (props) => {
   const { colors } = props.theme;
+  const { loggedIn } = useContext(cookieContext);
 
-  return (
+  return loggedIn ? (
     <Stack.Navigator
       initialRouteName="Diary"
       headerMode="screen"
@@ -60,7 +63,14 @@ const StackNavigator = (props) => {
         component={EditFood}
         options={{ title: 'Edit Food' }}
       />
+      {/* <Stack.Screen
+        name="sign-in"
+        component={SignIn}
+        options={{ title: 'Sign in' }}
+      /> */}
     </Stack.Navigator>
+  ) : (
+    <SignIn />
   );
 };
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
@@ -9,6 +9,7 @@ import {
   withTheme,
   Text,
 } from 'react-native-paper';
+import cookieContext from '../context/cookie-context';
 import { BACKEND_URL } from '../env.config';
 
 /**
@@ -18,6 +19,7 @@ import { BACKEND_URL } from '../env.config';
 const SearchFood = (props) => {
   const { colors } = props.theme;
   const { navigation } = props;
+  const { cookies } = useContext(cookieContext);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResult, setSearchResult] = useState([]);
@@ -31,12 +33,35 @@ const SearchFood = (props) => {
       setLoadingBar(false);
       setSearchResult([]);
     } else {
-      axios
-        .get(`${BACKEND_URL}/api/foods/search?query=${searchQuery}&limit=20`)
-        .then((res) => {
-          // console.log('results', res.data);
-          setSearchResult(res.data);
-          setLoadingBar(false);
+      cookies
+        .get(BACKEND_URL)
+        .then((cookie) => {
+          // console.log(cookie);
+          if (Object.keys(cookie).length === 0) {
+            throw new Error('cookie empty');
+          }
+
+          const {
+            token: { value },
+          } = cookie;
+
+          axios
+            .get(
+              `${BACKEND_URL}/api/foods/search?query=${searchQuery}&limit=20`,
+              {
+                headers: {
+                  Authorization: `Bearer ${value}`,
+                },
+              },
+            )
+            .then((res) => {
+              // console.log('results', res.data);
+              setSearchResult(res.data);
+              setLoadingBar(false);
+            });
+        })
+        .catch((err) => {
+          console.error(err);
         });
     }
   };

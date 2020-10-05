@@ -1,10 +1,11 @@
 import { StackActions } from '@react-navigation/native';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import NumericInput from 'react-native-numeric-input';
 import { Button, DataTable } from 'react-native-paper';
+import cookieContext from '../context/cookie-context';
 import { BACKEND_URL } from '../env.config';
 
 /**
@@ -14,6 +15,8 @@ import { BACKEND_URL } from '../env.config';
 const EditFood = ({ route, navigation }) => {
   // console.log(route.params);
   const [serving, setServing] = useState(1);
+  const { cookies } = useContext(cookieContext);
+
   const {
     food: { _id },
     food: { food },
@@ -46,14 +49,34 @@ const EditFood = ({ route, navigation }) => {
     data.update[`${addTo.toLowerCase()}.$.serving`] = serving;
 
     console.log(data);
-    await axios
-      .put(`${BACKEND_URL}/api/users/dailylog/food/update`, data)
-      .then((res) => {
-        console.log(res.data);
-        navigation.dispatch(StackActions.popToTop());
+    cookies
+      .get(BACKEND_URL)
+      .then((cookie) => {
+        // console.log(cookie);
+        if (Object.keys(cookie).length === 0) {
+          throw new Error('cookie empty');
+        }
+
+        const {
+          token: { value },
+        } = cookie;
+
+        axios
+          .put(`${BACKEND_URL}/api/users/dailylog/food/update`, data, {
+            headers: {
+              Authorization: `Bearer ${value}`,
+            },
+          })
+          .then((res) => {
+            console.log(res.data);
+            navigation.dispatch(StackActions.popToTop());
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   };
 

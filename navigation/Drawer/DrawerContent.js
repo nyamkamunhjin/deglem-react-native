@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { Avatar, Drawer, Title, Caption } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import cookieContext from '../../context/cookie-context';
 
 /**
  * @author
@@ -10,6 +11,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
  **/
 const DrawerContent = (props) => {
   const { navigation } = props;
+  const { loggedIn, logOut } = useContext(cookieContext);
   return (
     <View style={styles.drawerContainer}>
       <DrawerContentScrollView {...props}>
@@ -67,15 +69,23 @@ const DrawerContent = (props) => {
       </DrawerContentScrollView>
 
       <Drawer.Section title="Authorization">
-        <Drawer.Item
-          icon={({ color, size }) => (
-            <Icon name="location-exit" color={color} size={size} />
-          )}
-          label="Sign Out"
-          onPress={() => {
-            alert('signing out...');
-          }}
-        />
+        {!loggedIn ? (
+          <Drawer.Item
+            icon={({ color, size }) => (
+              <Icon name="location-enter" color={color} size={size} />
+            )}
+            label="Sign in"
+            onPress={() => navigation.navigate('sign-in')}
+          />
+        ) : (
+          <Drawer.Item
+            icon={({ color, size }) => (
+              <Icon name="location-exit" color={color} size={size} />
+            )}
+            label="Sign Out"
+            onPress={() => logOut()}
+          />
+        )}
       </Drawer.Section>
     </View>
   );

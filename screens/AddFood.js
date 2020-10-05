@@ -1,10 +1,11 @@
 import { StackActions } from '@react-navigation/native';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import NumericInput from 'react-native-numeric-input';
 import { Button, DataTable } from 'react-native-paper';
+import cookieContext from '../context/cookie-context';
 import { BACKEND_URL } from '../env.config';
 
 /**
@@ -15,6 +16,8 @@ const AddFood = ({ route, navigation }) => {
   // console.log(route.params);
   const [serving, setServing] = useState(1);
   const { food, addTo, selectedDate } = route.params;
+  const { cookies } = useContext(cookieContext);
+
   // console.log('addTo:', addTo);
   const getAdditionalNutrients = (doc) => {
     let temp = {
@@ -48,15 +51,35 @@ const AddFood = ({ route, navigation }) => {
     ];
 
     console.log(data);
-    await axios
-      .post(`${BACKEND_URL}/api/users/dailylog/food/add`, data)
-      .then((res) => {
-        console.log(res.data);
-        navigation.dispatch(StackActions.popToTop());
-        navigation.navigate('Diary');
+    cookies
+      .get(BACKEND_URL)
+      .then((cookie) => {
+        // console.log(cookie);
+        if (Object.keys(cookie).length === 0) {
+          throw new Error('cookie empty');
+        }
+
+        const {
+          token: { value },
+        } = cookie;
+
+        axios
+          .post(`${BACKEND_URL}/api/users/dailylog/food/add`, data, {
+            headers: {
+              Authorization: `Bearer ${value}`,
+            },
+          })
+          .then((res) => {
+            console.log(res.data);
+            navigation.dispatch(StackActions.popToTop());
+            navigation.navigate('Diary');
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   };
 
