@@ -39,9 +39,11 @@ const App = (props) => {
       if (Object.keys(cookie).length !== 0) {
         // console.log(CookieManager);
         setLoggedIn(true);
+      } else {
+        setLoggedIn(false);
       }
     });
-  }, [loggedIn]);
+  }, []);
 
   return (
     <CookieContext.Provider

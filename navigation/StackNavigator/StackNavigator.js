@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import AccountInfo from '../../screens/AccountInfo';
 import BottomNavigator from '../BottomNavigator/BottomNavigator';
@@ -10,6 +10,7 @@ import AddFood from '../../screens/AddFood';
 import EditFood from '../../screens/EditFood';
 import SignIn from '../../screens/SignIn';
 import cookieContext from '../../context/cookie-context';
+import SignUp from '../../screens/SignUp';
 
 /**
  * @author
@@ -22,9 +23,9 @@ const StackNavigator = (props) => {
   const { colors } = props.theme;
   const { loggedIn } = useContext(cookieContext);
 
-  return loggedIn ? (
+  return (
     <Stack.Navigator
-      initialRouteName="Diary"
+      initialRouteName={'Diary'}
       headerMode="screen"
       screenOptions={{
         header: ({ scene, previous, navigation }) => (
@@ -38,7 +39,7 @@ const StackNavigator = (props) => {
       }}>
       <Stack.Screen
         name="Diary"
-        component={BottomNavigator}
+        component={loggedIn ? BottomNavigator : SignIn}
         options={({ route }) => ({
           headerTitle: getHeaderTitle(route),
         })}
@@ -63,14 +64,17 @@ const StackNavigator = (props) => {
         component={EditFood}
         options={{ title: 'Edit Food' }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name="sign-in"
         component={SignIn}
-        options={{ title: 'Sign in' }}
-      /> */}
+        options={{ title: 'Sign in', gestureEnabled: true }}
+      />
+      <Stack.Screen
+        name="sign-up"
+        component={SignUp}
+        options={{ title: 'Sign up', gestureEnabled: true }}
+      />
     </Stack.Navigator>
-  ) : (
-    <SignIn />
   );
 };
 

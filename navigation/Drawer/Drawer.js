@@ -13,7 +13,8 @@ const RootNavigator = (props) => {
   return (
     <Drawer.Navigator
       initialRouteName="stack"
-      drawerContent={(props) => <DrawerContent {...props} />}
+      drawerContent={(drawerProps) => <DrawerContent {...drawerProps} />}
+
       // drawerStyle={{ backgroundColor: colors.accent}}
       // drawerType={'permanent'}
     >

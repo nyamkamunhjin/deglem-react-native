@@ -14,8 +14,8 @@ import { StackActions, useNavigation } from '@react-navigation/native';
  **/
 
 const signInSchema = yup.object({
-  email: yup.string().email().required().min(4),
-  password: yup.string().required().min(4),
+  email: yup.string().email().required('Email is required').min(4),
+  password: yup.string().required('Password is required').min(4),
 });
 
 const SignIn = (props) => {
@@ -26,8 +26,8 @@ const SignIn = (props) => {
       <Formik
         validationSchema={signInSchema}
         initialValues={{
-          email: '',
-          password: '',
+          email: 'nyamkamunhjin@gmail.com',
+          password: '12345678',
         }}
         onSubmit={(values, actions) => {
           console.log(values);
@@ -86,7 +86,8 @@ const SignIn = (props) => {
               <Button
                 style={styles.button}
                 mode={'contained'}
-                uppercase={false}>
+                uppercase={false}
+                onPress={() => navigation.navigate('sign-up')}>
                 Sign up
               </Button>
             </View>

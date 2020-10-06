@@ -117,7 +117,7 @@ const EditFood = ({ route, navigation }) => {
           </DataTable.Row>
 
           <View style={styles.main}>
-            <View style={styles.temp}></View>
+            <View style={styles.temp} />
 
             <DataTable>
               <DataTable.Header>
