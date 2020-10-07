@@ -83,7 +83,7 @@ const Diary = ({ navigation, theme }) => {
 
         axios
           .get(
-            `${BACKEND_URL}/api/users/dailylog?user_id=5f607f85a586e00e416f2124&range=1&date=${
+            `${BACKEND_URL}/api/diary?user_id=5f607f85a586e00e416f2124&range=1&date=${
               Object.keys(selectedDate)[0]
             }`,
             {

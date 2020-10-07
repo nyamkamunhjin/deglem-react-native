@@ -64,7 +64,7 @@ const AddFood = ({ route, navigation }) => {
         } = cookie;
 
         axios
-          .post(`${BACKEND_URL}/api/users/dailylog/food/add`, data, {
+          .post(`${BACKEND_URL}/api/diary/food/add`, data, {
             headers: {
               Authorization: `Bearer ${value}`,
             },

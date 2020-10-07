@@ -1,15 +1,53 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { Avatar, Drawer, Title, Caption } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import cookieContext from '../../context/cookie-context';
+import { BACKEND_URL } from '../../env.config';
+import axios from 'axios';
 
 /**
  * @author
  * @function DrawerContent
  **/
 const DrawerContent = (props) => {
+  const { cookies } = useContext(cookieContext);
+  const [title, setTitle] = useState('');
+  const [caption, setCaption] = useState('');
+
+  useEffect(() => {
+    cookies
+      .get(BACKEND_URL)
+      .then((cookie) => {
+        // console.log(cookie);
+        if (Object.keys(cookie).length === 0) {
+          throw new Error('cookie empty');
+        }
+
+        const {
+          token: { value },
+        } = cookie;
+
+        axios
+          .get(`${BACKEND_URL}/api/users`, {
+            headers: {
+              Authorization: `Bearer ${value}`,
+            },
+          })
+          .then(({ data }) => {
+            setTitle(`${data.userInfo.firstName} ${data.userInfo.lastName}`);
+            setCaption(data.userInfo.username);
+          })
+          .catch((err) => {
+            console.log('axios: ', err);
+          });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [cookies]);
+
   const { navigation } = props;
   const { loggedIn, logOut } = useContext(cookieContext);
   return (
@@ -25,8 +63,8 @@ const DrawerContent = (props) => {
               size={50}
             />
             <View style={{ flexDirection: 'column' }}>
-              <Title style={styles.title}>Muknhjin Nyamdorj</Title>
-              <Caption style={styles.caption}>@nyamkamunhjin</Caption>
+              <Title style={styles.title}>{title}</Title>
+              <Caption style={styles.caption}>@{caption}</Caption>
             </View>
           </View>
           <Drawer.Section>

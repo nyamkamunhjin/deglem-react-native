@@ -69,7 +69,7 @@ const FoodTable = (props) => {
         } = cookie;
 
         axios
-          .delete(`${BACKEND_URL}/api/users/dailylog/food/delete`, {
+          .delete(`${BACKEND_URL}/api/diary/food/delete`, {
             headers: {
               Authorization: `Bearer ${value}`,
             },
