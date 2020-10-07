@@ -47,22 +47,22 @@ const StackNavigator = (props) => {
       <Stack.Screen
         name="account-info"
         component={AccountInfo}
-        options={{ title: 'Edit Info' }}
+        options={{ title: 'Edit Info', gestureEnabled: true }}
       />
       <Stack.Screen
         name="search-food"
         component={SearchFood}
-        options={{ title: 'Search Food' }}
+        options={{ title: 'Search Food', gestureEnabled: true }}
       />
       <Stack.Screen
         name="add-food"
         component={AddFood}
-        options={{ title: 'Add Food' }}
+        options={{ title: 'Add Food', gestureEnabled: true }}
       />
       <Stack.Screen
         name="edit-food"
         component={EditFood}
-        options={{ title: 'Edit Food' }}
+        options={{ title: 'Edit Food', gestureEnabled: true }}
       />
       <Stack.Screen
         name="sign-in"

@@ -22,8 +22,10 @@ const Diary = ({ navigation, theme }) => {
   const [current, setCurrent] = useState({});
   // const [diaries, setDiaries] = useState([]);
   const [showCalendarModal, setShowCalendarModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState({
-    '2020-10-02': { selected: true },
+  const [selectedDate, setSelectedDate] = useState(() => {
+    let date = {};
+    date[formatDate(new Date())] = { selected: true };
+    return date;
   });
   const [totalCalories, setTotalCalories] = useState(0);
 

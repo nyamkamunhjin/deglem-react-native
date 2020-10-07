@@ -29,7 +29,7 @@ const signUpSchema = yup.object({
     .required('Confirm Password is required'),
   firstName: yup.string().required('First Name is required').min(4),
   lastName: yup.string().required('Last Name is required').min(4),
-  gender: yup.bool().required('Choose your gender'),
+  gender: yup.mixed().oneOf(['male', 'female']).required('Choose your gender'),
   dateOfBirth: yup.date().required('Birthday is required'),
 });
 
@@ -49,7 +49,7 @@ const SignUp = (props) => {
           email: 'nyamkamunhjin@gmail.com',
           firstName: 'Munkhjin',
           lastName: 'Nyamdorj',
-          gender: false,
+          gender: 'male',
           dateOfBirth: '1998-11-09',
         }}
         onSubmit={(values, actions) => {
@@ -89,7 +89,6 @@ const SignUp = (props) => {
               label="Password"
               mode={'outlined'}
               style={styles.input}
-              // error={formikProps.errors.password}
               secureTextEntry
               onChangeText={formikProps.handleChange('password')}
               value={formikProps.values.password}
@@ -104,7 +103,6 @@ const SignUp = (props) => {
               label="Confirm Password"
               mode={'outlined'}
               style={styles.input}
-              // error={formikProps.errors.password}
               secureTextEntry
               onChangeText={formikProps.handleChange('confirmPassword')}
               value={formikProps.values.confirmPassword}
@@ -134,8 +132,6 @@ const SignUp = (props) => {
               label="First Name"
               mode={'outlined'}
               style={styles.input}
-              // error={formikProps.errors.password}
-
               onChangeText={formikProps.handleChange('firstName')}
               value={formikProps.values.firstName}
               onBlur={formikProps.handleBlur('firstName')}
@@ -162,18 +158,24 @@ const SignUp = (props) => {
               <Text>Gender</Text>
               <View style={styles.gender}>
                 <Checkbox
-                  status={formikProps.values.gender ? 'unchecked' : 'checked'}
-                  onPress={() => formikProps.setFieldValue('gender', false)}
+                  status={
+                    formikProps.values.gender === 'male'
+                      ? 'checked'
+                      : 'unchecked'
+                  }
+                  onPress={() => formikProps.setFieldValue('gender', 'male')}
                   color={theme.colors.primary}
                 />
                 <Text>Man</Text>
               </View>
               <View style={styles.gender}>
                 <Checkbox
-                  // value={'hi'}
-                  onValueChange={() => console.log('hi')}
-                  status={!formikProps.values.gender ? 'unchecked' : 'checked'}
-                  onPress={() => formikProps.setFieldValue('gender', true)}
+                  status={
+                    formikProps.values.gender === 'female'
+                      ? 'checked'
+                      : 'unchecked'
+                  }
+                  onPress={() => formikProps.setFieldValue('gender', 'female')}
                   color={theme.colors.primary}
                 />
                 <Text>Woman</Text>
@@ -188,10 +190,22 @@ const SignUp = (props) => {
               label="Birthday"
               mode={'outlined'}
               style={styles.input}
-              // error={formikProps.errors.password}
+              onChangeText={(value) => {
+                let formatted = value;
+                if (formatted.length > 4 && formatted[4] !== '-') {
+                  formatted =
+                    formatted.substring(0, 4) + '-' + formatted.substr(4);
+                }
 
-              onChangeText={formikProps.handleChange('dateOfBirth')}
+                if (formatted.length > 7 && formatted[7] !== '-') {
+                  formatted =
+                    formatted.substring(0, 7) + '-' + formatted.substr(7);
+                }
+
+                formikProps.setFieldValue('dateOfBirth', formatted);
+              }}
               value={formikProps.values.dateOfBirth}
+              placeholder={'yyyy-mm-dd'}
               onBlur={formikProps.handleBlur('dateOfBirth')}
             />
 
@@ -232,23 +246,18 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   button: {
-    // flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    // borderRadius: 10,
     margin: 5,
-
-    // width: 150,
     alignSelf: 'center',
   },
   error: {
     color: 'red',
     marginBottom: 20,
-    // backgroundColor: 'green',
   },
   gender: {
     flexDirection: 'row',
-    // backgroundColor: 'green',
+
     alignItems: 'center',
   },
 });
