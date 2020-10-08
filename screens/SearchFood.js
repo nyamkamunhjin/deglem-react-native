@@ -47,7 +47,7 @@ const SearchFood = (props) => {
 
           axios
             .get(
-              `${BACKEND_URL}/api/foods/search?query=${searchQuery}&limit=20`,
+              `${BACKEND_URL}/api/foods/search?query=${searchQuery}&limit=25`,
               {
                 headers: {
                   Authorization: `Bearer ${value}`,
@@ -77,7 +77,7 @@ const SearchFood = (props) => {
         onIconPress={handleSearch}
         onSubmitEditing={handleSearch}
       />
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <DataTable>
           <DataTable.Header>
             <DataTable.Title>Food</DataTable.Title>

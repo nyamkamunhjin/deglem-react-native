@@ -35,10 +35,11 @@ const EditFood = ({ route, navigation }) => {
     delete temp.totalFat;
     delete temp.serving;
     delete temp.__v;
+    delete temp.barcode;
+    delete temp.creator;
 
     return temp;
   };
-
   const handleFoodUpdate = async () => {
     let data = {
       filter: {},
@@ -82,7 +83,7 @@ const EditFood = ({ route, navigation }) => {
 
   return (
     <View>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <DataTable>
           <DataTable.Row>
             <DataTable.Cell>{food.name}</DataTable.Cell>
@@ -127,13 +128,13 @@ const EditFood = ({ route, navigation }) => {
               </DataTable.Header>
               <DataTable.Row>
                 <DataTable.Cell style={styles.cell}>
-                  {food.totalCarbohydrates}
+                  {food.totalCarbohydrates || 0}
                 </DataTable.Cell>
                 <DataTable.Cell style={styles.cell}>
-                  {food.totalFat}
+                  {food.totalFat || 0}
                 </DataTable.Cell>
                 <DataTable.Cell style={styles.cell}>
-                  {food.protein}
+                  {food.protein || 0}
                 </DataTable.Cell>
               </DataTable.Row>
             </DataTable>

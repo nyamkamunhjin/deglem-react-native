@@ -15,6 +15,8 @@ const DrawerContent = (props) => {
   const { cookies } = useContext(cookieContext);
   const [title, setTitle] = useState('');
   const [caption, setCaption] = useState('');
+  const { navigation } = props;
+  const { loggedIn, logOut } = useContext(cookieContext);
 
   useEffect(() => {
     cookies
@@ -46,10 +48,13 @@ const DrawerContent = (props) => {
       .catch((err) => {
         console.error(err);
       });
-  }, [cookies]);
 
-  const { navigation } = props;
-  const { loggedIn, logOut } = useContext(cookieContext);
+    return () => {
+      setTitle('');
+      setCaption('');
+    };
+  }, [cookies, loggedIn]);
+
   return (
     loggedIn && (
       <View style={styles.drawerContainer}>

@@ -100,7 +100,7 @@ const Diary = ({ navigation, theme }) => {
           });
       })
       .catch((err) => {
-        console.error(err);
+        // console.error(err);
       });
 
     // setDiaries(data);
@@ -150,7 +150,7 @@ const Diary = ({ navigation, theme }) => {
         dateOnPress={() => setShowCalendarModal(true)}
         date={Object.keys(selectedDate)[0]}
       />
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <DiaryProgress progress={totalCalories} limit={2500} />
         <FoodTable
           name="Breakfast"
