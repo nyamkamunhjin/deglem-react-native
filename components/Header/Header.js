@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Appbar, TouchableRipple } from 'react-native-paper';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { View, StyleSheet } from 'react-native';
 
@@ -13,10 +13,6 @@ const Header = ({ scene, previous, navigation, colors }) => {
       : options.title !== undefined
       ? options.title
       : scene.route.name;
-
-  // useEffect(() => {
-  //   console.log(options);
-  // }, []);
 
   const styles = StyleSheet.create({
     header: {

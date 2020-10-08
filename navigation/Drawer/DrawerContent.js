@@ -12,11 +12,10 @@ import axios from 'axios';
  * @function DrawerContent
  **/
 const DrawerContent = (props) => {
-  const { cookies } = useContext(cookieContext);
   const [title, setTitle] = useState('');
   const [caption, setCaption] = useState('');
   const { navigation } = props;
-  const { loggedIn, logOut } = useContext(cookieContext);
+  const { cookies, loggedIn, logOut } = useContext(cookieContext);
 
   useEffect(() => {
     cookies

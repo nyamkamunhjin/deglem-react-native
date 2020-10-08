@@ -21,6 +21,7 @@ const App = (props) => {
     })
       .then((done) => {
         setLoggedIn(true);
+
         console.log('done:', done);
       })
       .catch((err) => {
@@ -39,8 +40,6 @@ const App = (props) => {
       if (Object.keys(cookie).length !== 0) {
         // console.log(CookieManager);
         setLoggedIn(true);
-      } else {
-        setLoggedIn(false);
       }
     });
   }, []);

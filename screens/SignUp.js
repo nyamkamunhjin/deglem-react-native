@@ -6,6 +6,7 @@ import {
   Checkbox,
   Text,
   TextInput,
+  Title,
   withTheme,
 } from 'react-native-paper';
 import * as yup from 'yup';
@@ -38,7 +39,10 @@ const SignUp = (props) => {
   const { theme } = props;
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}>
+      <Title>Sign up</Title>
       <Formik
         enableReinitialize={true}
         validationSchema={signUpSchema}
@@ -232,7 +236,7 @@ const SignUp = (props) => {
 const styles = StyleSheet.create({
   container: {
     // flex: 1,
-    flexDirection: 'row',
+    // flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },

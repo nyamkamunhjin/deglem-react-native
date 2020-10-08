@@ -1,7 +1,7 @@
 import { Formik } from 'formik';
 import React, { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button, Text, TextInput } from 'react-native-paper';
+import { Button, Text, TextInput, Title } from 'react-native-paper';
 import CookieContext from '../context/cookie-context';
 import * as yup from 'yup';
 import axios from 'axios';
@@ -23,6 +23,8 @@ const SignIn = (props) => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
+      <Title>Sign in</Title>
+
       <Formik
         validationSchema={signInSchema}
         initialValues={{
@@ -101,7 +103,7 @@ const SignIn = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
+    // flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
