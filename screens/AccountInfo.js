@@ -2,37 +2,51 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
+  ActivityIndicator,
   Avatar,
   Button,
   DataTable,
   Dialog,
-  Divider,
   Portal,
+  RadioButton,
   Subheading,
   TextInput,
-  Title,
   withTheme,
 } from 'react-native-paper';
 import cookieContext from '../context/cookie-context';
 import axios from 'axios';
 import { BACKEND_URL } from '../env.config';
 import { formatDate } from '../functions/functions';
-import { useTheme } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 /**
  * @author
  * @function AccountInfo
  **/
 const AccountInfo = ({ navigation, theme }) => {
-  const [user, setUser] = useState(null);
   const { cookies } = useContext(cookieContext);
+
+  const [user, setUser] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
   const [dialog, setDialog] = useState({
     path: '',
     name: '',
     type: '',
   });
-  const [input, setInput] = React.useState('');
+  const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleDateFormat = (value) => {
+    let formatted = value;
+    if (formatted.length > 4 && formatted[4] !== '-') {
+      formatted = formatted.substring(0, 4) + '-' + formatted.substr(4);
+    }
+
+    if (formatted.length > 7 && formatted[7] !== '-') {
+      formatted = formatted.substring(0, 7) + '-' + formatted.substr(7);
+    }
+    setInput(formatted);
+  };
 
   const { colors } = theme;
 
@@ -72,41 +86,64 @@ const AccountInfo = ({ navigation, theme }) => {
     switch (dialog.type) {
       case 'text':
         return (
-          <React.Fragment>
-            <Dialog.Title>{dialog.name}</Dialog.Title>
-            <Dialog.Content>
-              <TextInput
-                style={styles.input}
-                value={input}
-                onChangeText={(text) => setInput(text)}
-              />
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={handleChange}>Change</Button>
-            </Dialog.Actions>
-          </React.Fragment>
+          <Dialog.Content>
+            <TextInput
+              style={styles.input}
+              value={input}
+              onChangeText={(text) => setInput(text)}
+            />
+          </Dialog.Content>
         );
       case 'numeric':
         return (
-          <React.Fragment>
-            <Dialog.Title>{dialog.name}</Dialog.Title>
-            <Dialog.Content>
-              <TextInput
-                style={styles.input}
-                keyboardType={'numeric'}
-                value={input ? input.toString() : input}
-                onChangeText={(num) => setInput(num)}
+          <Dialog.Content>
+            <TextInput
+              style={styles.input}
+              keyboardType={'numeric'}
+              value={input ? input.toString() : input}
+              onChangeText={(num) => setInput(num)}
+            />
+          </Dialog.Content>
+        );
+      case 'gender':
+        return (
+          <Dialog.Content>
+            <View style={styles.row}>
+              <RadioButton
+                value="Male"
+                status={input === 'Male' ? 'checked' : 'unchecked'}
+                onPress={() => setInput('Male')}
+                color={colors.primary}
               />
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={handleChange}>Change</Button>
-            </Dialog.Actions>
-          </React.Fragment>
+              <Text>Male</Text>
+            </View>
+            <View style={styles.row}>
+              <RadioButton
+                value="Male"
+                status={input === 'Female' ? 'checked' : 'unchecked'}
+                onPress={() => setInput('Female')}
+                color={colors.primary}
+              />
+              <Text>Female</Text>
+            </View>
+          </Dialog.Content>
+        );
+      case 'date':
+        return (
+          <Dialog.Content>
+            <TextInput
+              style={styles.input}
+              value={input}
+              onChangeText={handleDateFormat}
+            />
+          </Dialog.Content>
         );
     }
   };
 
   const handleChange = () => {
+    setLoading(true);
+
     let update = {};
     update[dialog.path] = input;
 
@@ -132,13 +169,16 @@ const AccountInfo = ({ navigation, theme }) => {
             setUser(data);
             setShowDialog(false);
             setInput('');
+            setLoading(false);
           })
           .catch((err) => {
             console.log(err);
+            setLoading(false);
           });
       })
       .catch((err) => {
         console.error(err);
+        setLoading(false);
       });
   };
 
@@ -159,15 +199,42 @@ const AccountInfo = ({ navigation, theme }) => {
     input: {
       height: 35,
     },
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    loadingBar: {
+      // flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      // backgroundColor: 'green',
+      height: '100%',
+    },
   });
 
   return (
     <View style={styles.container}>
-      {user && (
+      {user ? (
         <ScrollView showsVerticalScrollIndicator={false}>
           <Portal>
             <Dialog visible={showDialog} onDismiss={() => setShowDialog(false)}>
+              <Dialog.Title>{dialog.name}</Dialog.Title>
+
               {renderSwitch()}
+              <Dialog.Actions>
+                {!loading ? (
+                  <Button onPress={handleChange}>
+                    <Icon
+                      name="check"
+                      size={30}
+                      style={{ padding: 10 }}
+                      // color="white"
+                    />
+                  </Button>
+                ) : (
+                  <ActivityIndicator style={{ padding: 10 }} size={30} />
+                )}
+              </Dialog.Actions>
             </Dialog>
           </Portal>
           <View>
@@ -249,7 +316,16 @@ const AccountInfo = ({ navigation, theme }) => {
                   {user.userInfo.lastName || ''}
                 </DataTable.Cell>
               </DataTable.Row>
-              <DataTable.Row onPress={() => console.log('pressed.')}>
+              <DataTable.Row
+                onPress={() => {
+                  // setInput(gender);
+                  setShowDialog(true);
+                  setDialog({
+                    path: 'userInfo.gender',
+                    name: 'Gender',
+                    type: 'gender',
+                  });
+                }}>
                 <DataTable.Cell>Gender</DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.userInfo.gender || ''}
@@ -257,12 +333,12 @@ const AccountInfo = ({ navigation, theme }) => {
               </DataTable.Row>
               <DataTable.Row
                 onPress={() => {
-                  setInput(user.userInfo.firstName || '');
+                  setInput(formatDate(user.userInfo.dateOfBirth));
                   setShowDialog(true);
                   setDialog({
-                    path: 'userInfo.firstName',
-                    name: 'First Name',
-                    type: 'text',
+                    path: 'userInfo.dateOfBirth',
+                    name: 'Date of birth',
+                    type: 'date',
                   });
                 }}>
                 <DataTable.Cell>Date of birth</DataTable.Cell>
@@ -354,11 +430,14 @@ const AccountInfo = ({ navigation, theme }) => {
 
               <DataTable.Row onPress={() => console.log('pressed.')}>
                 <DataTable.Cell>Nutrition Goals</DataTable.Cell>
-                {/* <DataTable.Cell numeric></DataTable.Cell> */}
               </DataTable.Row>
             </DataTable>
           </View>
         </ScrollView>
+      ) : (
+        <View style={styles.loadingBar}>
+          <ActivityIndicator color={colors.primary} size={'large'} />
+        </View>
       )}
     </View>
   );
