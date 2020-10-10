@@ -26,6 +26,7 @@
     "react": "16.13.1",
     "react-native": "0.63.2",
     "react-native-calendars": "^1.403.0",
+    "react-native-camera": "^3.40.0",
     "react-native-gesture-handler": "^1.8.0",
     "react-native-navigation-bar-color": "^2.0.1",
     "react-native-numeric-input": "himelbrand/react-native-numeric-input#50/head",

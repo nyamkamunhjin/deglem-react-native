@@ -60,3 +60,7 @@ buck-out/
 
 # api keys .env
 env.config.js
+android/app/google-services.json
+
+# dumps
+*.hprof

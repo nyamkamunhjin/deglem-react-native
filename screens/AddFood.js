@@ -1,6 +1,6 @@
 import { StackActions } from '@react-navigation/native';
 import axios from 'axios';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import NumericInput from 'react-native-numeric-input';
@@ -13,12 +13,51 @@ import { BACKEND_URL } from '../env.config';
  * @function AddFood
  **/
 const AddFood = ({ route, navigation }) => {
-  // console.log(route.params);
+  console.log(route.params);
   const [serving, setServing] = useState(1);
-  const { food, addTo, selectedDate } = route.params;
+  const { addTo, selectedDate, barcode } = route.params;
   const { cookies } = useContext(cookieContext);
 
-  // console.log('addTo:', addTo);
+  const [food, setFood] = useState(route.params.food);
+  console.log({ food });
+
+  useEffect(() => {
+    const getByBarcode = async () => {
+      cookies
+        .get(BACKEND_URL)
+        .then((cookie) => {
+          // console.log(cookie);
+          if (Object.keys(cookie).length === 0) {
+            throw new Error('cookie empty');
+          }
+
+          const {
+            token: { value },
+          } = cookie;
+
+          axios
+            .get(`${BACKEND_URL}/api/foods`, {
+              headers: {
+                Authorization: `Bearer ${value}`,
+              },
+              params: {
+                barcode,
+              },
+            })
+            .then(({ data }) => {
+              setFood(data);
+              console.log(data);
+            });
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    };
+
+    getByBarcode();
+  }, [barcode, cookies]);
+
+  // console.log();
   const getAdditionalNutrients = (doc) => {
     let temp = {
       ...doc,
@@ -87,72 +126,77 @@ const AddFood = ({ route, navigation }) => {
 
   return (
     <View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <DataTable>
-          <DataTable.Row>
-            <DataTable.Cell>{food.name}</DataTable.Cell>
-            <DataTable.Cell numeric>
-              <Button mode="contained" onPress={handleFoodAdd} color={'white'}>
-                Add
-              </Button>
-            </DataTable.Cell>
-          </DataTable.Row>
-          <DataTable.Row>
-            <DataTable.Cell>Serving size</DataTable.Cell>
-            <DataTable.Cell
-              numeric>{`${food.serving.size} ${food.serving.unit}`}</DataTable.Cell>
-          </DataTable.Row>
-          <DataTable.Row>
-            <DataTable.Cell>Number of serving</DataTable.Cell>
-            <DataTable.Cell numeric>
-              <NumericInput
-                // type="up-down"
-                valueType="real"
-                step={0.1}
-                totalWidth={100}
-                totalHeight={35}
-                rounded
-                value={serving}
-                onChange={(num) => setServing(num)}
-              />
-            </DataTable.Cell>
-          </DataTable.Row>
+      {food && (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <DataTable>
+            <DataTable.Row>
+              <DataTable.Cell>{food.name}</DataTable.Cell>
+              <DataTable.Cell numeric>
+                <Button
+                  mode="contained"
+                  onPress={handleFoodAdd}
+                  color={'white'}>
+                  Add
+                </Button>
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>Serving size</DataTable.Cell>
+              <DataTable.Cell
+                numeric>{`${food.serving.size} ${food.serving.unit}`}</DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>Number of serving</DataTable.Cell>
+              <DataTable.Cell numeric>
+                <NumericInput
+                  // type="up-down"
+                  valueType="real"
+                  step={0.1}
+                  totalWidth={100}
+                  totalHeight={35}
+                  rounded
+                  value={serving}
+                  onChange={(num) => setServing(num)}
+                />
+              </DataTable.Cell>
+            </DataTable.Row>
 
-          <View style={styles.main}>
-            <View style={styles.temp} />
+            <View style={styles.main}>
+              <View style={styles.temp} />
 
-            <DataTable>
-              <DataTable.Header>
-                <DataTable.Title style={styles.cell}>Carbs</DataTable.Title>
-                <DataTable.Title style={styles.cell}>Fat</DataTable.Title>
-                <DataTable.Title style={styles.cell}>Protein</DataTable.Title>
-              </DataTable.Header>
-              <DataTable.Row>
-                <DataTable.Cell style={styles.cell}>
-                  {food.totalCarbohydrates || 0}
-                </DataTable.Cell>
-                <DataTable.Cell style={styles.cell}>
-                  {food.totalFat || 0}
-                </DataTable.Cell>
-                <DataTable.Cell style={styles.cell}>
-                  {food.protein || 0}
-                </DataTable.Cell>
-              </DataTable.Row>
-            </DataTable>
+              <DataTable>
+                <DataTable.Header>
+                  <DataTable.Title style={styles.cell}>Carbs</DataTable.Title>
+                  <DataTable.Title style={styles.cell}>Fat</DataTable.Title>
+                  <DataTable.Title style={styles.cell}>Protein</DataTable.Title>
+                </DataTable.Header>
+                <DataTable.Row>
+                  <DataTable.Cell style={styles.cell}>
+                    {food.totalCarbohydrates || 0}
+                  </DataTable.Cell>
+                  <DataTable.Cell style={styles.cell}>
+                    {food.totalFat || 0}
+                  </DataTable.Cell>
+                  <DataTable.Cell style={styles.cell}>
+                    {food.protein || 0}
+                  </DataTable.Cell>
+                </DataTable.Row>
+              </DataTable>
 
-            <DataTable>
-              {Object.entries(getAdditionalNutrients(food)).map(
-                (entry, index) => (
-                  <DataTable.Row key={index}>
-                    <DataTable.Cell>{entry[0]}</DataTable.Cell>
-                    <DataTable.Cell numeric>{entry[1]}</DataTable.Cell>
-                  </DataTable.Row>
-                ),
-              )}
-            </DataTable>
-          </View>
-        </DataTable>
-      </ScrollView>
+              <DataTable>
+                {Object.entries(getAdditionalNutrients(food)).map(
+                  (entry, index) => (
+                    <DataTable.Row key={index}>
+                      <DataTable.Cell>{entry[0]}</DataTable.Cell>
+                      <DataTable.Cell numeric>{entry[1]}</DataTable.Cell>
+                    </DataTable.Row>
+                  ),
+                )}
+              </DataTable>
+            </View>
+          </DataTable>
+        </ScrollView>
+      )}
     </View>
   );
 };

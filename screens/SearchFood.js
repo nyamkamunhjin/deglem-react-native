@@ -8,9 +8,11 @@ import {
   Searchbar,
   withTheme,
   Text,
+  Button,
 } from 'react-native-paper';
 import cookieContext from '../context/cookie-context';
 import { BACKEND_URL } from '../env.config';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 /**
  * @author
@@ -69,14 +71,29 @@ const SearchFood = (props) => {
   const { container, searchbar } = styles;
   return (
     <View style={container}>
-      <Searchbar
-        style={searchbar}
-        placeholder="Search food"
-        onChangeText={onChangeSearch}
-        value={searchQuery}
-        onIconPress={handleSearch}
-        onSubmitEditing={handleSearch}
-      />
+      <View
+        style={{
+          flexDirection: 'row',
+        }}>
+        <Searchbar
+          style={searchbar}
+          placeholder="Search food"
+          onChangeText={onChangeSearch}
+          value={searchQuery}
+          onIconPress={handleSearch}
+          onSubmitEditing={handleSearch}
+        />
+        <Button
+          style={styles.barcode}
+          onPress={() =>
+            navigation.navigate('barcode-scanner', {
+              addTo: props.route.params.name,
+              selectedDate: props.route.params.selectedDate,
+            })
+          }>
+          <Icon name="barcode" size={30} />
+        </Button>
+      </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <DataTable>
           <DataTable.Header>
@@ -119,8 +136,14 @@ const SearchFood = (props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  barcode: {
+    flex: 0.001,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+  },
   searchbar: {
+    flex: 10,
     margin: 5,
     borderRadius: 10,
   },

@@ -11,6 +11,7 @@ import EditFood from '../../screens/EditFood';
 import SignIn from '../../screens/SignIn';
 import cookieContext from '../../context/cookie-context';
 import SignUp from '../../screens/SignUp';
+import BarcodeScanner from '../../components/BarcodeScanner/BarcodeScanner';
 
 /**
  * @author
@@ -73,6 +74,11 @@ const StackNavigator = (props) => {
         name="sign-up"
         component={SignUp}
         options={{ title: 'Sign up', gestureEnabled: true }}
+      />
+      <Stack.Screen
+        name="barcode-scanner"
+        component={BarcodeScanner}
+        options={{ title: 'Barcode scanner' }}
       />
     </Stack.Navigator>
   );
