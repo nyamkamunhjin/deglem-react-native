@@ -18,6 +18,7 @@ import axios from 'axios';
 import { BACKEND_URL } from '../env.config';
 import { formatDate } from '../functions/functions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MultiChoice from '../components/MultiChoice/MultiChoice';
 
 /**
  * @author
@@ -138,6 +139,8 @@ const AccountInfo = ({ navigation, theme }) => {
             />
           </Dialog.Content>
         );
+      case 'multi-choice':
+        return <MultiChoice input={input} setInput={setInput} />;
     }
   };
 
@@ -408,7 +411,7 @@ const AccountInfo = ({ navigation, theme }) => {
                 }}>
                 <DataTable.Cell>Weekly Goal</DataTable.Cell>
                 <DataTable.Cell numeric>
-                  {user.goalInfo ? user.goalInfo.weeklyGoal : ''}
+                  {user.goalInfo ? user.goalInfo.weeklyGoal : ''} kg
                 </DataTable.Cell>
               </DataTable.Row>
               <DataTable.Row
@@ -418,7 +421,7 @@ const AccountInfo = ({ navigation, theme }) => {
                   setDialog({
                     path: 'goalInfo.activityLevel',
                     name: 'Activity Level',
-                    type: 'numeric',
+                    type: 'multi-choice',
                   });
                 }}>
                 <DataTable.Cell>Activity Level</DataTable.Cell>
@@ -427,7 +430,7 @@ const AccountInfo = ({ navigation, theme }) => {
                 </DataTable.Cell>
               </DataTable.Row>
 
-              <DataTable.Row onPress={() => console.log('pressed.')}>
+              <DataTable.Row onPress={() => navigation.navigate('mygoal-tab')}>
                 <DataTable.Cell>Nutrition Goals</DataTable.Cell>
               </DataTable.Row>
             </DataTable>

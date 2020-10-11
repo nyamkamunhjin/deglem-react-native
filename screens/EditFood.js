@@ -70,7 +70,7 @@ const EditFood = ({ route, navigation }) => {
           })
           .then((res) => {
             console.log(res.data);
-            navigation.dispatch(StackActions.popToTop());
+            navigation.navigate('diary-tab');
           })
           .catch((err) => {
             console.log(err);

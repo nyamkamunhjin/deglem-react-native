@@ -13,51 +13,12 @@ import { BACKEND_URL } from '../env.config';
  * @function AddFood
  **/
 const AddFood = ({ route, navigation }) => {
-  console.log(route.params);
+  // console.log(route.params);
   const [serving, setServing] = useState(1);
-  const { addTo, selectedDate, barcode } = route.params;
+  const { addTo, selectedDate, food } = route.params;
   const { cookies } = useContext(cookieContext);
 
-  const [food, setFood] = useState(route.params.food);
-  console.log({ food });
-
-  useEffect(() => {
-    if (barcode) {
-      const getByBarcode = async () => {
-        cookies
-          .get(BACKEND_URL)
-          .then((cookie) => {
-            // console.log(cookie);
-            if (Object.keys(cookie).length === 0) {
-              throw new Error('cookie empty');
-            }
-
-            const {
-              token: { value },
-            } = cookie;
-
-            axios
-              .get(`${BACKEND_URL}/api/foods`, {
-                headers: {
-                  Authorization: `Bearer ${value}`,
-                },
-                params: {
-                  barcode,
-                },
-              })
-              .then(({ data }) => {
-                setFood(data);
-                console.log(data);
-              });
-          })
-          .catch((err) => {
-            console.error(err);
-          });
-      };
-
-      getByBarcode();
-    }
-  }, [barcode, cookies]);
+  // console.log({ food });
 
   // console.log();
   const getAdditionalNutrients = (doc) => {
@@ -114,8 +75,7 @@ const AddFood = ({ route, navigation }) => {
           })
           .then((res) => {
             console.log(res.data);
-            navigation.dispatch(StackActions.popToTop());
-            navigation.navigate('Diary');
+            navigation.navigate('diary-tab');
           })
           .catch((err) => {
             console.log(err);

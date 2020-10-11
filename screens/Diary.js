@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
-import { Dialog, Portal, withTheme, Button } from 'react-native-paper';
+import { Dialog, Portal, withTheme } from 'react-native-paper';
 import FoodTable from '../components/FoodTable/FoodTable';
 import CalendarSwipe from '../components/Calendar/CalendarSwipe';
 import DiaryProgress from '../components/DiaryProgress/DiaryProgress';
@@ -46,25 +46,25 @@ const Diary = ({ navigation, theme }) => {
 
     setSelectedDate(pair);
   };
+  const calculateTotalCalories = (today) => {
+    const { breakfast, lunch, dinner, snacks } = today;
+    return (
+      countCalories(breakfast) +
+      countCalories(lunch) +
+      countCalories(dinner) +
+      countCalories(snacks)
+    );
+  };
+  const setDiaryByDate = (date, diaries) => {
+    // console.log('diaries:', diaries);
+    const diary = diaries.find((item) => {
+      return formatDate(item.date) === date;
+    });
+    setCurrent(diary || {});
+    setTotalCalories(calculateTotalCalories(diary || {}));
+  };
 
   const fetchData = () => {
-    const calculateTotalCalories = (today) => {
-      const { breakfast, lunch, dinner, snacks } = today;
-      return (
-        countCalories(breakfast) +
-        countCalories(lunch) +
-        countCalories(dinner) +
-        countCalories(snacks)
-      );
-    };
-    const setDiaryByDate = (date, diaries) => {
-      // console.log('diaries:', diaries);
-      const diary = diaries.find((item) => {
-        return formatDate(item.date) === date;
-      });
-      setCurrent(diary || {});
-      setTotalCalories(calculateTotalCalories(diary || {}));
-    };
     cookies
       .get(BACKEND_URL)
       .then((cookie) => {
@@ -98,20 +98,11 @@ const Diary = ({ navigation, theme }) => {
       });
   };
 
-  // handle refresh
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     console.log({ selectedDate: getSelectedDate() });
-
-  //     fetchData();
-  //   }, [navigation]),
-  // );
-
   useEffect(() => {
     if (isFocused) {
       fetchData();
     }
-  }, [getSelectedDate, isFocused, current]);
+  }, [getSelectedDate, isFocused]);
 
   return (
     <React.Fragment>

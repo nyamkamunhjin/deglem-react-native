@@ -6,6 +6,8 @@ import CookieManager from '@react-native-community/cookies';
 import { BACKEND_URL } from './env.config';
 import SignIn from './screens/SignIn';
 import { formatDate } from './functions/functions';
+import MultiChoice from './components/MultiChoice/MultiChoice';
+import CreateFood from './screens/CreateFood';
 
 /**
  * @author
@@ -20,10 +22,6 @@ const App = (props) => {
     date[formatDate(new Date())] = { selected: true };
     return date;
   });
-
-  // useEffect(() => {
-  //   console.log('selectedDate changed from App.js', selectedDate);
-  // }, [selectedDate]);
 
   const logIn = ({ token, expires }) => {
     CookieManager.set(BACKEND_URL, {
@@ -47,18 +45,11 @@ const App = (props) => {
     });
   };
 
-  // const handleDateSelect = (day) => {
-  //   let pair = {};
-  //   pair[day.dateString] = { selected: true };
-  // };
-
   useEffect(() => {
     CookieManager.get(BACKEND_URL).then((cookie) => {
       if (Object.keys(cookie).length !== 0) {
         // console.log(CookieManager);
         setLoggedIn(true);
-
-        // setSelectedDate();
       }
     });
   }, []);
@@ -73,7 +64,7 @@ const App = (props) => {
         getSelectedDate: () => selectedDate,
         setSelectedDate,
       }}>
-      {<RootNavigator />}
+      <RootNavigator />
     </CookieContext.Provider>
   );
 };
