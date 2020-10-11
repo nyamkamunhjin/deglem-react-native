@@ -6,4 +6,6 @@ export default React.createContext({
   logIn: () => {},
   logOut: () => {},
   loggedIn: false,
+  getSelectedDate: () => {},
+  setSelectedDate: () => {},
 });

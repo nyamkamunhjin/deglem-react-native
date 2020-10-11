@@ -22,39 +22,41 @@ const AddFood = ({ route, navigation }) => {
   console.log({ food });
 
   useEffect(() => {
-    const getByBarcode = async () => {
-      cookies
-        .get(BACKEND_URL)
-        .then((cookie) => {
-          // console.log(cookie);
-          if (Object.keys(cookie).length === 0) {
-            throw new Error('cookie empty');
-          }
+    if (barcode) {
+      const getByBarcode = async () => {
+        cookies
+          .get(BACKEND_URL)
+          .then((cookie) => {
+            // console.log(cookie);
+            if (Object.keys(cookie).length === 0) {
+              throw new Error('cookie empty');
+            }
 
-          const {
-            token: { value },
-          } = cookie;
+            const {
+              token: { value },
+            } = cookie;
 
-          axios
-            .get(`${BACKEND_URL}/api/foods`, {
-              headers: {
-                Authorization: `Bearer ${value}`,
-              },
-              params: {
-                barcode,
-              },
-            })
-            .then(({ data }) => {
-              setFood(data);
-              console.log(data);
-            });
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    };
+            axios
+              .get(`${BACKEND_URL}/api/foods`, {
+                headers: {
+                  Authorization: `Bearer ${value}`,
+                },
+                params: {
+                  barcode,
+                },
+              })
+              .then(({ data }) => {
+                setFood(data);
+                console.log(data);
+              });
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      };
 
-    getByBarcode();
+      getByBarcode();
+    }
   }, [barcode, cookies]);
 
   // console.log();

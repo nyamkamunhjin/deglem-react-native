@@ -219,7 +219,6 @@ const AccountInfo = ({ navigation, theme }) => {
           <Portal>
             <Dialog visible={showDialog} onDismiss={() => setShowDialog(false)}>
               <Dialog.Title>{dialog.name}</Dialog.Title>
-
               {renderSwitch()}
               <Dialog.Actions>
                 {!loading ? (

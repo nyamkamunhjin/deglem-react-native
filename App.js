@@ -5,6 +5,7 @@ import CookieContext from './context/cookie-context';
 import CookieManager from '@react-native-community/cookies';
 import { BACKEND_URL } from './env.config';
 import SignIn from './screens/SignIn';
+import { formatDate } from './functions/functions';
 
 /**
  * @author
@@ -12,6 +13,17 @@ import SignIn from './screens/SignIn';
  **/
 const App = (props) => {
   const [loggedIn, setLoggedIn] = useState(false);
+
+  const [selectedDate, setSelectedDate] = useState(() => {
+    console.log('setSelected called from App.js');
+    let date = {};
+    date[formatDate(new Date())] = { selected: true };
+    return date;
+  });
+
+  // useEffect(() => {
+  //   console.log('selectedDate changed from App.js', selectedDate);
+  // }, [selectedDate]);
 
   const logIn = ({ token, expires }) => {
     CookieManager.set(BACKEND_URL, {
@@ -35,11 +47,18 @@ const App = (props) => {
     });
   };
 
+  // const handleDateSelect = (day) => {
+  //   let pair = {};
+  //   pair[day.dateString] = { selected: true };
+  // };
+
   useEffect(() => {
     CookieManager.get(BACKEND_URL).then((cookie) => {
       if (Object.keys(cookie).length !== 0) {
         // console.log(CookieManager);
         setLoggedIn(true);
+
+        // setSelectedDate();
       }
     });
   }, []);
@@ -48,9 +67,11 @@ const App = (props) => {
     <CookieContext.Provider
       value={{
         cookies: CookieManager,
-        logIn: logIn,
-        logOut: logOut,
+        logIn,
+        logOut,
         loggedIn,
+        getSelectedDate: () => selectedDate,
+        setSelectedDate,
       }}>
       {<RootNavigator />}
     </CookieContext.Provider>
