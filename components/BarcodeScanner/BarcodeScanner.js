@@ -97,7 +97,7 @@ const BarcodeScanner = ({
             ? ({ barcodes }) => {
                 barcodes[0] &&
                   barcodes[0].format !== 'None' &&
-                  console.log(barcodes[0].data);
+                  console.log(barcodes[0]);
 
                 if (barcodes[0] && barcodes[0].format !== 'None') {
                   getByBarcode(barcodes[0].dataRaw);
