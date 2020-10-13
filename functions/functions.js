@@ -1,5 +1,8 @@
-function formatDate(date) {
-  var d = new Date(date),
+import CookieManager from '@react-native-community/cookies';
+import { BACKEND_URL } from '../env.config';
+
+const formatDate = (date) => {
+  let d = new Date(date),
     month = '' + (d.getMonth() + 1),
     day = '' + d.getDate(),
     year = d.getFullYear();
@@ -12,12 +15,13 @@ function formatDate(date) {
   }
 
   return [year, month, day].join('-');
-}
+};
 
 const countCalories = (foods) => {
   if (foods) {
     return parseInt(
       foods.reduce((acc, obj) => acc + obj.food.calories * obj.serving, 0),
+      10,
     );
   } else {
     return 0;
@@ -53,11 +57,30 @@ const MifflinStJourFormula = ({
   return parseInt(OptimalCaloriesForGoal, 10);
 };
 
-function calculateAge(birthday) {
+const calculateAge = (birthday) => {
   // birtdday is a date
-  var ageDifMs = Date.now() - new Date(birthday).getTime();
-  var ageDate = new Date(ageDifMs); // miliseconds from epoch
+  let ageDifMs = Date.now() - new Date(birthday).getTime();
+  let ageDate = new Date(ageDifMs); // miliseconds from epoch
   return Math.abs(ageDate.getUTCFullYear() - 1970);
-}
+};
 
-export { formatDate, countCalories, MifflinStJourFormula, calculateAge };
+const getToken = async () => {
+  try {
+    const {
+      token: { value },
+    } = await CookieManager.get(BACKEND_URL);
+    // console.log('value:', value);
+    return value;
+    // return value;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export {
+  formatDate,
+  countCalories,
+  MifflinStJourFormula,
+  calculateAge,
+  getToken,
+};

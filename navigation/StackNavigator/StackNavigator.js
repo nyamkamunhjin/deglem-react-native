@@ -23,7 +23,7 @@ const Stack = createStackNavigator();
 
 const StackNavigator = (props) => {
   const { colors } = props.theme;
-  const { loggedIn } = useContext(cookieContext);
+  const { token } = useContext(cookieContext);
 
   return (
     <Stack.Navigator
@@ -41,7 +41,7 @@ const StackNavigator = (props) => {
       }}>
       <Stack.Screen
         name="Diary"
-        component={loggedIn ? BottomNavigator : SignIn}
+        component={token ? BottomNavigator : SignIn}
         options={({ route }) => ({
           headerTitle: getHeaderTitle(route),
         })}

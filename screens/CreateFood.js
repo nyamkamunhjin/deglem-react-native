@@ -19,6 +19,7 @@ import { StackActions, useNavigation } from '@react-navigation/native';
 import globalStyles from '../global-styles';
 import { ScrollView } from 'react-native-gesture-handler';
 import cookieContext from '../context/cookie-context';
+import FoodAPI from '../api/FoodAPI';
 
 const createFoodSchema = yup.object({
   name: yup.string().required('Food name is required').min(2),
@@ -36,7 +37,7 @@ const createFoodSchema = yup.object({
  * @function CreateFood
  **/
 const CreateFood = ({ navigation, route, theme }) => {
-  const { cookies } = useContext(cookieContext);
+  const { token } = useContext(cookieContext);
 
   const { colors } = theme;
   const { barcode } = route.params;
@@ -95,7 +96,7 @@ const CreateFood = ({ navigation, route, theme }) => {
           unit: '',
           servingPerContainer: '',
         }}
-        onSubmit={(values, actions) => {
+        onSubmit={async (values, actions) => {
           console.log(values);
           let food = { ...values };
           delete food.size;
@@ -108,36 +109,15 @@ const CreateFood = ({ navigation, route, theme }) => {
             servingPerContainer: values.servingPerContainer,
           };
 
-          cookies
-            .get(BACKEND_URL)
-            .then((cookie) => {
-              // console.log(cookie);
-              if (Object.keys(cookie).length === 0) {
-                throw new Error('cookie empty');
-              }
+          const { data, err } = await FoodAPI.createFood(token, food);
 
-              const {
-                token: { value },
-              } = cookie;
-
-              axios
-                .post(`${BACKEND_URL}/api/foods/add`, food, {
-                  headers: {
-                    Authorization: `Bearer ${value}`,
-                  },
-                })
-                .then(({ data, response }) => {
-                  if (data) {
-                    navigation.navigate('diary-tab');
-                  }
-                })
-                .catch((err) => {
-                  console.log('axios: ', err);
-                });
-            })
-            .catch((err) => {
-              console.error(err);
-            });
+          if (err) {
+            console.error(err);
+          } else {
+            if (data) {
+              navigation.navigate('diary-tab');
+            }
+          }
         }}>
         {(formikProps) => (
           <View style={styles.form}>

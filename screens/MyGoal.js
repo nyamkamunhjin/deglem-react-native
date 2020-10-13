@@ -24,13 +24,14 @@ import {
   MifflinStJourFormula,
   calculateAge,
 } from '../functions/functions';
+import UserAPI from '../api/UserAPI';
 
 /**
  * @author
  * @function MyGoal
  **/
 const MyGoal = ({ navigation, theme }) => {
-  const { cookies } = useContext(cookieContext);
+  const { token } = useContext(cookieContext);
   const { colors } = theme;
   const [user, setUser] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
@@ -55,36 +56,18 @@ const MyGoal = ({ navigation, theme }) => {
   };
 
   useEffect(() => {
-    cookies
-      .get(BACKEND_URL)
-      .then((cookie) => {
-        // console.log(cookie);
-        if (Object.keys(cookie).length === 0) {
-          throw new Error('cookie empty');
-        }
+    const getUser = async () => {
+      const { data, err } = await UserAPI.getUser(token);
 
-        const {
-          token: { value },
-        } = cookie;
-
-        axios
-          .get(`${BACKEND_URL}/api/users`, {
-            headers: {
-              Authorization: `Bearer ${value}`,
-            },
-          })
-          .then(({ data }) => {
-            setUser(data);
-            console.log;
-          })
-          .catch((err) => {
-            console.log('axios: ', err);
-          });
-      })
-      .catch((err) => {
+      if (err) {
         console.error(err);
-      });
-  }, [cookies]);
+      } else {
+        setUser(data);
+      }
+    };
+
+    getUser();
+  }, [token]);
 
   const renderSwitch = () => {
     switch (dialog.type) {
@@ -184,66 +167,99 @@ const MyGoal = ({ navigation, theme }) => {
     }
   };
 
-  const handleChange = () => {
+  const handleChange = async () => {
     setLoading(true);
 
     let update = {};
     update[dialog.path] = input;
 
-    cookies
-      .get(BACKEND_URL)
-      .then((cookie) => {
-        // console.log(cookie);
-        if (Object.keys(cookie).length === 0) {
-          throw new Error('cookie empty');
-        }
+    const { data, err } = await UserAPI.updateUser(token, update);
 
-        const {
-          token: { value },
-        } = cookie;
+    if (err) {
+      console.error(err);
+      setLoading(false);
+    } else {
+      setUser(data);
+      setShowDialog(false);
+      setInput('');
+      setLoading(false);
 
-        axios
-          .post(`${BACKEND_URL}/api/users/update`, update, {
-            headers: {
-              Authorization: `Bearer ${value}`,
-            },
-          })
-          .then(({ data }) => {
-            setUser(data);
-            setShowDialog(false);
-            setInput('');
-
-            let calories = {};
-            calories['nutritionGoals.calories'] = MifflinStJourFormula({
-              age: calculateAge(user.userInfo.dateOfBirth),
-              gender: user.userInfo.gender,
-              height: user.goalInfo.height,
-              currentWeight: user.goalInfo.currentWeight,
-              weeklyGoal: user.goalInfo.weeklyGoal,
-              activityLevel: user.goalInfo.activityLevel,
-            });
-            console.log(calories);
-
-            axios
-              .post(`${BACKEND_URL}/api/users/update`, calories, {
-                headers: {
-                  Authorization: `Bearer ${value}`,
-                },
-              })
-              .then(({ data }) => {
-                setUser(data);
-              });
-            setLoading(false);
-          })
-          .catch((err) => {
-            console.log(err);
-            setLoading(false);
-          });
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
+      let calories = {};
+      calories['nutritionGoals.calories'] = MifflinStJourFormula({
+        age: calculateAge(user.userInfo.dateOfBirth),
+        gender: user.userInfo.gender,
+        height: user.goalInfo.height,
+        currentWeight: user.goalInfo.currentWeight,
+        weeklyGoal: user.goalInfo.weeklyGoal,
+        activityLevel: user.goalInfo.activityLevel,
       });
+
+      const { data: updatedData, err: updatedErr } = await UserAPI.updateUser(
+        token,
+        calories,
+      );
+
+      if (updatedErr) {
+        console.error(updatedErr);
+      } else {
+        setUser(updatedData);
+      }
+    }
+
+    // cookies
+    //   .get(BACKEND_URL)
+    //   .then((cookie) => {
+    //     // console.log(cookie);
+    //     if (Object.keys(cookie).length === 0) {
+    //       throw new Error('cookie empty');
+    //     }
+
+    //     const {
+    //       token: { value },
+    //     } = cookie;
+
+    //     axios
+    //       .post(`${BACKEND_URL}/api/users/update`, update, {
+    //         headers: {
+    //           Authorization: `Bearer ${value}`,
+    //         },
+    //       })
+    //       .then(({ data }) => {
+    //         setUser(data);
+    //         setShowDialog(false);
+    //         setInput('');
+
+    //         let calories = {};
+    //         calories['nutritionGoals.calories'] = MifflinStJourFormula({
+    //           age: calculateAge(user.userInfo.dateOfBirth),
+    //           gender: user.userInfo.gender,
+    //           height: user.goalInfo.height,
+    //           currentWeight: user.goalInfo.currentWeight,
+    //           weeklyGoal: user.goalInfo.weeklyGoal,
+    //           activityLevel: user.goalInfo.activityLevel,
+    //         });
+    //         console.log(calories);
+
+    //         axios
+    //           .post(`${BACKEND_URL}/api/users/update`, calories, {
+    //             headers: {
+    //               Authorization: `Bearer ${value}`,
+    //             },
+    //           })
+    //           .then(({ data }) => {
+    //             setUser(data);
+    //           });
+    //         setLoading(false);
+    //       })
+    //       .catch((err) => {
+    //         console.log(err);
+    //         setLoading(false);
+    //       });
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //     setLoading(false);
+    //   });
   };
 
   const styles = StyleSheet.create({

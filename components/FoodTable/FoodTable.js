@@ -10,6 +10,7 @@ import {
   Dialog,
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import DiaryAPI from '../../api/DiaryAPI';
 import cookieContext from '../../context/cookie-context';
 import { BACKEND_URL } from '../../env.config';
 import { countCalories } from '../../functions/functions';
@@ -21,7 +22,7 @@ import { countCalories } from '../../functions/functions';
 
 const FoodTable = (props) => {
   const { name, backgroundColor, fetchData } = props;
-  const { cookies } = useContext(cookieContext);
+  const { token } = useContext(cookieContext);
 
   const navigation = useNavigation();
   const { colors } = props.theme;
@@ -53,43 +54,18 @@ const FoodTable = (props) => {
     },
   });
 
-  const handleDeleteFood = (item) => {
+  const handleDeleteFood = async (item) => {
     console.log(item.name, item._id);
 
-    cookies
-      .get(BACKEND_URL)
-      .then((cookie) => {
-        // console.log(cookie);
-        if (Object.keys(cookie).length === 0) {
-          throw new Error('cookie empty');
-        }
+    const { data, err } = await DiaryAPI.removeFood(token, item);
 
-        const {
-          token: { value },
-        } = cookie;
-
-        axios
-          .delete(`${BACKEND_URL}/api/diary/food/delete`, {
-            headers: {
-              Authorization: `Bearer ${value}`,
-            },
-            params: {
-              name: item.name,
-              _id: item._id,
-            },
-          })
-          .then((res) => console.log({ data: res.data }))
-          .catch((err) => {
-            console.error({ err });
-          });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-
-    // console.log(data);
+    if (err) {
+      console.error(err);
+    } else {
+      console.log({ data });
+      fetchData();
+    }
     setShowDeleteDialog(false);
-    fetchData();
   };
 
   const { foodTable, addButton } = styles;
@@ -133,7 +109,7 @@ const FoodTable = (props) => {
                 <DataTable.Cell>{data.food.name}</DataTable.Cell>
                 <DataTable.Cell numeric>{data.serving}</DataTable.Cell>
                 <DataTable.Cell numeric>
-                  {parseInt(data.food.calories * data.serving)}
+                  {parseInt(data.food.calories * data.serving, 10)}
                 </DataTable.Cell>
               </DataTable.Row>
             );

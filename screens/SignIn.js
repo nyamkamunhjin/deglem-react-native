@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import axios from 'axios';
 import { BACKEND_URL } from '../env.config';
 import { StackActions, useNavigation } from '@react-navigation/native';
+import UserAPI from '../api/UserAPI';
 
 /**
  * @author
@@ -31,16 +32,26 @@ const SignIn = (props) => {
           email: 'nyamkamunhjin@gmail.com',
           password: '12345678',
         }}
-        onSubmit={(values, actions) => {
+        onSubmit={async (values, actions) => {
           console.log(values);
 
-          axios.post(`${BACKEND_URL}/auth/login`, values).then(({ data }) => {
-            console.log(data);
+          const { data, err } = await UserAPI.signIn(values);
+
+          if (err) {
+            console.error(err);
+          } else {
             if (data) {
               logIn(data);
               // navigation.dispatch(StackActions.popToTop());
             }
-          });
+          }
+          // axios.post(`${BACKEND_URL}/auth/login`, values).then(({ data }) => {
+          //   console.log(data);
+          //   if (data) {
+          //     logIn(data);
+          //     // navigation.dispatch(StackActions.popToTop());
+          //   }
+          // });
         }}>
         {(formikProps) => (
           <View style={styles.form}>

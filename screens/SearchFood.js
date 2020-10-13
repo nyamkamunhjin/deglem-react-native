@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -11,8 +10,8 @@ import {
   Button,
 } from 'react-native-paper';
 import cookieContext from '../context/cookie-context';
-import { BACKEND_URL } from '../env.config';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import FoodAPI from '../api/FoodAPI';
 
 /**
  * @author
@@ -21,7 +20,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const SearchFood = (props) => {
   const { colors } = props.theme;
   const { navigation } = props;
-  const { cookies } = useContext(cookieContext);
+  const { token } = useContext(cookieContext);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResult, setSearchResult] = useState([]);
@@ -29,42 +28,20 @@ const SearchFood = (props) => {
 
   const onChangeSearch = (query) => setSearchQuery(query);
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     setLoadingBar(true);
     if (searchQuery === '') {
       setLoadingBar(false);
       setSearchResult([]);
     } else {
-      cookies
-        .get(BACKEND_URL)
-        .then((cookie) => {
-          // console.log(cookie);
-          if (Object.keys(cookie).length === 0) {
-            throw new Error('cookie empty');
-          }
+      const { data, err } = await FoodAPI.searchFood(token, searchQuery);
 
-          const {
-            token: { value },
-          } = cookie;
-
-          axios
-            .get(
-              `${BACKEND_URL}/api/foods/search?query=${searchQuery}&limit=25`,
-              {
-                headers: {
-                  Authorization: `Bearer ${value}`,
-                },
-              },
-            )
-            .then((res) => {
-              // console.log('results', res.data);
-              setSearchResult(res.data);
-              setLoadingBar(false);
-            });
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      if (err) {
+        console.error(err);
+      } else {
+        setSearchResult(data);
+        setLoadingBar(false);
+      }
     }
   };
 

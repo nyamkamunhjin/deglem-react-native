@@ -19,13 +19,14 @@ import { BACKEND_URL } from '../env.config';
 import { formatDate } from '../functions/functions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MultiChoice from '../components/MultiChoice/MultiChoice';
+import UserAPI from '../api/UserAPI';
 
 /**
  * @author
  * @function AccountInfo
  **/
 const AccountInfo = ({ navigation, theme }) => {
-  const { cookies } = useContext(cookieContext);
+  const { token } = useContext(cookieContext);
 
   const [user, setUser] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
@@ -52,36 +53,18 @@ const AccountInfo = ({ navigation, theme }) => {
   const { colors } = theme;
 
   useEffect(() => {
-    cookies
-      .get(BACKEND_URL)
-      .then((cookie) => {
-        // console.log(cookie);
-        if (Object.keys(cookie).length === 0) {
-          throw new Error('cookie empty');
-        }
+    const getUser = async () => {
+      const { data, err } = await UserAPI.getUser(token);
 
-        const {
-          token: { value },
-        } = cookie;
-
-        axios
-          .get(`${BACKEND_URL}/api/users`, {
-            headers: {
-              Authorization: `Bearer ${value}`,
-            },
-          })
-          .then(({ data }) => {
-            setUser(data);
-            console.log;
-          })
-          .catch((err) => {
-            console.log('axios: ', err);
-          });
-      })
-      .catch((err) => {
+      if (err) {
         console.error(err);
-      });
-  }, [cookies]);
+      } else {
+        setUser(data);
+      }
+    };
+
+    getUser();
+  }, [token]);
 
   const renderSwitch = () => {
     switch (dialog.type) {
@@ -144,45 +127,23 @@ const AccountInfo = ({ navigation, theme }) => {
     }
   };
 
-  const handleChange = () => {
+  const handleChange = async () => {
     setLoading(true);
 
     let update = {};
     update[dialog.path] = input;
 
-    cookies
-      .get(BACKEND_URL)
-      .then((cookie) => {
-        // console.log(cookie);
-        if (Object.keys(cookie).length === 0) {
-          throw new Error('cookie empty');
-        }
+    const { data, err } = await UserAPI.updateUser(token, update);
 
-        const {
-          token: { value },
-        } = cookie;
-
-        axios
-          .post(`${BACKEND_URL}/api/users/update`, update, {
-            headers: {
-              Authorization: `Bearer ${value}`,
-            },
-          })
-          .then(({ data }) => {
-            setUser(data);
-            setShowDialog(false);
-            setInput('');
-            setLoading(false);
-          })
-          .catch((err) => {
-            console.log(err);
-            setLoading(false);
-          });
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
+    if (err) {
+      console.error(err);
+      setLoading(false);
+    } else {
+      setUser(data);
+      setShowDialog(false);
+      setInput('');
+      setLoading(false);
+    }
   };
 
   const styles = StyleSheet.create({

@@ -5,6 +5,7 @@ import { View, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import NumericInput from 'react-native-numeric-input';
 import { Button, DataTable } from 'react-native-paper';
+import DiaryAPI from '../api/DiaryAPI';
 import cookieContext from '../context/cookie-context';
 import { BACKEND_URL } from '../env.config';
 
@@ -16,7 +17,7 @@ const AddFood = ({ route, navigation }) => {
   // console.log(route.params);
   const [serving, setServing] = useState(1);
   const { addTo, selectedDate, food } = route.params;
-  const { cookies } = useContext(cookieContext);
+  const { token } = useContext(cookieContext);
 
   // console.log({ food });
 
@@ -55,35 +56,47 @@ const AddFood = ({ route, navigation }) => {
     ];
 
     console.log(data);
-    cookies
-      .get(BACKEND_URL)
-      .then((cookie) => {
-        // console.log(cookie);
-        if (Object.keys(cookie).length === 0) {
-          throw new Error('cookie empty');
-        }
 
-        const {
-          token: { value },
-        } = cookie;
+    const {
+      data: { foodData },
+      err,
+    } = await DiaryAPI.addFood(token, data);
 
-        axios
-          .post(`${BACKEND_URL}/api/diary/food/add`, data, {
-            headers: {
-              Authorization: `Bearer ${value}`,
-            },
-          })
-          .then((res) => {
-            console.log(res.data);
-            navigation.navigate('diary-tab');
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    if (err) {
+      console.error(err);
+    } else {
+      console.log(foodData);
+      navigation.navigate('diary-tab');
+    }
+    // cookies
+    //   .get(BACKEND_URL)
+    //   .then((cookie) => {
+    //     // console.log(cookie);
+    //     if (Object.keys(cookie).length === 0) {
+    //       throw new Error('cookie empty');
+    //     }
+
+    //     const {
+    //       token: { value },
+    //     } = cookie;
+
+    //     axios
+    //       .post(`${BACKEND_URL}/api/diary/food/add`, data, {
+    //         headers: {
+    //           Authorization: `Bearer ${value}`,
+    //         },
+    //       })
+    //       .then((res) => {
+    //         console.log(res.data);
+    //         navigation.navigate('diary-tab');
+    //       })
+    //       .catch((err) => {
+    //         console.log(err);
+    //       });
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //   });
   };
 
   return (

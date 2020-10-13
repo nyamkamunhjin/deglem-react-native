@@ -14,6 +14,7 @@ import { StackActions, useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import axios from 'axios';
 import { BACKEND_URL } from '../env.config';
+import UserAPI from '../api/UserAPI';
 
 /**
  * @author
@@ -30,7 +31,7 @@ const signUpSchema = yup.object({
     .required('Confirm Password is required'),
   firstName: yup.string().required('First Name is required').min(4),
   lastName: yup.string().required('Last Name is required').min(4),
-  gender: yup.mixed().oneOf(['male', 'female']).required('Choose your gender'),
+  gender: yup.mixed().oneOf(['Male', 'Female']).required('Choose your gender'),
   dateOfBirth: yup.date().required('Birthday is required'),
 });
 
@@ -53,25 +54,24 @@ const SignUp = (props) => {
           email: 'nyamkamunhjin@gmail.com',
           firstName: 'Munkhjin',
           lastName: 'Nyamdorj',
-          gender: 'male',
+          gender: 'Male',
           dateOfBirth: '1998-11-09',
         }}
-        onSubmit={(values, actions) => {
+        onSubmit={async (values, actions) => {
           console.log(values);
           const userData = values;
           delete userData.confirmPassword;
 
-          axios
-            .post(`${BACKEND_URL}/auth/register`, { userInfo: { ...userData } })
-            .then(({ data }) => {
-              console.log(data);
-              if (data) {
-                navigation.dispatch(StackActions.popToTop());
-              }
-            })
-            .catch((err) => {
-              console.error(err);
-            });
+          const { data, err } = await UserAPI.signUp(userData);
+
+          if (err) {
+            console.error(err);
+          } else {
+            console.log(data);
+            if (data) {
+              navigation.dispatch(StackActions.popToTop());
+            }
+          }
         }}>
         {(formikProps) => (
           <View style={styles.form}>
@@ -163,11 +163,11 @@ const SignUp = (props) => {
               <View style={styles.gender}>
                 <Checkbox
                   status={
-                    formikProps.values.gender === 'male'
+                    formikProps.values.gender === 'Male'
                       ? 'checked'
                       : 'unchecked'
                   }
-                  onPress={() => formikProps.setFieldValue('gender', 'male')}
+                  onPress={() => formikProps.setFieldValue('gender', 'Male')}
                   color={theme.colors.primary}
                 />
                 <Text>Man</Text>
@@ -175,11 +175,11 @@ const SignUp = (props) => {
               <View style={styles.gender}>
                 <Checkbox
                   status={
-                    formikProps.values.gender === 'female'
+                    formikProps.values.gender === 'Female'
                       ? 'checked'
                       : 'unchecked'
                   }
-                  onPress={() => formikProps.setFieldValue('gender', 'female')}
+                  onPress={() => formikProps.setFieldValue('gender', 'Female')}
                   color={theme.colors.primary}
                 />
                 <Text>Woman</Text>

@@ -7,11 +7,11 @@ import CalendarSwipe from '../components/Calendar/CalendarSwipe';
 import DiaryProgress from '../components/DiaryProgress/DiaryProgress';
 import { Calendar } from 'react-native-calendars';
 import axios from 'axios';
-import { countCalories, formatDate } from '../functions/functions';
+import { countCalories, formatDate, getToken } from '../functions/functions';
 import { BACKEND_URL } from '../env.config';
 import cookieContext from '../context/cookie-context';
 import { useIsFocused } from '@react-navigation/native';
-
+import DiaryAPI from '../api/DiaryAPI';
 /**
  * @author
  * @function Diarys
@@ -19,9 +19,7 @@ import { useIsFocused } from '@react-navigation/native';
 
 const Diary = ({ navigation, theme }) => {
   const { colors } = theme;
-  const { cookies, getSelectedDate, setSelectedDate } = useContext(
-    cookieContext,
-  );
+  const { getSelectedDate, setSelectedDate, token } = useContext(cookieContext);
   const [current, setCurrent] = useState({});
   const [showCalendarModal, setShowCalendarModal] = useState(false);
   const [totalCalories, setTotalCalories] = useState(0);
@@ -64,43 +62,20 @@ const Diary = ({ navigation, theme }) => {
     setTotalCalories(calculateTotalCalories(diary || {}));
   };
 
-  const fetchData = () => {
-    cookies
-      .get(BACKEND_URL)
-      .then((cookie) => {
-        // console.log(cookie);
-        if (Object.keys(cookie).length === 0) {
-          throw new Error('cookie empty');
-        }
-        const {
-          token: { value },
-        } = cookie;
-        axios
-          .get(
-            `${BACKEND_URL}/api/diary?user_id=5f607f85a586e00e416f2124&range=1&date=${
-              Object.keys(getSelectedDate())[0]
-            }`,
-            {
-              headers: {
-                Authorization: `Bearer ${value}`,
-              },
-            },
-          )
-          .then(({ data }) => {
-            setDiaryByDate(Object.keys(getSelectedDate())[0], data);
-          })
-          .catch((err) => {
-            console.log('axios: ', err);
-          });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+  const fetchDiary = async () => {
+    const diary = await DiaryAPI.fetchDiary(token, getSelectedDate());
+    // console.log({ data: diary.data, token, selectedDate: getSelectedDate() });
+
+    if (diary.err) {
+      console.error(diary.err);
+    } else {
+      setDiaryByDate(getSelectedDate(), diary.data);
+    }
   };
 
   useEffect(() => {
     if (isFocused) {
-      fetchData();
+      fetchDiary();
     }
   }, [getSelectedDate, isFocused]);
 
@@ -112,7 +87,7 @@ const Diary = ({ navigation, theme }) => {
           onDismiss={() => setShowCalendarModal(false)}>
           <Calendar
             pagingEnabled={true}
-            markedDates={getSelectedDate()}
+            markedDates={getSelectedDate(true)}
             onDayPress={handleDateSelect}
             theme={{
               selectedDayBackgroundColor: colors.primary,
@@ -124,41 +99,37 @@ const Diary = ({ navigation, theme }) => {
       </Portal>
 
       <CalendarSwipe
-        arrowLeftOnPress={() =>
-          handleCalendarButton(Object.keys(getSelectedDate())[0], -1)
-        }
-        arrowRightOnPress={() =>
-          handleCalendarButton(Object.keys(getSelectedDate())[0], 1)
-        }
+        arrowLeftOnPress={() => handleCalendarButton(getSelectedDate(), -1)}
+        arrowRightOnPress={() => handleCalendarButton(getSelectedDate(), 1)}
         dateOnPress={() => setShowCalendarModal(true)}
-        date={Object.keys(getSelectedDate())[0]}
+        date={getSelectedDate()}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <DiaryProgress progress={totalCalories} limit={2500} />
         <FoodTable
           name="Breakfast"
           foods={current.breakfast}
-          selectedDate={Object.keys(getSelectedDate())[0]}
-          fetchData={fetchData}
+          selectedDate={getSelectedDate()}
+          fetchData={fetchDiary}
         />
         <FoodTable
           name="Lunch"
           foods={current.lunch}
-          selectedDate={Object.keys(getSelectedDate())[0]}
-          fetchData={fetchData}
+          selectedDate={getSelectedDate()}
+          fetchData={fetchDiary}
         />
         <FoodTable
           name="Dinner"
           foods={current.dinner}
-          selectedDate={Object.keys(getSelectedDate())[0]}
-          fetchData={fetchData}
+          selectedDate={getSelectedDate()}
+          fetchData={fetchDiary}
         />
         <FoodTable
           name="Snacks"
           backgroundColor={colors.triadic}
           foods={current.snacks}
-          selectedDate={Object.keys(getSelectedDate())[0]}
-          fetchData={fetchData}
+          selectedDate={getSelectedDate()}
+          fetchData={fetchDiary}
         />
       </ScrollView>
     </React.Fragment>

@@ -4,18 +4,15 @@ import RootNavigator from './navigation/Drawer/Drawer';
 import CookieContext from './context/cookie-context';
 import CookieManager from '@react-native-community/cookies';
 import { BACKEND_URL } from './env.config';
-import SignIn from './screens/SignIn';
-import { formatDate } from './functions/functions';
-import MultiChoice from './components/MultiChoice/MultiChoice';
-import CreateFood from './screens/CreateFood';
+import { formatDate, getToken } from './functions/functions';
 
 /**
  * @author
  * @function App
  **/
 const App = (props) => {
-  const [loggedIn, setLoggedIn] = useState(false);
-
+  // const [loggedIn, setLoggedIn] = useState(false);
+  const [token, setToken] = useState(null);
   const [selectedDate, setSelectedDate] = useState(() => {
     console.log('setSelected called from App.js');
     let date = {};
@@ -30,7 +27,9 @@ const App = (props) => {
       expires,
     })
       .then((done) => {
-        setLoggedIn(true);
+        console.log('log in:', token);
+        setToken(token);
+        // setLoggedIn(true);
 
         console.log('done:', done);
       })
@@ -41,27 +40,35 @@ const App = (props) => {
 
   const logOut = () => {
     CookieManager.clearAll().then((success) => {
-      setLoggedIn(false);
+      // setLoggedIn(false);
+      setToken(null);
     });
   };
 
   useEffect(() => {
-    CookieManager.get(BACKEND_URL).then((cookie) => {
-      if (Object.keys(cookie).length !== 0) {
-        // console.log(CookieManager);
-        setLoggedIn(true);
-      }
+    getToken().then((data) => {
+      // console.log(data);
+      // setLoggedIn(true);
+      setToken(data);
     });
+    // CookieManager.get(BACKEND_URL).then((cookie) => {
+    //   if (Object.keys(cookie).length !== 0) {
+    //     // console.log(CookieManager);
+    //     setLoggedIn(true);
+    //   }
+    // });
   }, []);
 
   return (
     <CookieContext.Provider
       value={{
-        cookies: CookieManager,
+        token,
+        // cookies: CookieManager,
         logIn,
         logOut,
-        loggedIn,
-        getSelectedDate: () => selectedDate,
+        // loggedIn,
+        getSelectedDate: (raw) =>
+          raw ? selectedDate : Object.keys(selectedDate)[0],
         setSelectedDate,
       }}>
       <RootNavigator />

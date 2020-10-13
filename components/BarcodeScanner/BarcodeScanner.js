@@ -5,6 +5,7 @@ import cookieContext from '../../context/cookie-context';
 import { BACKEND_URL } from '../../env.config';
 import axios from 'axios';
 import { useIsFocused } from '@react-navigation/native';
+import FoodAPI from '../../api/FoodAPI';
 
 /**
  * @author
@@ -16,7 +17,7 @@ const BarcodeScanner = ({
     params: { addTo, selectedDate },
   },
 }) => {
-  const { cookies } = useContext(cookieContext);
+  const { token } = useContext(cookieContext);
   const [shouldDetect, setShouldDetect] = useState(true);
   const isFocused = useIsFocused();
   const camera = useRef();
@@ -34,48 +35,22 @@ const BarcodeScanner = ({
   }, [isFocused]);
 
   const getByBarcode = async (barcode) => {
-    cookies
-      .get(BACKEND_URL)
-      .then((cookie) => {
-        // console.log(cookie);
-        if (Object.keys(cookie).length === 0) {
-          throw new Error('cookie empty');
-        }
+    const { data, err } = await FoodAPI.getFoodByBarcode(token, barcode);
 
-        const {
-          token: { value },
-        } = cookie;
-
-        axios
-          .get(`${BACKEND_URL}/api/foods`, {
-            headers: {
-              Authorization: `Bearer ${value}`,
-            },
-            params: {
-              barcode,
-            },
-          })
-          .then(({ data }) => {
-            console.log(data);
-            // setShouldDetect(false);
-            navigation.navigate('add-food', {
-              food: data,
-              addTo,
-              selectedDate,
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-            if (err.response.status === 409 && barcode) {
-              navigation.navigate('create-food', {
-                barcode,
-              });
-            }
-          });
-      })
-      .catch((err) => {
-        console.error(err);
+    if (err) {
+      console.log(err);
+      if (err.response.status === 409 && barcode) {
+        navigation.navigate('create-food', {
+          barcode,
+        });
+      }
+    } else {
+      navigation.navigate('add-food', {
+        food: data,
+        addTo,
+        selectedDate,
       });
+    }
   };
 
   return (
