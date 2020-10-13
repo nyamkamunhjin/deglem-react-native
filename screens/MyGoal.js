@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import cookieContext from '../context/cookie-context';
-import { BACKEND_URL } from '../env.config';
-import axios from 'axios';
+
 import {
   ActivityIndicator,
-  Avatar,
   Button,
   DataTable,
   Dialog,
@@ -25,6 +23,9 @@ import {
   calculateAge,
 } from '../functions/functions';
 import UserAPI from '../api/UserAPI';
+import flatten from 'flat';
+import InfoRow from '../components/InfoRow/infoRow';
+import CaloriesDialog from '../components/CaloriesDialog/CaloriesDialog';
 
 /**
  * @author
@@ -55,6 +56,27 @@ const MyGoal = ({ navigation, theme }) => {
     setInput(formatted);
   };
 
+  // eslint-disable-next-line no-shadow
+  const updateCalories = (user) => {
+    let calories = {};
+    calories['nutritionGoals.calories'] = MifflinStJourFormula({
+      age: calculateAge(user.userInfo.dateOfBirth),
+      gender: user.userInfo.gender,
+      height: user.goalInfo.height,
+      currentWeight: user.goalInfo.currentWeight,
+      weeklyGoal: user.goalInfo.weeklyGoal,
+      activityLevel: user.goalInfo.activityLevel,
+    });
+
+    UserAPI.updateUser(token, calories).then(({ err, data }) => {
+      if (err) {
+        console.error(err);
+      } else {
+        setUser(data);
+      }
+    });
+  };
+
   useEffect(() => {
     const getUser = async () => {
       const { data, err } = await UserAPI.getUser(token);
@@ -62,6 +84,8 @@ const MyGoal = ({ navigation, theme }) => {
       if (err) {
         console.error(err);
       } else {
+        // console.log(data);
+        // console.log(flatten(data));
         setUser(data);
       }
     };
@@ -69,105 +93,7 @@ const MyGoal = ({ navigation, theme }) => {
     getUser();
   }, [token]);
 
-  const renderSwitch = () => {
-    switch (dialog.type) {
-      case 'text':
-        return (
-          <Dialog.Content>
-            <TextInput
-              style={styles.input}
-              value={input}
-              onChangeText={(text) => setInput(text)}
-            />
-          </Dialog.Content>
-        );
-      case 'numeric':
-        return (
-          <Dialog.Content>
-            <TextInput
-              style={styles.input}
-              keyboardType={'numeric'}
-              value={input ? input.toString() : input}
-              onChangeText={(num) => setInput(num)}
-            />
-          </Dialog.Content>
-        );
-      case 'gender':
-        return (
-          <Dialog.Content>
-            <View style={styles.row}>
-              <RadioButton
-                value="Male"
-                status={input === 'Male' ? 'checked' : 'unchecked'}
-                onPress={() => setInput('Male')}
-                color={colors.primary}
-              />
-              <Text>Male</Text>
-            </View>
-            <View style={styles.row}>
-              <RadioButton
-                value="Male"
-                status={input === 'Female' ? 'checked' : 'unchecked'}
-                onPress={() => setInput('Female')}
-                color={colors.primary}
-              />
-              <Text>Female</Text>
-            </View>
-          </Dialog.Content>
-        );
-      case 'date':
-        return (
-          <Dialog.Content>
-            <TextInput
-              style={styles.input}
-              value={input}
-              onChangeText={handleDateFormat}
-            />
-          </Dialog.Content>
-        );
-      case 'multi-choice':
-        return <MultiChoice input={input} setInput={setInput} />;
-      case 'calories':
-        return (
-          <Dialog.Content>
-            <View>
-              <Text>Calories</Text>
-              <TextInput
-                style={styles.input}
-                value={input}
-                onChangeText={(num) => setInput(num)}
-              />
-            </View>
-            <View>
-              <Text>Protein</Text>
-              <TextInput
-                style={styles.input}
-                value={input}
-                onChangeText={(num) => setInput(num)}
-              />
-            </View>
-            <View>
-              <Text>Calories</Text>
-              <TextInput
-                style={styles.input}
-                value={input}
-                onChangeText={(num) => setInput(num)}
-              />
-            </View>
-            <View>
-              <Text>Calories</Text>
-              <TextInput
-                style={styles.input}
-                value={input}
-                onChangeText={(num) => setInput(num)}
-              />
-            </View>
-          </Dialog.Content>
-        );
-    }
-  };
-
-  const handleChange = async () => {
+  const handleChange = async (setCalories) => {
     setLoading(true);
 
     let update = {};
@@ -184,82 +110,64 @@ const MyGoal = ({ navigation, theme }) => {
       setInput('');
       setLoading(false);
 
-      let calories = {};
-      calories['nutritionGoals.calories'] = MifflinStJourFormula({
-        age: calculateAge(user.userInfo.dateOfBirth),
-        gender: user.userInfo.gender,
-        height: user.goalInfo.height,
-        currentWeight: user.goalInfo.currentWeight,
-        weeklyGoal: user.goalInfo.weeklyGoal,
-        activityLevel: user.goalInfo.activityLevel,
-      });
-
-      const { data: updatedData, err: updatedErr } = await UserAPI.updateUser(
-        token,
-        calories,
-      );
-
-      if (updatedErr) {
-        console.error(updatedErr);
-      } else {
-        setUser(updatedData);
+      if (setCalories || false) {
+        updateCalories(data);
       }
     }
+  };
 
-    // cookies
-    //   .get(BACKEND_URL)
-    //   .then((cookie) => {
-    //     // console.log(cookie);
-    //     if (Object.keys(cookie).length === 0) {
-    //       throw new Error('cookie empty');
-    //     }
+  const renderSwitch = () => {
+    switch (dialog.type) {
+      case 'numeric':
+        return (
+          <React.Fragment>
+            <Dialog.Content>
+              <TextInput
+                style={styles.input}
+                keyboardType={'numeric'}
+                value={input ? input.toString() : input}
+                onChangeText={setInput}
+              />
+            </Dialog.Content>
+            <Dialog.Actions>
+              {!loading ? (
+                <Button onPress={() => handleChange(dialog.setCalories)}>
+                  <Icon name="check" size={30} style={{ padding: 10 }} />
+                </Button>
+              ) : (
+                <ActivityIndicator style={{ padding: 10 }} size={30} />
+              )}
+            </Dialog.Actions>
+          </React.Fragment>
+        );
 
-    //     const {
-    //       token: { value },
-    //     } = cookie;
-
-    //     axios
-    //       .post(`${BACKEND_URL}/api/users/update`, update, {
-    //         headers: {
-    //           Authorization: `Bearer ${value}`,
-    //         },
-    //       })
-    //       .then(({ data }) => {
-    //         setUser(data);
-    //         setShowDialog(false);
-    //         setInput('');
-
-    //         let calories = {};
-    //         calories['nutritionGoals.calories'] = MifflinStJourFormula({
-    //           age: calculateAge(user.userInfo.dateOfBirth),
-    //           gender: user.userInfo.gender,
-    //           height: user.goalInfo.height,
-    //           currentWeight: user.goalInfo.currentWeight,
-    //           weeklyGoal: user.goalInfo.weeklyGoal,
-    //           activityLevel: user.goalInfo.activityLevel,
-    //         });
-    //         console.log(calories);
-
-    //         axios
-    //           .post(`${BACKEND_URL}/api/users/update`, calories, {
-    //             headers: {
-    //               Authorization: `Bearer ${value}`,
-    //             },
-    //           })
-    //           .then(({ data }) => {
-    //             setUser(data);
-    //           });
-    //         setLoading(false);
-    //       })
-    //       .catch((err) => {
-    //         console.log(err);
-    //         setLoading(false);
-    //       });
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //     setLoading(false);
-    //   });
+      case 'multi-choice':
+        return (
+          <React.Fragment>
+            <MultiChoice input={input} setInput={setInput} />
+            <Dialog.Actions>
+              {!loading ? (
+                <Button onPress={() => handleChange(dialog.setCalories)}>
+                  <Icon name="check" size={30} style={{ padding: 10 }} />
+                </Button>
+              ) : (
+                <ActivityIndicator style={{ padding: 10 }} size={30} />
+              )}
+            </Dialog.Actions>
+          </React.Fragment>
+        );
+      case 'calories':
+        return (
+          <CaloriesDialog
+            nutritionGoals={user.nutritionGoals}
+            loading={loading}
+            setLoading={setLoading}
+            setShowDialog={setShowDialog}
+            setUser={setUser}
+            token={token}
+          />
+        );
+    }
   };
 
   const styles = StyleSheet.create({
@@ -300,20 +208,6 @@ const MyGoal = ({ navigation, theme }) => {
             <Dialog visible={showDialog} onDismiss={() => setShowDialog(false)}>
               <Dialog.Title>{dialog.name}</Dialog.Title>
               {renderSwitch()}
-              <Dialog.Actions>
-                {!loading ? (
-                  <Button onPress={handleChange}>
-                    <Icon
-                      name="check"
-                      size={30}
-                      style={{ padding: 10 }}
-                      // color="white"
-                    />
-                  </Button>
-                ) : (
-                  <ActivityIndicator style={{ padding: 10 }} size={30} />
-                )}
-              </Dialog.Actions>
             </Dialog>
           </Portal>
 
@@ -328,6 +222,7 @@ const MyGoal = ({ navigation, theme }) => {
                     path: 'goalInfo.height',
                     name: 'Height',
                     type: 'numeric',
+                    setCalories: true,
                   });
                 }}>
                 <DataTable.Cell>Height</DataTable.Cell>
@@ -343,6 +238,7 @@ const MyGoal = ({ navigation, theme }) => {
                     path: 'goalInfo.currentWeight',
                     name: 'Current Weight',
                     type: 'numeric',
+                    setCalories: true,
                   });
                 }}>
                 <DataTable.Cell>Current Weight</DataTable.Cell>
@@ -358,6 +254,7 @@ const MyGoal = ({ navigation, theme }) => {
                     path: 'goalInfo.goalWeight',
                     name: 'Goal Weight',
                     type: 'numeric',
+                    setCalories: true,
                   });
                 }}>
                 <DataTable.Cell>Goal Weight</DataTable.Cell>
@@ -367,17 +264,28 @@ const MyGoal = ({ navigation, theme }) => {
               </DataTable.Row>
               <DataTable.Row
                 onPress={() => {
-                  setInput(user.goalInfo ? user.goalInfo.weeklyGoal : '');
+                  setInput(
+                    user.goalInfo
+                      ? user.goalInfo.weeklyGoal === 0
+                        ? ''
+                        : user.goalInfo.weeklyGoal
+                      : '',
+                  );
                   setShowDialog(true);
                   setDialog({
                     path: 'goalInfo.weeklyGoal',
                     name: 'Weekly Goal',
                     type: 'numeric',
+                    setCalories: true,
                   });
                 }}>
                 <DataTable.Cell>Weekly Goal</DataTable.Cell>
                 <DataTable.Cell numeric>
-                  {user.goalInfo ? user.goalInfo.weeklyGoal : ''} kg
+                  {user.goalInfo
+                    ? user.goalInfo.weeklyGoal === ''
+                      ? 'Maintain'
+                      : `${user.goalInfo.weeklyGoal} kg`
+                    : ''}
                 </DataTable.Cell>
               </DataTable.Row>
               <DataTable.Row
@@ -388,6 +296,7 @@ const MyGoal = ({ navigation, theme }) => {
                     path: 'goalInfo.activityLevel',
                     name: 'Activity Level',
                     type: 'multi-choice',
+                    setCalories: true,
                   });
                 }}>
                 <DataTable.Cell>Activity Level</DataTable.Cell>
@@ -408,7 +317,7 @@ const MyGoal = ({ navigation, theme }) => {
                   setDialog({
                     path: 'nutritionGoals.calories',
                     name: 'Calories',
-                    type: 'numeric',
+                    type: 'calories',
                   });
                 }}>
                 <DataTable.Cell>Calories</DataTable.Cell>
@@ -426,7 +335,7 @@ const MyGoal = ({ navigation, theme }) => {
                   setDialog({
                     path: 'nutritionGoals.protein',
                     name: 'Protein',
-                    type: 'numeric',
+                    type: 'calories',
                   });
                 }}>
                 <DataTable.Cell>Protein</DataTable.Cell>
@@ -447,7 +356,7 @@ const MyGoal = ({ navigation, theme }) => {
                   setDialog({
                     path: 'nutritionGoals.carbohydrates',
                     name: 'Carbs',
-                    type: 'numeric',
+                    type: 'calories',
                   });
                 }}>
                 <DataTable.Cell>Carbs</DataTable.Cell>
@@ -465,7 +374,7 @@ const MyGoal = ({ navigation, theme }) => {
                   setDialog({
                     path: 'nutritionGoals.fat',
                     name: 'Fats',
-                    type: 'numeric',
+                    type: 'calories',
                   });
                 }}>
                 <DataTable.Cell>Fats</DataTable.Cell>

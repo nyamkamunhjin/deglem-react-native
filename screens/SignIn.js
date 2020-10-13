@@ -42,16 +42,8 @@ const SignIn = (props) => {
           } else {
             if (data) {
               logIn(data);
-              // navigation.dispatch(StackActions.popToTop());
             }
           }
-          // axios.post(`${BACKEND_URL}/auth/login`, values).then(({ data }) => {
-          //   console.log(data);
-          //   if (data) {
-          //     logIn(data);
-          //     // navigation.dispatch(StackActions.popToTop());
-          //   }
-          // });
         }}>
         {(formikProps) => (
           <View style={styles.form}>

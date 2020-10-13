@@ -15,6 +15,9 @@ const globalStyles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 5,
   },
+  center: {
+    textAlign: 'center',
+  },
 });
 
 export default globalStyles;

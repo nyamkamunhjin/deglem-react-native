@@ -23,7 +23,7 @@ const DrawerContent = (props) => {
       const { data, err } = await UserAPI.getUser(token);
 
       if (err) {
-        console.error(err);
+        // console.error(err);
       } else {
         setTitle(`${data.userInfo.firstName} ${data.userInfo.lastName}`);
         setCaption(data.userInfo.username);
