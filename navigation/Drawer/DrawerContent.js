@@ -4,9 +4,6 @@ import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { Avatar, Drawer, Title, Caption } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import cookieContext from '../../context/cookie-context';
-import { BACKEND_URL } from '../../env.config';
-import axios from 'axios';
-import CookieManager from '@react-native-community/cookies';
 import UserAPI from '../../api/UserAPI';
 
 /**
@@ -34,6 +31,7 @@ const DrawerContent = (props) => {
     return () => {
       setTitle('');
       setCaption('');
+      console.log('hello from unmount DrawerContent.js');
     };
   }, [token]);
 

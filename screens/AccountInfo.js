@@ -14,8 +14,6 @@ import {
   withTheme,
 } from 'react-native-paper';
 import cookieContext from '../context/cookie-context';
-import axios from 'axios';
-import { BACKEND_URL } from '../env.config';
 import { formatDate } from '../functions/functions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MultiChoice from '../components/MultiChoice/MultiChoice';

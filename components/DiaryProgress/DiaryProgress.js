@@ -37,7 +37,7 @@ const DiaryProgress = ({ theme, progress, limit }) => {
         allowFontScaling={true}
         formatText={() => (
           <Text style={{ fontFamily: fonts.light.fontFamily, fontSize: 15 }}>
-            {`${progress}/${limit} kcal`}
+            {`${progress}/${limit} cal`}
           </Text>
         )}
         showsText={true}

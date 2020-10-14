@@ -6,12 +6,11 @@ import FoodTable from '../components/FoodTable/FoodTable';
 import CalendarSwipe from '../components/Calendar/CalendarSwipe';
 import DiaryProgress from '../components/DiaryProgress/DiaryProgress';
 import { Calendar } from 'react-native-calendars';
-import axios from 'axios';
 import { countCalories, formatDate, getToken } from '../functions/functions';
-import { BACKEND_URL } from '../env.config';
 import cookieContext from '../context/cookie-context';
 import { useIsFocused } from '@react-navigation/native';
 import DiaryAPI from '../api/DiaryAPI';
+import UserAPI from '../api/UserAPI';
 /**
  * @author
  * @function Diarys
@@ -23,7 +22,7 @@ const Diary = ({ navigation, theme }) => {
   const [current, setCurrent] = useState({});
   const [showCalendarModal, setShowCalendarModal] = useState(false);
   const [totalCalories, setTotalCalories] = useState(0);
-
+  const [limitCalories, setLimitCalories] = useState(0);
   const isFocused = useIsFocused();
 
   const handleDateSelect = (day) => {
@@ -64,6 +63,13 @@ const Diary = ({ navigation, theme }) => {
 
   const fetchDiary = async () => {
     const diary = await DiaryAPI.fetchDiary(token, getSelectedDate());
+    const user = await UserAPI.getUser(token);
+
+    if (user.err) {
+      console.error(user.err);
+    } else {
+      setLimitCalories(user.data.nutritionGoals.calories);
+    }
     // console.log({ data: diary.data, token, selectedDate: getSelectedDate() });
 
     if (diary.err) {
@@ -105,7 +111,7 @@ const Diary = ({ navigation, theme }) => {
         date={getSelectedDate()}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <DiaryProgress progress={totalCalories} limit={2500} />
+        <DiaryProgress progress={totalCalories} limit={limitCalories} />
         <FoodTable
           name="Breakfast"
           foods={current.breakfast}

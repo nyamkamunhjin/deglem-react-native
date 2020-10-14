@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import cookieContext from '../context/cookie-context';
 
 import {
@@ -8,7 +8,6 @@ import {
   DataTable,
   Dialog,
   Portal,
-  RadioButton,
   Subheading,
   TextInput,
   withTheme,
@@ -17,14 +16,8 @@ import MultiChoice from '../components/MultiChoice/MultiChoice';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {
-  formatDate,
-  MifflinStJourFormula,
-  calculateAge,
-} from '../functions/functions';
+import { MifflinStJourFormula, calculateAge } from '../functions/functions';
 import UserAPI from '../api/UserAPI';
-import flatten from 'flat';
-import InfoRow from '../components/InfoRow/infoRow';
 import CaloriesDialog from '../components/CaloriesDialog/CaloriesDialog';
 
 /**

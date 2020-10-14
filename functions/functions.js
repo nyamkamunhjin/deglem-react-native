@@ -1,6 +1,5 @@
 import CookieManager from '@react-native-community/cookies';
 import { BACKEND_URL } from '../env.config';
-
 const formatDate = (date) => {
   let d = new Date(date),
     month = '' + (d.getMonth() + 1),
@@ -77,10 +76,45 @@ const getToken = async () => {
   }
 };
 
+const getNutritionProgress = (diary) => {
+  if (!diary) return {};
+  // console.log(diary);
+  const foods = [
+    ...diary.breakfast,
+    ...diary.lunch,
+    ...diary.dinner,
+    ...diary.snacks,
+  ];
+  console.log('foods:', foods);
+  let nutritionProgress = {};
+  foods.map(({ food }) => {
+    let values = { ...food };
+    delete values.__v;
+    delete values._id;
+    delete values.serving;
+    delete values.creator;
+    delete values.name;
+    delete values.barcode;
+    delete values.calories;
+    // console.log(values);
+
+    Object.entries(values).map(([key, value]) => {
+      if (!nutritionProgress[key]) {
+        nutritionProgress[key] = 0;
+      }
+
+      nutritionProgress[key] += parseInt(value, 10);
+    });
+  });
+  console.log(nutritionProgress);
+  return nutritionProgress;
+};
+
 export {
   formatDate,
   countCalories,
   MifflinStJourFormula,
   calculateAge,
   getToken,
+  getNutritionProgress,
 };

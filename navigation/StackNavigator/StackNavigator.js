@@ -38,6 +38,7 @@ const StackNavigator = (props) => {
             colors={colors}
           />
         ),
+        // gestureEnabled: false,
       }}>
       <Stack.Screen
         name="Diary"
@@ -49,32 +50,32 @@ const StackNavigator = (props) => {
       <Stack.Screen
         name="account-info"
         component={AccountInfo}
-        options={{ title: 'Edit Info', gestureEnabled: true }}
+        options={{ title: 'Edit Info' }}
       />
       <Stack.Screen
         name="search-food"
         component={SearchFood}
-        options={{ title: 'Search Food', gestureEnabled: true }}
+        options={{ title: 'Search Food' }}
       />
       <Stack.Screen
         name="add-food"
         component={AddFood}
-        options={{ title: 'Add Food', gestureEnabled: true }}
+        options={{ title: 'Add Food' }}
       />
       <Stack.Screen
         name="edit-food"
         component={EditFood}
-        options={{ title: 'Edit Food', gestureEnabled: true }}
+        options={{ title: 'Edit Food' }}
       />
       <Stack.Screen
         name="sign-in"
         component={SignIn}
-        options={{ title: 'Sign in', gestureEnabled: true }}
+        options={{ title: 'Sign in' }}
       />
       <Stack.Screen
         name="sign-up"
         component={SignUp}
-        options={{ title: 'Sign up', gestureEnabled: true }}
+        options={{ title: 'Sign up' }}
       />
       <Stack.Screen
         name="barcode-scanner"
