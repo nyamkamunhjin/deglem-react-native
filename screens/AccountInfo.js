@@ -24,9 +24,9 @@ import UserAPI from '../api/UserAPI';
  * @function AccountInfo
  **/
 const AccountInfo = ({ navigation, theme }) => {
-  const { token } = useContext(cookieContext);
+  const { token, user, setUser } = useContext(cookieContext);
 
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
   const [dialog, setDialog] = useState({
     path: '',
@@ -49,20 +49,6 @@ const AccountInfo = ({ navigation, theme }) => {
   };
 
   const { colors } = theme;
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data, err } = await UserAPI.getUser(token);
-
-      if (err) {
-        console.error(err);
-      } else {
-        setUser(data);
-      }
-    };
-
-    getUser();
-  }, [token]);
 
   const renderSwitch = () => {
     switch (dialog.type) {

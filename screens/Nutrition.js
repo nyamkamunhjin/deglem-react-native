@@ -1,13 +1,12 @@
 import { useIsFocused } from '@react-navigation/native';
 import _ from 'lodash';
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ProgressBarAndroid } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
   ActivityIndicator,
   Dialog,
-  Divider,
   Portal,
   ProgressBar,
   Title,
@@ -17,6 +16,8 @@ import DiaryAPI from '../api/DiaryAPI';
 import CalendarSwipe from '../components/Calendar/CalendarSwipe';
 import cookieContext from '../context/cookie-context';
 import { formatDate, getNutritionProgress } from '../functions/functions';
+import { percentageToGram } from '../functions/nutritionList';
+// import { nutritionListGenerator } from '../functions/nutritionList';
 import globalStyles from '../global-styles';
 
 /**
@@ -27,7 +28,9 @@ const Nutrition = ({ navigation, theme }) => {
   const { colors } = theme;
 
   const [nutritionProgress, setNutritionProgress] = useState([]);
-  const { getSelectedDate, setSelectedDate, token } = useContext(cookieContext);
+  const { getSelectedDate, setSelectedDate, token, user } = useContext(
+    cookieContext,
+  );
   const [loading, setLoading] = useState(false);
   const [showCalendarModal, setShowCalendarModal] = useState(false);
 
@@ -62,11 +65,12 @@ const Nutrition = ({ navigation, theme }) => {
         console.error(err);
         setLoading(true);
       } else {
-        console.log({ data, err, token });
+        // console.log({ data, err, token });
         if (data) {
           // console.log(data[0]);
           // console.log(getNutritionProgress(data[0]));
           setNutritionProgress(getNutritionProgress(data[0]));
+          // nutritionListGenerator(getNutritionProgress(data[0]));
           setLoading(true);
         }
       }
@@ -109,15 +113,24 @@ const Nutrition = ({ navigation, theme }) => {
         <Title style={globalStyles.center}>Nutrition progress</Title>
         {loading ? (
           Object.entries(nutritionProgress).map(([key, value], index) => {
-            console.log(key, value);
+            // console.log(key, value);
+
+            const convert = percentageToGram(
+              key,
+              user.nutritionGoals.calories.value,
+              user.nutritionGoals[key].value,
+            );
+
             return (
               <React.Fragment key={index}>
-                <Text style={styles.text}>{_.startCase(key)}</Text>
                 <View style={styles.progress}>
-                  <View style={styles.progressBar}>
-                    <ProgressBar progress={0.5} />
-                  </View>
-                  <Text style={styles.value}>{value}</Text>
+                  <Text style={styles.text}>{_.startCase(key)}</Text>
+                  <Text style={styles.value}>
+                    {value}/{convert} {user.nutritionGoals[key].unit}
+                  </Text>
+                </View>
+                <View style={styles.progressBar}>
+                  <ProgressBar progress={value / convert} />
                 </View>
               </React.Fragment>
             );
@@ -144,20 +157,20 @@ const styles = StyleSheet.create({
   },
   progress: {
     ...globalStyles.row,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     margin: 10,
   },
   text: {
-    marginHorizontal: 20,
+    // marginHorizontal: 20,
   },
   value: {
-    flex: 1,
-    marginHorizontal: 20,
+    marginLeft: 'auto',
+    // marginHorizontal: 20,
     // marginBottom: 1000,
   },
   progressBar: {
     marginHorizontal: 10,
-    flex: 9,
+    flex: 5,
   },
   activityIndicator: {
     marginTop: 20,

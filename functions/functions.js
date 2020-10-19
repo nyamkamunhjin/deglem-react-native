@@ -85,7 +85,7 @@ const getNutritionProgress = (diary) => {
     ...diary.dinner,
     ...diary.snacks,
   ];
-  console.log('foods:', foods);
+  // console.log('foods:', foods);
   let nutritionProgress = {};
   foods.map(({ food }) => {
     let values = { ...food };
@@ -106,7 +106,7 @@ const getNutritionProgress = (diary) => {
       nutritionProgress[key] += parseInt(value, 10);
     });
   });
-  console.log(nutritionProgress);
+  // console.log(nutritionProgress);
   return nutritionProgress;
 };
 

@@ -18,7 +18,9 @@ import UserAPI from '../api/UserAPI';
 
 const Diary = ({ navigation, theme }) => {
   const { colors } = theme;
-  const { getSelectedDate, setSelectedDate, token } = useContext(cookieContext);
+  const { getSelectedDate, setSelectedDate, token, user } = useContext(
+    cookieContext,
+  );
   const [current, setCurrent] = useState({});
   const [showCalendarModal, setShowCalendarModal] = useState(false);
   const [totalCalories, setTotalCalories] = useState(0);
@@ -63,14 +65,6 @@ const Diary = ({ navigation, theme }) => {
 
   const fetchDiary = async () => {
     const diary = await DiaryAPI.fetchDiary(token, getSelectedDate());
-    const user = await UserAPI.getUser(token);
-
-    if (user.err) {
-      console.error(user.err);
-    } else {
-      setLimitCalories(user.data.nutritionGoals.calories);
-    }
-    // console.log({ data: diary.data, token, selectedDate: getSelectedDate() });
 
     if (diary.err) {
       console.error(diary.err);
@@ -82,8 +76,11 @@ const Diary = ({ navigation, theme }) => {
   useEffect(() => {
     if (isFocused) {
       fetchDiary();
+      if (user) {
+        setLimitCalories(user.nutritionGoals.calories.value);
+      }
     }
-  }, [getSelectedDate, isFocused]);
+  }, [getSelectedDate, isFocused, user]);
 
   return (
     <React.Fragment>

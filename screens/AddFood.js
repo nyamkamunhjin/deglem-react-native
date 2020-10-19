@@ -8,7 +8,7 @@ import { Button, DataTable } from 'react-native-paper';
 import DiaryAPI from '../api/DiaryAPI';
 import cookieContext from '../context/cookie-context';
 import { BACKEND_URL } from '../env.config';
-
+import _ from 'lodash';
 /**
  * @author
  * @function AddFood
@@ -68,35 +68,6 @@ const AddFood = ({ route, navigation }) => {
       console.log(foodData);
       navigation.navigate('diary-tab');
     }
-    // cookies
-    //   .get(BACKEND_URL)
-    //   .then((cookie) => {
-    //     // console.log(cookie);
-    //     if (Object.keys(cookie).length === 0) {
-    //       throw new Error('cookie empty');
-    //     }
-
-    //     const {
-    //       token: { value },
-    //     } = cookie;
-
-    //     axios
-    //       .post(`${BACKEND_URL}/api/diary/food/add`, data, {
-    //         headers: {
-    //           Authorization: `Bearer ${value}`,
-    //         },
-    //       })
-    //       .then((res) => {
-    //         console.log(res.data);
-    //         navigation.navigate('diary-tab');
-    //       })
-    //       .catch((err) => {
-    //         console.log(err);
-    //       });
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
   };
 
   return (
@@ -160,10 +131,10 @@ const AddFood = ({ route, navigation }) => {
 
               <DataTable>
                 {Object.entries(getAdditionalNutrients(food)).map(
-                  (entry, index) => (
+                  ([key, value], index) => (
                     <DataTable.Row key={index}>
-                      <DataTable.Cell>{entry[0]}</DataTable.Cell>
-                      <DataTable.Cell numeric>{entry[1]}</DataTable.Cell>
+                      <DataTable.Cell>{_.startCase(key)}</DataTable.Cell>
+                      <DataTable.Cell numeric>{value}</DataTable.Cell>
                     </DataTable.Row>
                   ),
                 )}

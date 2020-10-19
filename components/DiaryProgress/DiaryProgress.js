@@ -41,7 +41,7 @@ const DiaryProgress = ({ theme, progress, limit }) => {
           </Text>
         )}
         showsText={true}
-        thickness={20}
+        thickness={5}
         animated={true}
         color={colors.triadic}
         unfilledColor={colors.disabled}

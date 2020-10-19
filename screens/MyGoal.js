@@ -25,9 +25,9 @@ import CaloriesDialog from '../components/CaloriesDialog/CaloriesDialog';
  * @function MyGoal
  **/
 const MyGoal = ({ navigation, theme }) => {
-  const { token } = useContext(cookieContext);
+  const { token, user, setUser } = useContext(cookieContext);
   const { colors } = theme;
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
   const [dialog, setDialog] = useState({
     path: '',
@@ -69,22 +69,6 @@ const MyGoal = ({ navigation, theme }) => {
       }
     });
   };
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data, err } = await UserAPI.getUser(token);
-
-      if (err) {
-        console.error(err);
-      } else {
-        // console.log(data);
-        // console.log(flatten(data));
-        setUser(data);
-      }
-    };
-
-    getUser();
-  }, [token]);
 
   const handleChange = async (setCalories) => {
     setLoading(true);
@@ -304,36 +288,44 @@ const MyGoal = ({ navigation, theme }) => {
               <DataTable.Row
                 onPress={() => {
                   setInput(
-                    user.nutritionGoals ? user.nutritionGoals.calories : '',
+                    user.nutritionGoals
+                      ? user.nutritionGoals.calories.value
+                      : '',
                   );
                   setShowDialog(true);
                   setDialog({
-                    path: 'nutritionGoals.calories',
+                    path: 'nutritionGoals.calories.value',
                     name: 'Calories',
                     type: 'calories',
                   });
                 }}>
                 <DataTable.Cell>Calories</DataTable.Cell>
                 <DataTable.Cell numeric>
-                  {user.nutritionGoals ? user.nutritionGoals.calories : '-'} cal
+                  {user.nutritionGoals
+                    ? user.nutritionGoals.calories.value
+                    : '-'}{' '}
+                  cal
                 </DataTable.Cell>
               </DataTable.Row>
 
               <DataTable.Row
                 onPress={() => {
                   setInput(
-                    user.nutritionGoals ? user.nutritionGoals.protein : '',
+                    user.nutritionGoals
+                      ? user.nutritionGoals.protein.value
+                      : '',
                   );
                   setShowDialog(true);
                   setDialog({
-                    path: 'nutritionGoals.protein',
+                    path: 'nutritionGoals.protein.value',
                     name: 'Protein',
                     type: 'calories',
                   });
                 }}>
                 <DataTable.Cell>Protein</DataTable.Cell>
                 <DataTable.Cell numeric>
-                  {user.nutritionGoals && (user.nutritionGoals.protein || '-')}{' '}
+                  {user.nutritionGoals &&
+                    (user.nutritionGoals.protein.value || '-')}{' '}
                   %
                 </DataTable.Cell>
               </DataTable.Row>
@@ -342,12 +334,12 @@ const MyGoal = ({ navigation, theme }) => {
                 onPress={() => {
                   setInput(
                     user.nutritionGoals
-                      ? user.nutritionGoals.carbohydrates
+                      ? user.nutritionGoals.totalCarbohydrates.value
                       : '',
                   );
                   setShowDialog(true);
                   setDialog({
-                    path: 'nutritionGoals.carbohydrates',
+                    path: 'nutritionGoals.totalCarbohydrates.value',
                     name: 'Carbs',
                     type: 'calories',
                   });
@@ -355,24 +347,30 @@ const MyGoal = ({ navigation, theme }) => {
                 <DataTable.Cell>Carbs</DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.nutritionGoals &&
-                    (user.nutritionGoals.carbohydrates || '-')}{' '}
+                    (user.nutritionGoals.totalCarbohydrates.value || '-')}{' '}
                   %
                 </DataTable.Cell>
               </DataTable.Row>
 
               <DataTable.Row
                 onPress={() => {
-                  setInput(user.nutritionGoals ? user.nutritionGoals.fat : '');
+                  setInput(
+                    user.nutritionGoals
+                      ? user.nutritionGoals.totalFat.value
+                      : '',
+                  );
                   setShowDialog(true);
                   setDialog({
-                    path: 'nutritionGoals.fat',
+                    path: 'nutritionGoals.totalFat.value',
                     name: 'Fats',
                     type: 'calories',
                   });
                 }}>
                 <DataTable.Cell>Fats</DataTable.Cell>
                 <DataTable.Cell numeric>
-                  {user.nutritionGoals && (user.nutritionGoals.fat || '-')} %
+                  {user.nutritionGoals &&
+                    (user.nutritionGoals.totalFat.value || '-')}{' '}
+                  %
                 </DataTable.Cell>
               </DataTable.Row>
             </DataTable>

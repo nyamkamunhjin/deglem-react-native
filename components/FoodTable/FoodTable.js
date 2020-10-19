@@ -86,7 +86,7 @@ const FoodTable = (props) => {
         <DataTable.Header>
           <DataTable.Title>{name}</DataTable.Title>
           <DataTable.Title numeric>Serving</DataTable.Title>
-          <DataTable.Title numeric>{countCalories(foods)}</DataTable.Title>
+          <DataTable.Title numeric>{countCalories(foods)} cal</DataTable.Title>
         </DataTable.Header>
         {foods &&
           foods.map((data, index) => {

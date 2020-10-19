@@ -26,12 +26,12 @@ const CaloriesDialog = ({
   token,
 }) => {
   const { colors } = theme;
-  const [calories, setCalories] = useState(nutritionGoals.calories);
-  const [protein, setProtein] = useState(nutritionGoals.protein);
+  const [calories, setCalories] = useState(nutritionGoals.calories.value);
+  const [protein, setProtein] = useState(nutritionGoals.protein.value);
   const [carbohydrates, setCarbohydrates] = useState(
-    nutritionGoals.carbohydrates,
+    nutritionGoals.totalCarbohydrates.value,
   );
-  const [fat, setFat] = useState(nutritionGoals.fat);
+  const [fat, setFat] = useState(nutritionGoals.totalFat.value);
 
   const getSum = () => {
     const p = isNaN(parseInt(protein, 10)) ? 0 : parseInt(protein, 10);
@@ -45,7 +45,20 @@ const CaloriesDialog = ({
   const handleChange = async () => {
     setLoading(true);
     let change = {
-      nutritionGoals: { calories, protein, carbohydrates, fat },
+      nutritionGoals: {
+        calories: {
+          value: calories,
+        },
+        protein: {
+          value: protein,
+        },
+        totalCarbohydrates: {
+          value: carbohydrates,
+        },
+        totalFat: {
+          value: fat,
+        },
+      },
     };
 
     console.log(flatten(change), token);

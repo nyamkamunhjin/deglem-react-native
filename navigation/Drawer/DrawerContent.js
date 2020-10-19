@@ -14,26 +14,19 @@ const DrawerContent = (props) => {
   const [title, setTitle] = useState('');
   const [caption, setCaption] = useState('');
   const { navigation } = props;
-  const { token, logOut } = useContext(cookieContext);
+  const { token, user, logOut } = useContext(cookieContext);
   useEffect(() => {
-    const getUser = async () => {
-      const { data, err } = await UserAPI.getUser(token);
+    if (user) {
+      setTitle(`${user.userInfo.firstName} ${user.userInfo.lastName}`);
+      setCaption(user.userInfo.username);
+    }
 
-      if (err) {
-        // console.error(err);
-      } else {
-        setTitle(`${data.userInfo.firstName} ${data.userInfo.lastName}`);
-        setCaption(data.userInfo.username);
-      }
-    };
-
-    getUser();
     return () => {
       setTitle('');
       setCaption('');
       console.log('hello from unmount DrawerContent.js');
     };
-  }, [token]);
+  }, [token, user]);
 
   return token ? (
     <View style={styles.drawerContainer}>

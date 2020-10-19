@@ -5,6 +5,7 @@ import CookieContext from './context/cookie-context';
 import CookieManager from '@react-native-community/cookies';
 import { BACKEND_URL } from './env.config';
 import { formatDate, getToken } from './functions/functions';
+import UserAPI from './api/UserAPI';
 
 /**
  * @author
@@ -13,6 +14,7 @@ import { formatDate, getToken } from './functions/functions';
 const App = (props) => {
   // const [loggedIn, setLoggedIn] = useState(false);
   const [token, setToken] = useState(null);
+  const [user, setUser] = useState(null);
   const [selectedDate, setSelectedDate] = useState(() => {
     console.log('setSelected called from App.js');
     let date = {};
@@ -20,16 +22,27 @@ const App = (props) => {
     return date;
   });
 
+  const getUser = async (token) => {
+    const { data, err } = await UserAPI.getUser(token);
+
+    if (err) {
+      console.error(err);
+      console.log('getUser error');
+    } else {
+      setUser(data);
+    }
+  };
+
   const logIn = ({ token, expires }) => {
     CookieManager.set(BACKEND_URL, {
       name: 'token',
       value: token,
       expires,
     })
-      .then((done) => {
+      .then(async (done) => {
         console.log('log in:', token);
         setToken(token);
-        // setLoggedIn(true);
+        getUser(token);
 
         console.log('done:', done);
       })
@@ -42,27 +55,26 @@ const App = (props) => {
     CookieManager.clearAll().then((success) => {
       // setLoggedIn(false);
       setToken(null);
+      setUser(null);
     });
   };
 
   useEffect(() => {
-    getToken().then((data) => {
+    getToken().then(async (data) => {
       // console.log(data);
       // setLoggedIn(true);
       setToken(data);
+      getUser(data);
     });
-    // CookieManager.get(BACKEND_URL).then((cookie) => {
-    //   if (Object.keys(cookie).length !== 0) {
-    //     // console.log(CookieManager);
-    //     setLoggedIn(true);
-    //   }
-    // });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <CookieContext.Provider
       value={{
         token,
+        user,
+        setUser,
         // cookies: CookieManager,
         logIn,
         logOut,

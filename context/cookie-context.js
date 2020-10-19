@@ -3,6 +3,8 @@ import React from 'react';
 
 export default React.createContext({
   token: null,
+  user: null,
+  setUser: () => {},
   // cookies: null,
   logIn: () => {},
   logOut: () => {},
