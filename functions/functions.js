@@ -89,7 +89,7 @@ const getNutritionProgress = (diary) => {
   ];
   // console.log('foods:', foods);
   let nutritionProgress = {};
-  foods.map(({ food }) => {
+  foods.map(({ food, serving }) => {
     let values = { ...food };
     delete values.__v;
     delete values._id;
@@ -105,7 +105,7 @@ const getNutritionProgress = (diary) => {
         nutritionProgress[key] = 0;
       }
 
-      nutritionProgress[key] += parseInt(value, 10);
+      nutritionProgress[key] += parseInt(value * serving, 10);
     });
   });
   // console.log(nutritionProgress);

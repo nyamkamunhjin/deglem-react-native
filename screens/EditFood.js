@@ -1,5 +1,3 @@
-import { StackActions } from '@react-navigation/native';
-import axios from 'axios';
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -7,12 +5,9 @@ import NumericInput from 'react-native-numeric-input';
 import { Button, DataTable } from 'react-native-paper';
 import DiaryAPI from '../api/DiaryAPI';
 import cookieContext from '../context/cookie-context';
-import { BACKEND_URL } from '../env.config';
-import _ from 'lodash';
-import * as Progress from 'react-native-progress';
 
-import { Text } from 'react-native-paper';
-import { PieChart } from 'react-native-svg-charts';
+import _ from 'lodash';
+
 import FoodStats from '../components/FoodStats/FoodStats';
 /**
  * @author

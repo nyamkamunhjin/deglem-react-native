@@ -130,7 +130,21 @@ const Nutrition = ({ navigation, theme }) => {
                   </Text>
                 </View>
                 <View style={styles.progressBar}>
-                  <ProgressBar progress={value / convert} />
+                  <ProgressBar
+                    color={
+                      key === 'protein'
+                        ? colors.protein
+                        : key === 'totalFat'
+                        ? colors.fat
+                        : key === 'totalCarbohydrates'
+                        ? colors.carbs
+                        : colors.primary
+                    }
+                    style={{
+                      backgroundColor: '#dedede',
+                    }}
+                    progress={value / convert}
+                  />
                 </View>
               </React.Fragment>
             );
@@ -150,8 +164,8 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     // alignItems: 'center',
     // backgroundColor: 'grey',
-    // borderRadius: 10,
-    // margin: 5,
+    borderRadius: 10,
+    padding: 5,
     // marginBottom: 100,
     // paddingBottom: 30,
   },
