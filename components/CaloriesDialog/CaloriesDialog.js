@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import {
   ActivityIndicator,
   Button,
   Dialog,
   TextInput,
   withTheme,
+  Text,
 } from 'react-native-paper';
 import globalStyles from '../../global-styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';

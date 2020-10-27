@@ -15,19 +15,19 @@ import { NavigationContainer } from '@react-navigation/native';
 const fontConfig = {
   default: {
     regular: {
-      fontFamily: 'Montserrat-Regular',
+      fontFamily: 'Rubik-Regular',
       fontWeight: 'normal',
     },
     medium: {
-      fontFamily: 'Montserrat-Medium',
+      fontFamily: 'Rubik-Medium',
       fontWeight: 'normal',
     },
     light: {
-      fontFamily: 'Montserrat-Light',
+      fontFamily: 'Rubik-Light',
       fontWeight: 'normal',
     },
     thin: {
-      fontFamily: 'Montserrat-Thin',
+      fontFamily: 'Rubik-Thin',
       fontWeight: 'normal',
     },
   },
@@ -41,14 +41,14 @@ export const theme = {
   colors: {
     ...DefaultTheme.colors,
     primary: '#ffa202',
-    accent: '#85cdff',
-    triadic: '#8bff58',
+    accent: '#A1D1FE',
+    triadic: '#e6e6e6',
     white: '#ffffff',
     protein: '#82c758',
     carbs: '#79c0d1',
     fat: '#f77272',
     // icons: '',
-    // text: '#ffffff'
+    // text: 'white',
   },
 };
 

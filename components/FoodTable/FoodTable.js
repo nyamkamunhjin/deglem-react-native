@@ -8,6 +8,7 @@ import {
   Button,
   Portal,
   Dialog,
+  Text,
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DiaryAPI from '../../api/DiaryAPI';
@@ -117,6 +118,7 @@ const FoodTable = (props) => {
       </DataTable>
       <Button
         compact={true}
+        // color={colors.triadic}
         style={addButton}
         mode="contained"
         icon={({ color }) => <Icon name="plus" size={15} color={color} />}
@@ -127,7 +129,7 @@ const FoodTable = (props) => {
           })
         }
         uppercase={false}>
-        Add
+        <Text>Add</Text>
       </Button>
     </View>
   );
