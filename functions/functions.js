@@ -77,7 +77,9 @@ const getToken = async () => {
 };
 
 const getNutritionProgress = (diary) => {
-  if (!diary) return {};
+  if (!diary) {
+    return {};
+  }
   // console.log(diary);
   const foods = [
     ...diary.breakfast,

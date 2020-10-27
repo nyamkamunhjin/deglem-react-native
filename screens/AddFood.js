@@ -9,6 +9,7 @@ import DiaryAPI from '../api/DiaryAPI';
 import cookieContext from '../context/cookie-context';
 import { BACKEND_URL } from '../env.config';
 import _ from 'lodash';
+import FoodStats from '../components/FoodStats/FoodStats';
 /**
  * @author
  * @function AddFood
@@ -35,13 +36,13 @@ const AddFood = ({ route, navigation }) => {
     delete temp.__v;
     delete temp.barcode;
     delete temp.creator;
+    delete temp.calories;
 
     return temp;
   };
 
   const handleFoodAdd = async () => {
     let data = {
-      user_id: '5f607f85a586e00e416f2124',
       diary: {
         date: selectedDate,
         push: {},
@@ -108,33 +109,15 @@ const AddFood = ({ route, navigation }) => {
             </DataTable.Row>
 
             <View style={styles.main}>
-              <View style={styles.temp} />
-
-              <DataTable>
-                <DataTable.Header>
-                  <DataTable.Title style={styles.cell}>Carbs</DataTable.Title>
-                  <DataTable.Title style={styles.cell}>Fat</DataTable.Title>
-                  <DataTable.Title style={styles.cell}>Protein</DataTable.Title>
-                </DataTable.Header>
-                <DataTable.Row>
-                  <DataTable.Cell style={styles.cell}>
-                    {food.totalCarbohydrates || 0}
-                  </DataTable.Cell>
-                  <DataTable.Cell style={styles.cell}>
-                    {food.totalFat || 0}
-                  </DataTable.Cell>
-                  <DataTable.Cell style={styles.cell}>
-                    {food.protein || 0}
-                  </DataTable.Cell>
-                </DataTable.Row>
-              </DataTable>
-
+              <FoodStats food={food} serving={serving} />
               <DataTable>
                 {Object.entries(getAdditionalNutrients(food)).map(
                   ([key, value], index) => (
                     <DataTable.Row key={index}>
                       <DataTable.Cell>{_.startCase(key)}</DataTable.Cell>
-                      <DataTable.Cell numeric>{value}</DataTable.Cell>
+                      <DataTable.Cell numeric>
+                        {parseInt(value, 10)}
+                      </DataTable.Cell>
                     </DataTable.Row>
                   ),
                 )}
@@ -158,11 +141,7 @@ const styles = StyleSheet.create({
 
     alignItems: 'center',
   },
-  temp: {
-    width: 150,
-    height: 150,
-    backgroundColor: 'orange',
-  },
+
   cell: {
     justifyContent: 'center',
   },

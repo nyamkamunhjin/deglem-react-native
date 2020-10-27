@@ -9,6 +9,11 @@ import DiaryAPI from '../api/DiaryAPI';
 import cookieContext from '../context/cookie-context';
 import { BACKEND_URL } from '../env.config';
 import _ from 'lodash';
+import * as Progress from 'react-native-progress';
+
+import { Text } from 'react-native-paper';
+import { PieChart } from 'react-native-svg-charts';
+import FoodStats from '../components/FoodStats/FoodStats';
 /**
  * @author
  * @function EditFood
@@ -38,6 +43,7 @@ const EditFood = ({ route, navigation }) => {
     delete temp.__v;
     delete temp.barcode;
     delete temp.creator;
+    delete temp.calories;
 
     return temp;
   };
@@ -99,33 +105,15 @@ const EditFood = ({ route, navigation }) => {
           </DataTable.Row>
 
           <View style={styles.main}>
-            <View style={styles.temp} />
-
-            <DataTable>
-              <DataTable.Header>
-                <DataTable.Title style={styles.cell}>Carbs</DataTable.Title>
-                <DataTable.Title style={styles.cell}>Fat</DataTable.Title>
-                <DataTable.Title style={styles.cell}>Protein</DataTable.Title>
-              </DataTable.Header>
-              <DataTable.Row>
-                <DataTable.Cell style={styles.cell}>
-                  {food.totalCarbohydrates || 0}
-                </DataTable.Cell>
-                <DataTable.Cell style={styles.cell}>
-                  {food.totalFat || 0}
-                </DataTable.Cell>
-                <DataTable.Cell style={styles.cell}>
-                  {food.protein || 0}
-                </DataTable.Cell>
-              </DataTable.Row>
-            </DataTable>
-
+            <FoodStats food={food} serving={serving} />
             <DataTable>
               {Object.entries(getAdditionalNutrients(food)).map(
                 ([key, value], index) => (
                   <DataTable.Row key={index}>
                     <DataTable.Cell>{_.startCase(key)}</DataTable.Cell>
-                    <DataTable.Cell numeric>{value}</DataTable.Cell>
+                    <DataTable.Cell numeric>
+                      {parseInt(value, 10)}
+                    </DataTable.Cell>
                   </DataTable.Row>
                 ),
               )}
@@ -148,10 +136,29 @@ const styles = StyleSheet.create({
 
     alignItems: 'center',
   },
+  circles: {
+    margin: 10,
+    // height: 500
+  },
+  graph: {
+    flex: 4.5,
+    justifyContent: 'center',
+    // backgroundColor: 'orange',
+  },
+  stats: {
+    flex: 5.5,
+  },
   temp: {
-    width: 150,
-    height: 150,
-    backgroundColor: 'orange',
+    flexDirection: 'row',
+    // height: 150,
+    // backgroundColor: 'blue',
+    // backgroundColor: 'orange',
+  },
+  calories: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   cell: {
     justifyContent: 'center',

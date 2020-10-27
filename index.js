@@ -44,6 +44,9 @@ export const theme = {
     accent: '#85cdff',
     triadic: '#8bff58',
     white: '#ffffff',
+    protein: '#82c758',
+    carbs: '#79c0d1',
+    fat: '#f77272',
     // icons: '',
     // text: '#ffffff'
   },
