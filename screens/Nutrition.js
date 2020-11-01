@@ -1,6 +1,7 @@
 import { useIsFocused } from '@react-navigation/native';
 import _ from 'lodash';
 import React, { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -25,6 +26,7 @@ import globalStyles from '../global-styles';
  * @function Nutrition
  **/
 const Nutrition = ({ navigation, theme }) => {
+  const { t } = useTranslation();
   const { colors } = theme;
 
   const [nutritionProgress, setNutritionProgress] = useState([]);
@@ -110,7 +112,7 @@ const Nutrition = ({ navigation, theme }) => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.container}>
-        <Title style={globalStyles.center}>Nutrition progress</Title>
+        <Title style={globalStyles.center}>{t('Nutrition Progress')}</Title>
         {loading ? (
           Object.entries(nutritionProgress).map(([key, value], index) => {
             // console.log(key, value);
@@ -124,7 +126,7 @@ const Nutrition = ({ navigation, theme }) => {
             return (
               <React.Fragment key={index}>
                 <View style={styles.progress}>
-                  <Text style={styles.text}>{_.startCase(key)}</Text>
+                  <Text style={styles.text}>{t(_.startCase(key))}</Text>
                   <Text style={styles.value}>
                     {value}/{convert} {user.nutritionGoals[key].unit}
                   </Text>

@@ -8,6 +8,7 @@ import axios from 'axios';
 import { BACKEND_URL } from '../env.config';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import UserAPI from '../api/UserAPI';
+import { useTranslation } from 'react-i18next';
 
 /**
  * @author
@@ -20,11 +21,12 @@ const signInSchema = yup.object({
 });
 
 const SignIn = (props) => {
+  const { t } = useTranslation();
   const { logIn } = useContext(CookieContext);
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <Title>Sign in</Title>
+      <Title>{t('Sign in')}</Title>
 
       <Formik
         validationSchema={signInSchema}
@@ -50,7 +52,7 @@ const SignIn = (props) => {
             {/* <Text>Email</Text> */}
 
             <TextInput
-              label="Email"
+              label={t('Email')}
               mode={'outlined'}
               style={styles.input}
               error={formikProps.errors.email}
@@ -66,7 +68,7 @@ const SignIn = (props) => {
             {/* <Text>Password</Text> */}
 
             <TextInput
-              label="Password"
+              label={t('Password')}
               mode={'outlined'}
               style={styles.input}
               // error={formikProps.errors.password}
@@ -86,14 +88,14 @@ const SignIn = (props) => {
                 mode={'contained'}
                 uppercase={false}
                 onPress={formikProps.handleSubmit}>
-                Sign in
+                {t('Sign in')}
               </Button>
               <Button
                 style={styles.button}
                 mode={'contained'}
                 uppercase={false}
                 onPress={() => navigation.navigate('sign-up')}>
-                Sign up
+                {t('Sign up')}
               </Button>
             </View>
           </View>

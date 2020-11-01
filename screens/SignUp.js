@@ -15,6 +15,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import axios from 'axios';
 import { BACKEND_URL } from '../env.config';
 import UserAPI from '../api/UserAPI';
+import { useTranslation } from 'react-i18next';
 
 /**
  * @author
@@ -36,6 +37,7 @@ const signUpSchema = yup.object({
 });
 
 const SignUp = (props) => {
+  const { t } = useTranslation();
   const navigation = useNavigation();
   const { theme } = props;
 
@@ -43,7 +45,7 @@ const SignUp = (props) => {
     <ScrollView
       contentContainerStyle={styles.container}
       showsVerticalScrollIndicator={false}>
-      <Title>Sign up</Title>
+      <Title>{t('Sign up')}</Title>
       <Formik
         enableReinitialize={true}
         validationSchema={signUpSchema}
@@ -76,7 +78,7 @@ const SignUp = (props) => {
         {(formikProps) => (
           <View style={styles.form}>
             <TextInput
-              label="Username"
+              label={t('Username')}
               mode={'outlined'}
               style={styles.input}
               error={formikProps.errors.username}
@@ -90,7 +92,7 @@ const SignUp = (props) => {
             </Text>
 
             <TextInput
-              label="Password"
+              label={t('Password')}
               mode={'outlined'}
               style={styles.input}
               secureTextEntry
@@ -104,7 +106,7 @@ const SignUp = (props) => {
             </Text>
 
             <TextInput
-              label="Confirm Password"
+              label={t('Confirm Password')}
               mode={'outlined'}
               style={styles.input}
               secureTextEntry
@@ -119,7 +121,7 @@ const SignUp = (props) => {
             </Text>
 
             <TextInput
-              label="Email"
+              label={t('Email')}
               mode={'outlined'}
               style={styles.input}
               error={formikProps.errors.email}
@@ -133,7 +135,7 @@ const SignUp = (props) => {
             </Text>
 
             <TextInput
-              label="First Name"
+              label={t('First Name')}
               mode={'outlined'}
               style={styles.input}
               onChangeText={formikProps.handleChange('firstName')}
@@ -145,7 +147,7 @@ const SignUp = (props) => {
               {formikProps.touched.firstName && formikProps.errors.firstName}
             </Text>
             <TextInput
-              label="Last Name"
+              label={t('Last Name')}
               mode={'outlined'}
               style={styles.input}
               error={formikProps.errors.lastName}
@@ -159,7 +161,7 @@ const SignUp = (props) => {
             </Text>
 
             <View>
-              <Text>Gender</Text>
+              <Text>{t('Gender')}</Text>
               <View style={styles.gender}>
                 <Checkbox
                   status={
@@ -170,7 +172,7 @@ const SignUp = (props) => {
                   onPress={() => formikProps.setFieldValue('gender', 'Male')}
                   color={theme.colors.primary}
                 />
-                <Text>Man</Text>
+                <Text>{t('Male')}</Text>
               </View>
               <View style={styles.gender}>
                 <Checkbox
@@ -182,7 +184,7 @@ const SignUp = (props) => {
                   onPress={() => formikProps.setFieldValue('gender', 'Female')}
                   color={theme.colors.primary}
                 />
-                <Text>Woman</Text>
+                <Text>{t('Female')}</Text>
               </View>
             </View>
 
@@ -191,7 +193,7 @@ const SignUp = (props) => {
             </Text>
 
             <TextInput
-              label="Birthday"
+              label={t('Birthday')}
               mode={'outlined'}
               style={styles.input}
               onChangeText={(value) => {
@@ -223,7 +225,7 @@ const SignUp = (props) => {
                 mode={'contained'}
                 uppercase={false}
                 onPress={formikProps.handleSubmit}>
-                Sign up
+                {t('Sign up')}
               </Button>
             </View>
           </View>

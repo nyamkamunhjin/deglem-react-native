@@ -168,7 +168,7 @@ const AccountInfo = ({ navigation, theme }) => {
         <ScrollView showsVerticalScrollIndicator={false}>
           <Portal>
             <Dialog visible={showDialog} onDismiss={() => setShowDialog(false)}>
-              <Dialog.Title>{dialog.name}</Dialog.Title>
+              <Dialog.Title>{t(dialog.name)}</Dialog.Title>
               {renderSwitch()}
               <Dialog.Actions>
                 {!loading ? (

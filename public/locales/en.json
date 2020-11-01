@@ -66,5 +66,25 @@
   "Unit": "Unit",
   "Serving Per Container": "Serving Per Container",
   "Optional": "Optional",
-  "Create": "Create"
+  "Create": "Create",
+  // MyGoal.js
+  "My Goals": "My Goals",
+  "Height": "Height",
+  "Current Weight": "Current weight",
+  "Goal Weight": "Goal weight",
+  "Weekly Goal": "Weekly Goal",
+  "Activity Level": "Activity Level",
+  // Nutrition.js
+  "Nutrition Progress": "Nutrition Progress",
+  // SearchFood.js
+  "Search food": "Search Food",
+  "Food": "Food",
+  "No food found.": "No food found.",
+  // SignIn.js
+  "Sign in": "Sign in",
+  "Password": "Password",
+  "Sign up": "Sign up",
+  // SignUp.js
+  "Confirm Password": "Confirm Password",
+  "Birthday": "Birthday"
 }

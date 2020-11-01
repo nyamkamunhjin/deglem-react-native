@@ -18,13 +18,16 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { MifflinStJourFormula, calculateAge } from '../functions/functions';
 import UserAPI from '../api/UserAPI';
+import { useTranslation } from 'react-i18next';
+import CaloriesDialog from '../components/CaloriesDialog/CaloriesDialog';
+/**
 import CaloriesDialog from '../components/CaloriesDialog/CaloriesDialog';
 
-/**
  * @author
  * @function MyGoal
  **/
 const MyGoal = ({ navigation, theme }) => {
+  const { t } = useTranslation();
   const { token, user, setUser } = useContext(cookieContext);
   const { colors } = theme;
   // const [user, setUser] = useState(null);
@@ -37,17 +40,17 @@ const MyGoal = ({ navigation, theme }) => {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleDateFormat = (value) => {
-    let formatted = value;
-    if (formatted.length > 4 && formatted[4] !== '-') {
-      formatted = formatted.substring(0, 4) + '-' + formatted.substr(4);
-    }
+  // const handleDateFormat = (value) => {
+  //   let formatted = value;
+  //   if (formatted.length > 4 && formatted[4] !== '-') {
+  //     formatted = formatted.substring(0, 4) + '-' + formatted.substr(4);
+  //   }
 
-    if (formatted.length > 7 && formatted[7] !== '-') {
-      formatted = formatted.substring(0, 7) + '-' + formatted.substr(7);
-    }
-    setInput(formatted);
-  };
+  //   if (formatted.length > 7 && formatted[7] !== '-') {
+  //     formatted = formatted.substring(0, 7) + '-' + formatted.substr(7);
+  //   }
+  //   setInput(formatted);
+  // };
 
   // eslint-disable-next-line no-shadow
   const updateCalories = (user) => {
@@ -183,13 +186,13 @@ const MyGoal = ({ navigation, theme }) => {
         <ScrollView showsVerticalScrollIndicator={false}>
           <Portal>
             <Dialog visible={showDialog} onDismiss={() => setShowDialog(false)}>
-              <Dialog.Title>{dialog.name}</Dialog.Title>
+              <Dialog.Title>{t(dialog.name)}</Dialog.Title>
               {renderSwitch()}
             </Dialog>
           </Portal>
 
           <View>
-            <Subheading style={styles.heading}>My Goals</Subheading>
+            <Subheading style={styles.heading}>{t('My Goals')}</Subheading>
             <DataTable>
               <DataTable.Row
                 onPress={() => {
@@ -202,7 +205,7 @@ const MyGoal = ({ navigation, theme }) => {
                     setCalories: true,
                   });
                 }}>
-                <DataTable.Cell>Height</DataTable.Cell>
+                <DataTable.Cell>{t('Height')}</DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.goalInfo ? user.goalInfo.height : ''} cm
                 </DataTable.Cell>
@@ -218,7 +221,7 @@ const MyGoal = ({ navigation, theme }) => {
                     setCalories: true,
                   });
                 }}>
-                <DataTable.Cell>Current Weight</DataTable.Cell>
+                <DataTable.Cell>{t('Current Weight')}</DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.goalInfo ? user.goalInfo.currentWeight : ''} kg
                 </DataTable.Cell>
@@ -234,7 +237,7 @@ const MyGoal = ({ navigation, theme }) => {
                     setCalories: true,
                   });
                 }}>
-                <DataTable.Cell>Goal Weight</DataTable.Cell>
+                <DataTable.Cell>{t('Goal Weight')}</DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.goalInfo ? user.goalInfo.goalWeight : ''} kg
                 </DataTable.Cell>
@@ -256,7 +259,7 @@ const MyGoal = ({ navigation, theme }) => {
                     setCalories: true,
                   });
                 }}>
-                <DataTable.Cell>Weekly Goal</DataTable.Cell>
+                <DataTable.Cell>{t('Weekly Goal')}</DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.goalInfo
                     ? user.goalInfo.weeklyGoal === ''
@@ -276,14 +279,16 @@ const MyGoal = ({ navigation, theme }) => {
                     setCalories: true,
                   });
                 }}>
-                <DataTable.Cell>Activity Level</DataTable.Cell>
+                <DataTable.Cell>{t('Activity Level')}</DataTable.Cell>
                 <DataTable.Cell numeric>
-                  {user.goalInfo ? user.goalInfo.activityLevel : ''}
+                  {user.goalInfo ? t(user.goalInfo.activityLevel) : ''}
                 </DataTable.Cell>
               </DataTable.Row>
             </DataTable>
 
-            <Subheading style={styles.heading}>Nutrition goals</Subheading>
+            <Subheading style={styles.heading}>
+              {t('Nutrition Goals')}
+            </Subheading>
             <DataTable>
               <DataTable.Row
                 onPress={() => {
@@ -299,12 +304,12 @@ const MyGoal = ({ navigation, theme }) => {
                     type: 'calories',
                   });
                 }}>
-                <DataTable.Cell>Calories</DataTable.Cell>
+                <DataTable.Cell>{t('Calories')}</DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.nutritionGoals
                     ? user.nutritionGoals.calories.value
                     : '-'}{' '}
-                  cal
+                  {t('kcal')}
                 </DataTable.Cell>
               </DataTable.Row>
 
@@ -322,7 +327,7 @@ const MyGoal = ({ navigation, theme }) => {
                     type: 'calories',
                   });
                 }}>
-                <DataTable.Cell>Protein</DataTable.Cell>
+                <DataTable.Cell>{t('Protein')}</DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.nutritionGoals &&
                     (user.nutritionGoals.protein.value || '-')}{' '}
@@ -344,7 +349,7 @@ const MyGoal = ({ navigation, theme }) => {
                     type: 'calories',
                   });
                 }}>
-                <DataTable.Cell>Carbs</DataTable.Cell>
+                <DataTable.Cell>{t('Carbs')}</DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.nutritionGoals &&
                     (user.nutritionGoals.totalCarbohydrates.value || '-')}{' '}
@@ -366,7 +371,7 @@ const MyGoal = ({ navigation, theme }) => {
                     type: 'calories',
                   });
                 }}>
-                <DataTable.Cell>Fats</DataTable.Cell>
+                <DataTable.Cell>{t('Fats')}</DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.nutritionGoals &&
                     (user.nutritionGoals.totalFat.value || '-')}{' '}

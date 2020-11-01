@@ -12,12 +12,14 @@ import {
 import cookieContext from '../context/cookie-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FoodAPI from '../api/FoodAPI';
+import { useTranslation } from 'react-i18next';
 
 /**
  * @author
  * @function SearchFood
  **/
 const SearchFood = (props) => {
+  const { t } = useTranslation();
   const { colors } = props.theme;
   const { navigation } = props;
   const { token } = useContext(cookieContext);
@@ -54,7 +56,7 @@ const SearchFood = (props) => {
         }}>
         <Searchbar
           style={searchbar}
-          placeholder="Search food"
+          placeholder={t('Search food')}
           onChangeText={onChangeSearch}
           value={searchQuery}
           onIconPress={handleSearch}
@@ -74,9 +76,9 @@ const SearchFood = (props) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <DataTable>
           <DataTable.Header>
-            <DataTable.Title>Food</DataTable.Title>
-            <DataTable.Title numeric>Serving</DataTable.Title>
-            <DataTable.Title numeric>Calories</DataTable.Title>
+            <DataTable.Title>{t('Food')}</DataTable.Title>
+            <DataTable.Title numeric>{t('Serving')}</DataTable.Title>
+            <DataTable.Title numeric>{t('Calories')}</DataTable.Title>
           </DataTable.Header>
           {loadingBar ? (
             <ActivityIndicator
@@ -98,13 +100,15 @@ const SearchFood = (props) => {
                 }>
                 <DataTable.Cell>{res.document.name}</DataTable.Cell>
                 <DataTable.Cell numeric>
-                  {`${res.document.serving.size} ${res.document.serving.unit}`}
+                  {`${res.document.serving.size} ${t(
+                    res.document.serving.unit,
+                  )}`}
                 </DataTable.Cell>
                 <DataTable.Cell numeric>{res.document.calories}</DataTable.Cell>
               </DataTable.Row>
             ))
           ) : (
-            <Text style={styles.text}>No food found.</Text>
+            <Text style={styles.text}>{t('No food found.')}</Text>
           )}
         </DataTable>
       </ScrollView>

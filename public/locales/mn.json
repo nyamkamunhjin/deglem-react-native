@@ -66,5 +66,25 @@
   "Unit": "Хэмжигдхүүн",
   "Serving Per Container": "Нэг хайрцаг/уутанд агуулагдах хэмжээ",
   "Optional": "Заавал биш",
-  "Create": "Үүсгэх"
+  "Create": "Үүсгэх",
+  // MyGoal.js
+  "My Goals": "Миний зорилго",
+  "Height": "Өндөр",
+  "Current Weight": "Одоогийн жин",
+  "Goal Weight": "Хүрэхийг зорьж буй жин",
+  "Weekly Goal": "7 хоногт биелүүлэх зорилго",
+  "Activity Level": "Хөдөлгөөний түвшин",
+  // Nutrition.js
+  "Nutrition Progress": "Өнөөдөр авсан шим тэжээл",
+  // SearchFood.js
+  "Search food": "Хоол хайх",
+  "Food": "Хоол",
+  "No food found.": "Хоол олдсонгүй.",
+  // SignIn.js
+  "Sign in": "Нэвтрэх",
+  "Password": "Нууц үг",
+  "Sign up": "Бүртгүүлэх",
+  // SignUp.js
+  "Confirm Password": "Нууц үг давтах",
+  "Birthday": "Төрсөн өдөр"
 }
