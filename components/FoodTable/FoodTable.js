@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import {
@@ -13,7 +12,6 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DiaryAPI from '../../api/DiaryAPI';
 import cookieContext from '../../context/cookie-context';
-import { BACKEND_URL } from '../../env.config';
 import { countCalories } from '../../functions/functions';
 
 /**

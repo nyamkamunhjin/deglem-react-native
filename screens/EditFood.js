@@ -14,15 +14,16 @@ import FoodStats from '../components/FoodStats/FoodStats';
  * @function EditFood
  **/
 const EditFood = ({ route, navigation }) => {
-  // console.log(route.params);
-  const [serving, setServing] = useState(1);
-  const { token } = useContext(cookieContext);
-
+  // console.log(route.params.food.serving);
   const {
     food: { _id },
     food: { food },
     addTo,
   } = route.params;
+
+  const [serving, setServing] = useState(route.params.food.serving || 1);
+  const { token } = useContext(cookieContext);
+
   // console.log(food);
   // console.log('addTo:', addTo);
   const getAdditionalNutrients = (doc) => {
@@ -138,16 +139,12 @@ const styles = StyleSheet.create({
   graph: {
     flex: 4.5,
     justifyContent: 'center',
-    // backgroundColor: 'orange',
   },
   stats: {
     flex: 5.5,
   },
   temp: {
     flexDirection: 'row',
-    // height: 150,
-    // backgroundColor: 'blue',
-    // backgroundColor: 'orange',
   },
   calories: {
     flexDirection: 'row',
