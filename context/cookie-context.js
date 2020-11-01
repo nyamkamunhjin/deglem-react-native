@@ -4,7 +4,9 @@ import React from 'react';
 export default React.createContext({
   token: null,
   user: null,
+  lang: 'mn',
   setUser: () => {},
+  setLanguage: (value) => {},
   // cookies: null,
   logIn: () => {},
   logOut: () => {},

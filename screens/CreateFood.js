@@ -4,22 +4,19 @@ import { View, Text, StyleSheet } from 'react-native';
 import {
   Button,
   Caption,
-  Headline,
   List,
   Subheading,
   TextInput,
   Title,
-  ToggleButton,
   withTheme,
 } from 'react-native-paper';
 import * as yup from 'yup';
-import axios from 'axios';
-import { BACKEND_URL } from '../env.config';
-import { StackActions, useNavigation } from '@react-navigation/native';
+
 import globalStyles from '../global-styles';
 import { ScrollView } from 'react-native-gesture-handler';
 import cookieContext from '../context/cookie-context';
 import FoodAPI from '../api/FoodAPI';
+import { useTranslation } from 'react-i18next';
 
 const createFoodSchema = yup.object({
   name: yup.string().required('Food name is required').min(2),
@@ -37,6 +34,7 @@ const createFoodSchema = yup.object({
  * @function CreateFood
  **/
 const CreateFood = ({ navigation, route, theme }) => {
+  const { t } = useTranslation();
   const { token } = useContext(cookieContext);
 
   const { colors } = theme;
@@ -80,9 +78,11 @@ const CreateFood = ({ navigation, route, theme }) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-      <Subheading>Sorry product could not be found in database. </Subheading>
-      <Caption>Help us by adding food to our database.</Caption>
-      <Title>Create Food</Title>
+      <Subheading>
+        {t('Sorry product could not be found in database.')}
+      </Subheading>
+      <Caption>{t('Help us by adding food to our database.')}</Caption>
+      <Title>{t('Create Food')}</Title>
 
       <Formik
         validationSchema={createFoodSchema}
@@ -121,7 +121,7 @@ const CreateFood = ({ navigation, route, theme }) => {
         }}>
         {(formikProps) => (
           <View style={styles.form}>
-            <Text style={styles.inputTitle}>Food Name</Text>
+            <Text style={styles.inputTitle}>{t('Food Name')}</Text>
             <View>
               <TextInput
                 // 3="Food Name"
@@ -137,10 +137,10 @@ const CreateFood = ({ navigation, route, theme }) => {
               </Text>
             </View>
 
-            <Subheading>Servings</Subheading>
+            <Subheading>{t('Serving')}</Subheading>
             <View style={globalStyles.row}>
               <View style={globalStyles.flex}>
-                <Text style={styles.inputTitle}>Size</Text>
+                <Text style={styles.inputTitle}>{t('Serving size')}</Text>
                 <TextInput
                   // 3="Size"
                   keyboardType="numeric"
@@ -157,7 +157,7 @@ const CreateFood = ({ navigation, route, theme }) => {
                 </Text>
               </View>
               <View style={globalStyles.flex}>
-                <Text style={styles.inputTitle}>Unit</Text>
+                <Text style={styles.inputTitle}>{t('Unit')}</Text>
                 <TextInput
                   // 3="Unit"
                   mode={'flat'}
@@ -174,7 +174,9 @@ const CreateFood = ({ navigation, route, theme }) => {
               </View>
             </View>
             <View>
-              <Text style={styles.inputTitle}>Serving Per Container</Text>
+              <Text style={styles.inputTitle}>
+                {t('Serving Per Container')}
+              </Text>
               <TextInput
                 // 3="Serving Per Container"
                 mode={'flat'}
@@ -192,7 +194,7 @@ const CreateFood = ({ navigation, route, theme }) => {
               </Text>
             </View>
             <View>
-              <Text style={styles.inputTitle}>Calories</Text>
+              <Text style={styles.inputTitle}>{t('Calories')}</Text>
               <TextInput
                 // 3="Serving Per Container"
                 mode={'flat'}
@@ -208,9 +210,9 @@ const CreateFood = ({ navigation, route, theme }) => {
                 {formikProps.touched.calories && formikProps.errors.calories}
               </Text>
             </View>
-            <Subheading>Nutrients</Subheading>
+            <Subheading>{t('Nutrition')}</Subheading>
             <View>
-              <Text style={styles.inputTitle}>Protein</Text>
+              <Text style={styles.inputTitle}>{t('Protein')}</Text>
               <TextInput
                 keyboardType="numeric"
                 // 3="Protein"
@@ -227,7 +229,7 @@ const CreateFood = ({ navigation, route, theme }) => {
               </Text>
             </View>
             <View>
-              <Text style={styles.inputTitle}>Carbohydrates</Text>
+              <Text style={styles.inputTitle}>{t('Carbohydrates')}</Text>
               <TextInput
                 keyboardType="numeric"
                 // 3="Carbohydrates"
@@ -245,7 +247,7 @@ const CreateFood = ({ navigation, route, theme }) => {
               </Text>
             </View>
             <View>
-              <Text style={styles.inputTitle}>Fats</Text>
+              <Text style={styles.inputTitle}>{t('Fats')}</Text>
               <TextInput
                 keyboardType="numeric"
                 // 3="Fats"
@@ -261,9 +263,9 @@ const CreateFood = ({ navigation, route, theme }) => {
                 {formikProps.touched.totalFat && formikProps.errors.totalFat}
               </Text>
             </View>
-            <List.Accordion title="Optional">
+            <List.Accordion title={t('Optional')}>
               <View>
-                <Text style={styles.inputTitle}>Sugars</Text>
+                <Text style={styles.inputTitle}>{t('Sugars')}</Text>
                 <TextInput
                   keyboardType="numeric"
                   mode={'flat'}
@@ -280,7 +282,7 @@ const CreateFood = ({ navigation, route, theme }) => {
               </View>
 
               <View>
-                <Text style={styles.inputTitle}>Dietary Fibers</Text>
+                <Text style={styles.inputTitle}>{t('Dietary Fibers')}</Text>
                 <TextInput
                   keyboardType="numeric"
                   mode={'flat'}
@@ -298,7 +300,7 @@ const CreateFood = ({ navigation, route, theme }) => {
               </View>
 
               <View>
-                <Text style={styles.inputTitle}>Saturated Fat</Text>
+                <Text style={styles.inputTitle}>{t('Saturated Fat')}</Text>
                 <TextInput
                   keyboardType="numeric"
                   mode={'flat'}
@@ -316,7 +318,9 @@ const CreateFood = ({ navigation, route, theme }) => {
               </View>
 
               <View>
-                <Text style={styles.inputTitle}>Monounsaturated Fat</Text>
+                <Text style={styles.inputTitle}>
+                  {t('Mono Unsaturated Fat')}
+                </Text>
                 <TextInput
                   keyboardType="numeric"
                   mode={'flat'}
@@ -333,7 +337,9 @@ const CreateFood = ({ navigation, route, theme }) => {
                 </Text>
               </View>
               <View>
-                <Text style={styles.inputTitle}>Polyunsaturated Fat</Text>
+                <Text style={styles.inputTitle}>
+                  {t('Poly Unsaturated Fat')}
+                </Text>
                 <TextInput
                   keyboardType="numeric"
                   mode={'flat'}
@@ -350,7 +356,7 @@ const CreateFood = ({ navigation, route, theme }) => {
                 </Text>
               </View>
               <View>
-                <Text style={styles.inputTitle}>Cholestrol</Text>
+                <Text style={styles.inputTitle}>{t('Cholestrol')}</Text>
                 <TextInput
                   keyboardType="numeric"
                   mode={'flat'}
@@ -367,7 +373,7 @@ const CreateFood = ({ navigation, route, theme }) => {
                 </Text>
               </View>
               <View>
-                <Text style={styles.inputTitle}>Vitamin A</Text>
+                <Text style={styles.inputTitle}>{t('Vitamin A')}</Text>
                 <TextInput
                   keyboardType="numeric"
                   mode={'flat'}
@@ -383,7 +389,7 @@ const CreateFood = ({ navigation, route, theme }) => {
                 </Text>
               </View>
               <View>
-                <Text style={styles.inputTitle}>Vitamin C</Text>
+                <Text style={styles.inputTitle}>{t('Vitamin C')}</Text>
                 <TextInput
                   keyboardType="numeric"
                   mode={'flat'}
@@ -399,7 +405,7 @@ const CreateFood = ({ navigation, route, theme }) => {
                 </Text>
               </View>
               <View>
-                <Text style={styles.inputTitle}>Vitamin D</Text>
+                <Text style={styles.inputTitle}>{t('Vitamin D')}</Text>
                 <TextInput
                   keyboardType="numeric"
                   mode={'flat'}
@@ -415,7 +421,7 @@ const CreateFood = ({ navigation, route, theme }) => {
                 </Text>
               </View>
               <View>
-                <Text style={styles.inputTitle}>Calcium</Text>
+                <Text style={styles.inputTitle}>{t('Calcium')}</Text>
                 <TextInput
                   keyboardType="numeric"
                   mode={'flat'}
@@ -431,7 +437,7 @@ const CreateFood = ({ navigation, route, theme }) => {
                 </Text>
               </View>
               <View>
-                <Text style={styles.inputTitle}>Iron</Text>
+                <Text style={styles.inputTitle}>{t('Iron')}</Text>
                 <TextInput
                   keyboardType="numeric"
                   mode={'flat'}
@@ -447,7 +453,7 @@ const CreateFood = ({ navigation, route, theme }) => {
                 </Text>
               </View>
               <View>
-                <Text style={styles.inputTitle}>Potassium</Text>
+                <Text style={styles.inputTitle}>{t('Potassium')}</Text>
                 <TextInput
                   keyboardType="numeric"
                   mode={'flat'}
@@ -464,7 +470,7 @@ const CreateFood = ({ navigation, route, theme }) => {
                 </Text>
               </View>
               <View>
-                <Text style={styles.inputTitle}>Sodium</Text>
+                <Text style={styles.inputTitle}>{t('Sodium')}</Text>
                 <TextInput
                   keyboardType="numeric"
                   mode={'flat'}
@@ -486,7 +492,7 @@ const CreateFood = ({ navigation, route, theme }) => {
                 mode={'contained'}
                 uppercase={false}
                 onPress={formikProps.handleSubmit}>
-                Create
+                {t('Create')}
               </Button>
             </View>
           </View>

@@ -3,9 +3,11 @@ import { Appbar, TouchableRipple } from 'react-native-paper';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { View, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const Header = ({ scene, previous, navigation, colors }) => {
   const { options } = scene.descriptor;
+  const { t } = useTranslation();
 
   const title =
     options.headerTitle !== undefined
@@ -41,7 +43,7 @@ const Header = ({ scene, previous, navigation, colors }) => {
         </View>
       )}
       <Appbar.Content
-        title={title}
+        title={t(title)}
         titleStyle={{ marginLeft: -10 }}
         color="white"
       />

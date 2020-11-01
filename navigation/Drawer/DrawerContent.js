@@ -1,20 +1,43 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
-import { Avatar, Drawer, Title, Caption } from 'react-native-paper';
+import {
+  Avatar,
+  Drawer,
+  Title,
+  Caption,
+  Text,
+  Switch,
+  withTheme,
+} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import cookieContext from '../../context/cookie-context';
-import UserAPI from '../../api/UserAPI';
+import { useTranslation } from 'react-i18next';
+
+import color from 'color';
 
 /**
  * @author
  * @function DrawerContent
  **/
 const DrawerContent = (props) => {
+  const { colors, fonts } = props.theme;
+  // console.log(fonts);
+  const { token, user, logOut, setLanguage, lang } = useContext(cookieContext);
+  // console.log(lang);
   const [title, setTitle] = useState('');
   const [caption, setCaption] = useState('');
+
+  // const [isSwitchOn, setIsSwitchOn] = useState(lang);
+
+  const onToggleSwitch = () => {
+    // setIsSwitchOn(!isSwitchOn);
+    setLanguage(lang === 'mn' ? 'en' : 'mn');
+  };
+
   const { navigation } = props;
-  const { token, user, logOut } = useContext(cookieContext);
+  const { t, i18n } = useTranslation();
+
   useEffect(() => {
     if (user) {
       setTitle(`${user.userInfo.firstName} ${user.userInfo.lastName}`);
@@ -49,7 +72,7 @@ const DrawerContent = (props) => {
             icon={({ color, size }) => (
               <Icon name="notebook" color={color} size={size} />
             )}
-            label="Diary"
+            label={t('Diary')}
             onPress={() => {
               navigation.navigate('diary-tab');
             }}
@@ -58,7 +81,7 @@ const DrawerContent = (props) => {
             icon={({ color, size }) => (
               <Icon name="trophy" color={color} size={size} />
             )}
-            label="My Goal"
+            label={t('My Goal')}
             onPress={() => {
               navigation.navigate('mygoal-tab');
             }}
@@ -67,7 +90,7 @@ const DrawerContent = (props) => {
             icon={({ color, size }) => (
               <Icon name="nutrition" color={color} size={size} />
             )}
-            label="Nutrition"
+            label={t('Nutrition')}
             onPress={() => {
               navigation.navigate('nutrition-tab');
             }}
@@ -76,20 +99,37 @@ const DrawerContent = (props) => {
             icon={({ color, size }) => (
               <Icon name="account-edit" color={color} size={size} />
             )}
-            label="Edit Info"
+            label={t('Edit Info')}
             onPress={() => {
               navigation.navigate('account-info');
             }}
           />
         </Drawer.Section>
       </DrawerContentScrollView>
-
+      <Drawer.Section title={t('Language Title')}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingVertical: 12,
+            paddingHorizontal: 16,
+          }}>
+          <Text
+            style={{
+              fontFamily: fonts.medium.fontFamily,
+              color: color(colors.text).alpha(0.68).rgb().string(),
+            }}>
+            {t('Language')}
+          </Text>
+          <Switch value={lang === 'mn'} onValueChange={onToggleSwitch} />
+        </View>
+      </Drawer.Section>
       <Drawer.Section title="Authorization">
         <Drawer.Item
           icon={({ color, size }) => (
             <Icon name="location-exit" color={color} size={size} />
           )}
-          label="Sign Out"
+          label={t('Sign Out')}
           onPress={() => {
             logOut();
             navigation.closeDrawer();
@@ -113,4 +153,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DrawerContent;
+export default withTheme(DrawerContent);

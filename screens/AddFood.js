@@ -10,11 +10,13 @@ import cookieContext from '../context/cookie-context';
 import { BACKEND_URL } from '../env.config';
 import _ from 'lodash';
 import FoodStats from '../components/FoodStats/FoodStats';
+import { useTranslation } from 'react-i18next';
 /**
  * @author
  * @function AddFood
  **/
 const AddFood = ({ route, navigation }) => {
+  const { t } = useTranslation();
   // console.log(route.params);
   const [serving, setServing] = useState(1);
   const { addTo, selectedDate, food } = route.params;
@@ -88,12 +90,13 @@ const AddFood = ({ route, navigation }) => {
               </DataTable.Cell>
             </DataTable.Row>
             <DataTable.Row>
-              <DataTable.Cell>Serving size</DataTable.Cell>
-              <DataTable.Cell
-                numeric>{`${food.serving.size} ${food.serving.unit}`}</DataTable.Cell>
+              <DataTable.Cell>{t('Serving size')}</DataTable.Cell>
+              <DataTable.Cell numeric>{`${food.serving.size} ${t(
+                food.serving.unit,
+              )}`}</DataTable.Cell>
             </DataTable.Row>
             <DataTable.Row>
-              <DataTable.Cell>Number of serving</DataTable.Cell>
+              <DataTable.Cell>{t('Number of serving')}</DataTable.Cell>
               <DataTable.Cell numeric>
                 <NumericInput
                   // type="up-down"
@@ -114,7 +117,7 @@ const AddFood = ({ route, navigation }) => {
                 {Object.entries(getAdditionalNutrients(food)).map(
                   ([key, value], index) => (
                     <DataTable.Row key={index}>
-                      <DataTable.Cell>{_.startCase(key)}</DataTable.Cell>
+                      <DataTable.Cell>{t(_.startCase(key))}</DataTable.Cell>
                       <DataTable.Cell numeric>
                         {parseInt(value, 10)}
                       </DataTable.Cell>

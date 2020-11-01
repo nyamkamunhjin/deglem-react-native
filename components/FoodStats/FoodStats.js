@@ -1,6 +1,7 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, StyleSheet } from 'react-native';
-import { DataTable, Text, withTheme } from 'react-native-paper';
+import { Text, withTheme } from 'react-native-paper';
 import { PieChart } from 'react-native-svg-charts';
 
 /**
@@ -9,9 +10,10 @@ import { PieChart } from 'react-native-svg-charts';
  **/
 const FoodStats = ({ food, serving, theme }) => {
   const { colors } = theme;
+  const { t } = useTranslation();
 
   const styles = StyleSheet.create({
-    pieChart: { height: 120 },
+    pieChart: { height: 100 },
 
     calories: {
       fontSize: 25,
@@ -92,26 +94,27 @@ const FoodStats = ({ food, serving, theme }) => {
           ]}>
           <View style={styles.cell}>
             <Text style={styles.calories}>
-              {parseInt(food.calories * serving, 10)} cal
+              {parseInt(food.calories * serving, 10)}
             </Text>
+            <Text style={{ fontSize: 15 }}>{t('kcal')}</Text>
           </View>
         </PieChart>
       </View>
       <View style={styles.stats}>
         <View style={styles.nutrition}>
-          <Text style={styles.carbs}>Carbs</Text>
+          <Text style={styles.carbs}>{t('Carbs')}</Text>
           <Text style={{ fontSize: 15 }}>
             {parseInt(food.totalCarbohydrates * serving, 10) || 0} g
           </Text>
         </View>
         <View style={styles.nutrition}>
-          <Text style={styles.fat}>Fat</Text>
+          <Text style={styles.fat}>{t('Fats')}</Text>
           <Text style={{ fontSize: 15 }}>
             {parseInt(food.totalFat * serving, 10) || 0} g
           </Text>
         </View>
         <View style={styles.nutrition}>
-          <Text style={styles.protein}>Protein</Text>
+          <Text style={styles.protein}>{t('Protein')}</Text>
           <Text style={{ fontSize: 15 }}>
             {parseInt(food.protein * serving, 10) || 0} g
           </Text>

@@ -12,6 +12,7 @@ import globalStyles from '../../global-styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import UserAPI from '../../api/UserAPI';
 import flatten from 'flat';
+import { useTranslation } from 'react-i18next';
 
 /**
  * @author
@@ -27,6 +28,7 @@ const CaloriesDialog = ({
   token,
 }) => {
   const { colors } = theme;
+  const { t } = useTranslation();
   const [calories, setCalories] = useState(nutritionGoals.calories.value);
   const [protein, setProtein] = useState(nutritionGoals.protein.value);
   const [carbohydrates, setCarbohydrates] = useState(
@@ -108,7 +110,9 @@ const CaloriesDialog = ({
     <React.Fragment>
       <Dialog.Content>
         <View style={styles.form}>
-          <Text style={styles.inputTitle}>Calories (cal)</Text>
+          <Text style={styles.inputTitle}>
+            {t('Calories')} {t('kcal')}
+          </Text>
           <TextInput
             style={styles.input}
             value={calories.toString()}
@@ -120,7 +124,7 @@ const CaloriesDialog = ({
         </Text>
         <View style={globalStyles.row}>
           <View style={globalStyles.flex}>
-            <Text style={styles.inputTitle}>Protein (%)</Text>
+            <Text style={styles.inputTitle}>{t('Protein')} (%)</Text>
             <TextInput
               style={styles.input}
               value={protein.toString()}
@@ -128,7 +132,7 @@ const CaloriesDialog = ({
             />
           </View>
           <View style={globalStyles.flex}>
-            <Text style={styles.inputTitle}>Carbs (%)</Text>
+            <Text style={styles.inputTitle}>{t('Carbs')} (%)</Text>
             <TextInput
               style={styles.input}
               value={carbohydrates.toString()}
@@ -136,7 +140,7 @@ const CaloriesDialog = ({
             />
           </View>
           <View style={globalStyles.flex}>
-            <Text style={styles.inputTitle}>Fats (%)</Text>
+            <Text style={styles.inputTitle}>{t('Fats')} (%)</Text>
             <TextInput
               style={styles.input}
               value={fat.toString()}

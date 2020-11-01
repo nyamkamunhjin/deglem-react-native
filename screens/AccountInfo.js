@@ -18,12 +18,14 @@ import { formatDate } from '../functions/functions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MultiChoice from '../components/MultiChoice/MultiChoice';
 import UserAPI from '../api/UserAPI';
+import { useTranslation } from 'react-i18next';
 
 /**
  * @author
  * @function AccountInfo
  **/
 const AccountInfo = ({ navigation, theme }) => {
+  const { t } = useTranslation();
   const { token, user, setUser } = useContext(cookieContext);
 
   // const [user, setUser] = useState(null);
@@ -185,7 +187,9 @@ const AccountInfo = ({ navigation, theme }) => {
             </Dialog>
           </Portal>
           <View>
-            <Subheading style={styles.heading}>My Account</Subheading>
+            <Subheading style={styles.heading}>
+              {t('My Information')}
+            </Subheading>
             <DataTable>
               <DataTable.Row
                 onPress={() => {
@@ -198,13 +202,13 @@ const AccountInfo = ({ navigation, theme }) => {
                     type: 'text',
                   });
                 }}>
-                <DataTable.Cell>Username</DataTable.Cell>
+                <DataTable.Cell>{t('Username')}</DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.userInfo.username || ''}
                 </DataTable.Cell>
               </DataTable.Row>
               <DataTable.Row onPress={() => console.log('pressed.')}>
-                <DataTable.Cell>Avatar</DataTable.Cell>
+                <DataTable.Cell>{t('Avatar')}</DataTable.Cell>
                 <DataTable.Cell numeric>
                   <View style={styles.avatar || ''}>
                     <Avatar.Image
@@ -228,7 +232,7 @@ const AccountInfo = ({ navigation, theme }) => {
                   });
                 }}
                 style={{ marginTop: 0 }}>
-                <DataTable.Cell>Email</DataTable.Cell>
+                <DataTable.Cell>{t('Email')}</DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.userInfo.email || ''}
                 </DataTable.Cell>
@@ -243,7 +247,7 @@ const AccountInfo = ({ navigation, theme }) => {
                     type: 'text',
                   });
                 }}>
-                <DataTable.Cell>First Name</DataTable.Cell>
+                <DataTable.Cell>{t('First Name')}</DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.userInfo.firstName || ''}
                 </DataTable.Cell>
@@ -258,7 +262,7 @@ const AccountInfo = ({ navigation, theme }) => {
                     type: 'text',
                   });
                 }}>
-                <DataTable.Cell>Last Name</DataTable.Cell>
+                <DataTable.Cell>{t('Last Name')}</DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.userInfo.lastName || ''}
                 </DataTable.Cell>
@@ -273,9 +277,9 @@ const AccountInfo = ({ navigation, theme }) => {
                     type: 'gender',
                   });
                 }}>
-                <DataTable.Cell>Gender</DataTable.Cell>
+                <DataTable.Cell>{t('Gender')}</DataTable.Cell>
                 <DataTable.Cell numeric>
-                  {user.userInfo.gender || ''}
+                  {t(user.userInfo.gender) || ''}
                 </DataTable.Cell>
               </DataTable.Row>
               <DataTable.Row
@@ -288,7 +292,7 @@ const AccountInfo = ({ navigation, theme }) => {
                     type: 'date',
                   });
                 }}>
-                <DataTable.Cell>Date of birth</DataTable.Cell>
+                <DataTable.Cell>{t('Date of birth')}</DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.userInfo ? formatDate(user.userInfo.dateOfBirth) : ''}
                 </DataTable.Cell>
@@ -299,7 +303,7 @@ const AccountInfo = ({ navigation, theme }) => {
           <View>
             <DataTable>
               <DataTable.Row onPress={() => navigation.navigate('mygoal-tab')}>
-                <DataTable.Cell>Nutrition Goals</DataTable.Cell>
+                <DataTable.Cell>{t('Nutrition Goals')}</DataTable.Cell>
               </DataTable.Row>
             </DataTable>
           </View>

@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, StyleSheet } from 'react-native';
 import {
   withTheme,
@@ -20,6 +21,7 @@ import { countCalories } from '../../functions/functions';
  **/
 
 const FoodTable = (props) => {
+  const { t } = useTranslation();
   const { name, backgroundColor, fetchData } = props;
   const { token } = useContext(cookieContext);
 
@@ -74,18 +76,24 @@ const FoodTable = (props) => {
         <Dialog
           visible={showDeleteDialog}
           onDismiss={() => setShowDeleteDialog(false)}>
-          <Dialog.Title>Diary</Dialog.Title>
+          <Dialog.Title>{t('Diary')}</Dialog.Title>
           <Dialog.Actions>
-            <Button onPress={() => setShowDeleteDialog(false)}>Cancel</Button>
-            <Button onPress={() => handleDeleteFood(deleteItem)}>Remove</Button>
+            <Button onPress={() => setShowDeleteDialog(false)}>
+              {t('Cancel')}
+            </Button>
+            <Button onPress={() => handleDeleteFood(deleteItem)}>
+              {t('Remove')}
+            </Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
       <DataTable>
         <DataTable.Header>
-          <DataTable.Title>{name}</DataTable.Title>
-          <DataTable.Title numeric>Serving</DataTable.Title>
-          <DataTable.Title numeric>{countCalories(foods)} cal</DataTable.Title>
+          <DataTable.Title>{t(name)}</DataTable.Title>
+          <DataTable.Title numeric>{t('Serving')}</DataTable.Title>
+          <DataTable.Title numeric>
+            {countCalories(foods)} {t('kcal')}
+          </DataTable.Title>
         </DataTable.Header>
         {foods &&
           foods.map((data, index) => {
@@ -127,7 +135,7 @@ const FoodTable = (props) => {
           })
         }
         uppercase={false}>
-        <Text>Add</Text>
+        <Text>{t('Add')}</Text>
       </Button>
     </View>
   );

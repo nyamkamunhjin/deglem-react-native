@@ -12,10 +12,12 @@ import Diary from '../../screens/Diary';
 import MyGoal from '../../screens/MyGoal';
 import Nutrition from '../../screens/Nutrition';
 import { withTheme } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 
 const Tab = createMaterialBottomTabNavigator();
 
 const BottomNavigator = (props) => {
+  const { t } = useTranslation();
   const { colors } = props.theme;
 
   return (
@@ -28,7 +30,7 @@ const BottomNavigator = (props) => {
         name="diary-tab"
         component={Diary}
         options={{
-          tabBarLabel: 'Diary',
+          tabBarLabel: t('Diary'),
           tabBarIcon: ({ color }) => (
             <Icon name="notebook" color={color} size={15} />
           ),
@@ -39,7 +41,7 @@ const BottomNavigator = (props) => {
         name="mygoal-tab"
         component={MyGoal}
         options={{
-          tabBarLabel: 'My Goal',
+          tabBarLabel: t('My Goal'),
           tabBarIcon: ({ color }) => (
             <Icon name="trophy" color={color} size={15} />
           ),
@@ -50,7 +52,7 @@ const BottomNavigator = (props) => {
         name="nutrition-tab"
         component={Nutrition}
         options={{
-          tabBarLabel: 'Nutrition',
+          tabBarLabel: t('Nutrition'),
           tabBarIcon: ({ color }) => (
             <Icon name="nutrition" color={color} size={15} />
           ),

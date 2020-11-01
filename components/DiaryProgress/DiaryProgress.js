@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { Text, withTheme } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 
 /**
  * @author
@@ -9,7 +10,7 @@ import { Text, withTheme } from 'react-native-paper';
  **/
 const DiaryProgress = ({ theme, progress, limit }) => {
   const { colors, fonts } = theme;
-
+  const { t } = useTranslation();
   const styles = StyleSheet.create({
     container: {
       // backgroundColor: colors.primary,
@@ -37,7 +38,7 @@ const DiaryProgress = ({ theme, progress, limit }) => {
         allowFontScaling={true}
         formatText={() => (
           <Text style={{ fontFamily: fonts.light.fontFamily, fontSize: 15 }}>
-            {`${progress}/${limit} cal`}
+            {`${progress}/${limit} ${t('kcal')}`}
           </Text>
         )}
         showsText={true}

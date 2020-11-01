@@ -11,6 +11,7 @@ import {
   configureFonts,
 } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
+import './i18n';
 
 const fontConfig = {
   default: {

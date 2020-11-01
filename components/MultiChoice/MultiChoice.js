@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, StyleSheet } from 'react-native';
 import { Dialog, Paragraph, RadioButton, Text } from 'react-native-paper';
 import globalStyles from '../../global-styles';
@@ -8,6 +9,7 @@ import globalStyles from '../../global-styles';
  * @function MultiChoice
  **/
 const MultiChoice = ({ input, setInput }) => {
+  const { t } = useTranslation();
   const { container } = styles;
   return (
     <Dialog.Content>
@@ -17,7 +19,7 @@ const MultiChoice = ({ input, setInput }) => {
           status={input === 'Sedentary' ? 'checked' : 'unchecked'}
           onPress={() => setInput('Sedentary')}
         />
-        <Text>Sedentary</Text>
+        <Text>{t('Sedentary')}</Text>
       </View>
       <View style={globalStyles.row}>
         <RadioButton
@@ -25,7 +27,7 @@ const MultiChoice = ({ input, setInput }) => {
           status={input === 'Lightly Active' ? 'checked' : 'unchecked'}
           onPress={() => setInput('Lightly Active')}
         />
-        <Text>Lightly Active</Text>
+        <Text>{t('Lightly Active')}</Text>
       </View>
       <View style={globalStyles.row}>
         <RadioButton
@@ -33,7 +35,7 @@ const MultiChoice = ({ input, setInput }) => {
           status={input === 'Active' ? 'checked' : 'unchecked'}
           onPress={() => setInput('Active')}
         />
-        <Text>Active</Text>
+        <Text>{t('Active')}</Text>
       </View>
 
       <View style={globalStyles.row}>
@@ -42,7 +44,7 @@ const MultiChoice = ({ input, setInput }) => {
           status={input === 'Very Active' ? 'checked' : 'unchecked'}
           onPress={() => setInput('Very Active')}
         />
-        <Text>Very Active</Text>
+        <Text>{t('Very Active')}</Text>
       </View>
     </Dialog.Content>
   );

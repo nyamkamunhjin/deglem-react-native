@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
 import RootNavigator from './navigation/Drawer/Drawer';
 import CookieContext from './context/cookie-context';
@@ -6,15 +6,23 @@ import CookieManager from '@react-native-community/cookies';
 import { BACKEND_URL } from './env.config';
 import { formatDate, getToken } from './functions/functions';
 import UserAPI from './api/UserAPI';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
 
 /**
  * @author
  * @function App
  **/
+
+const LANGUAGE_KEY = 'LANG';
+
 const App = (props) => {
+  const { i18n } = useTranslation();
   // const [loggedIn, setLoggedIn] = useState(false);
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
+  const [lang, setLang] = useState('en');
+
   const [selectedDate, setSelectedDate] = useState(() => {
     console.log('setSelected called from App.js');
     let date = {};
@@ -59,7 +67,33 @@ const App = (props) => {
     });
   };
 
+  const setLanguage = async (value) => {
+    try {
+      await AsyncStorage.setItem(LANGUAGE_KEY, value);
+      setLang(value);
+      i18n.changeLanguage(value);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
+    const getLang = async () => {
+      try {
+        const value = await AsyncStorage.getItem(LANGUAGE_KEY);
+
+        if (value) {
+          console.log(value);
+          i18n.changeLanguage(value);
+          setLang(value);
+        }
+      } catch (err) {
+        // console.error(err);
+      }
+    };
+
+    getLang();
+
     getToken().then(async (data) => {
       // console.log(data);
       // setLoggedIn(true);
@@ -75,10 +109,10 @@ const App = (props) => {
         token,
         user,
         setUser,
-        // cookies: CookieManager,
+        lang,
+        setLanguage,
         logIn,
         logOut,
-        // loggedIn,
         getSelectedDate: (raw) =>
           raw ? selectedDate : Object.keys(selectedDate)[0],
         setSelectedDate,

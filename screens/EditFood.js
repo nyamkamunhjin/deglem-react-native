@@ -9,12 +9,14 @@ import cookieContext from '../context/cookie-context';
 import _ from 'lodash';
 
 import FoodStats from '../components/FoodStats/FoodStats';
+import { useTranslation } from 'react-i18next';
 /**
  * @author
  * @function EditFood
  **/
 const EditFood = ({ route, navigation }) => {
   // console.log(route.params.food.serving);
+  const { t } = useTranslation();
   const {
     food: { _id },
     food: { food },
@@ -66,57 +68,60 @@ const EditFood = ({ route, navigation }) => {
 
   return (
     <View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <DataTable>
-          <DataTable.Row>
-            <DataTable.Cell>{food.name}</DataTable.Cell>
-            <DataTable.Cell numeric>
-              <Button
-                mode="contained"
-                onPress={handleFoodUpdate}
-                color={'white'}>
-                change
-              </Button>
-            </DataTable.Cell>
-          </DataTable.Row>
-          <DataTable.Row>
-            <DataTable.Cell>Serving size</DataTable.Cell>
-            <DataTable.Cell
-              numeric>{`${food.serving.size} ${food.serving.unit}`}</DataTable.Cell>
-          </DataTable.Row>
-          <DataTable.Row>
-            <DataTable.Cell>Number of serving</DataTable.Cell>
-            <DataTable.Cell numeric>
-              <NumericInput
-                // type="up-down"
-                valueType="real"
-                step={0.1}
-                totalWidth={100}
-                totalHeight={35}
-                rounded
-                value={serving}
-                onChange={(num) => setServing(num)}
-              />
-            </DataTable.Cell>
-          </DataTable.Row>
+      {food && (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <DataTable>
+            <DataTable.Row>
+              <DataTable.Cell>{food.name}</DataTable.Cell>
+              <DataTable.Cell numeric>
+                <Button
+                  mode="contained"
+                  onPress={handleFoodUpdate}
+                  color={'white'}>
+                  Add
+                </Button>
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>{t('Serving size')}</DataTable.Cell>
+              <DataTable.Cell numeric>{`${food.serving.size} ${t(
+                food.serving.unit,
+              )}`}</DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>{t('Number of serving')}</DataTable.Cell>
+              <DataTable.Cell numeric>
+                <NumericInput
+                  // type="up-down"
+                  valueType="real"
+                  step={0.1}
+                  totalWidth={100}
+                  totalHeight={35}
+                  rounded
+                  value={serving}
+                  onChange={(num) => setServing(num)}
+                />
+              </DataTable.Cell>
+            </DataTable.Row>
 
-          <View style={styles.main}>
-            <FoodStats food={food} serving={serving} />
-            <DataTable>
-              {Object.entries(getAdditionalNutrients(food)).map(
-                ([key, value], index) => (
-                  <DataTable.Row key={index}>
-                    <DataTable.Cell>{_.startCase(key)}</DataTable.Cell>
-                    <DataTable.Cell numeric>
-                      {parseInt(value, 10)}
-                    </DataTable.Cell>
-                  </DataTable.Row>
-                ),
-              )}
-            </DataTable>
-          </View>
-        </DataTable>
-      </ScrollView>
+            <View style={styles.main}>
+              <FoodStats food={food} serving={serving} />
+              <DataTable>
+                {Object.entries(getAdditionalNutrients(food)).map(
+                  ([key, value], index) => (
+                    <DataTable.Row key={index}>
+                      <DataTable.Cell>{t(_.startCase(key))}</DataTable.Cell>
+                      <DataTable.Cell numeric>
+                        {parseInt(value, 10)}
+                      </DataTable.Cell>
+                    </DataTable.Row>
+                  ),
+                )}
+              </DataTable>
+            </View>
+          </DataTable>
+        </ScrollView>
+      )}
     </View>
   );
 };
