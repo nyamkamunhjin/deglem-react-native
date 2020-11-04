@@ -42,8 +42,10 @@
   "Male": "Male",
   "Female": "Female",
   // Add Food
+  "Add Food": "Add Food",
   "Serving size": "Serving size",
-  "gram": "gram",
+  "Change": "Change",
+  // "gram": "gram",
   "Number of serving": "Number of serving",
   "Sugars": "Sugars",
   "Dietary Fibers": "Dietary Fibers",
@@ -76,8 +78,9 @@
   "Activity Level": "Activity Level",
   // Nutrition.js
   "Nutrition Progress": "Nutrition Progress",
+  "Total Carbohydrates": "Total Carbohydrates",
   // SearchFood.js
-  "Search food": "Search Food",
+  "Search Food": "Search Food",
   "Food": "Food",
   "No food found.": "No food found.",
   // SignIn.js

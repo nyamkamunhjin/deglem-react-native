@@ -16,6 +16,8 @@ import { useTranslation } from 'react-i18next';
  **/
 const EditFood = ({ route, navigation }) => {
   // console.log(route.params.food.serving);
+  const { user } = useContext(cookieContext);
+
   const { t } = useTranslation();
   const {
     food: { _id },
@@ -78,7 +80,7 @@ const EditFood = ({ route, navigation }) => {
                   mode="contained"
                   onPress={handleFoodUpdate}
                   color={'white'}>
-                  Add
+                  {t('Change')}
                 </Button>
               </DataTable.Cell>
             </DataTable.Row>
@@ -108,14 +110,17 @@ const EditFood = ({ route, navigation }) => {
               <FoodStats food={food} serving={serving} />
               <DataTable>
                 {Object.entries(getAdditionalNutrients(food)).map(
-                  ([key, value], index) => (
-                    <DataTable.Row key={index}>
-                      <DataTable.Cell>{t(_.startCase(key))}</DataTable.Cell>
-                      <DataTable.Cell numeric>
-                        {parseInt(value, 10)}
-                      </DataTable.Cell>
-                    </DataTable.Row>
-                  ),
+                  ([key, value], index) => {
+                    const { unit } = user.nutritionGoals[key];
+                    return (
+                      <DataTable.Row key={index}>
+                        <DataTable.Cell>{t(_.startCase(key))}</DataTable.Cell>
+                        <DataTable.Cell numeric>
+                          {parseInt(value * serving, 10)} {unit}
+                        </DataTable.Cell>
+                      </DataTable.Row>
+                    );
+                  },
                 )}
               </DataTable>
             </View>

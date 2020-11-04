@@ -56,7 +56,7 @@ const SearchFood = (props) => {
         }}>
         <Searchbar
           style={searchbar}
-          placeholder={t('Search food')}
+          placeholder={t('Search Food')}
           onChangeText={onChangeSearch}
           value={searchQuery}
           onIconPress={handleSearch}

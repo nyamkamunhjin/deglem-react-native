@@ -7,7 +7,7 @@ import NumericInput from 'react-native-numeric-input';
 import { Button, DataTable } from 'react-native-paper';
 import DiaryAPI from '../api/DiaryAPI';
 import cookieContext from '../context/cookie-context';
-import { BACKEND_URL } from '../env.config';
+
 import _ from 'lodash';
 import FoodStats from '../components/FoodStats/FoodStats';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 const AddFood = ({ route, navigation }) => {
   const { t } = useTranslation();
   // console.log(route.params);
+  const { user } = useContext(cookieContext);
   const [serving, setServing] = useState(1);
   const { addTo, selectedDate, food } = route.params;
   const { token } = useContext(cookieContext);
@@ -85,7 +86,7 @@ const AddFood = ({ route, navigation }) => {
                   mode="contained"
                   onPress={handleFoodAdd}
                   color={'white'}>
-                  Add
+                  {t('Add')}
                 </Button>
               </DataTable.Cell>
             </DataTable.Row>
@@ -115,14 +116,17 @@ const AddFood = ({ route, navigation }) => {
               <FoodStats food={food} serving={serving} />
               <DataTable>
                 {Object.entries(getAdditionalNutrients(food)).map(
-                  ([key, value], index) => (
-                    <DataTable.Row key={index}>
-                      <DataTable.Cell>{t(_.startCase(key))}</DataTable.Cell>
-                      <DataTable.Cell numeric>
-                        {parseInt(value, 10)}
-                      </DataTable.Cell>
-                    </DataTable.Row>
-                  ),
+                  ([key, value], index) => {
+                    const { unit } = user.nutritionGoals[key];
+                    return (
+                      <DataTable.Row key={index}>
+                        <DataTable.Cell>{t(_.startCase(key))}</DataTable.Cell>
+                        <DataTable.Cell numeric>
+                          {parseInt(value * serving, 10)} {unit}
+                        </DataTable.Cell>
+                      </DataTable.Row>
+                    );
+                  },
                 )}
               </DataTable>
             </View>

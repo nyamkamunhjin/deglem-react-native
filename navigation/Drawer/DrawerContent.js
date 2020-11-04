@@ -36,7 +36,7 @@ const DrawerContent = (props) => {
   };
 
   const { navigation } = props;
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (user) {

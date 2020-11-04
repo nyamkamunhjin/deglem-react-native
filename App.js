@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
 import RootNavigator from './navigation/Drawer/Drawer';
 import CookieContext from './context/cookie-context';
@@ -61,7 +61,6 @@ const App = (props) => {
 
   const logOut = () => {
     CookieManager.clearAll().then((success) => {
-      // setLoggedIn(false);
       setToken(null);
       setUser(null);
     });
@@ -69,9 +68,9 @@ const App = (props) => {
 
   const setLanguage = async (value) => {
     try {
-      await AsyncStorage.setItem(LANGUAGE_KEY, value);
-      setLang(value);
       i18n.changeLanguage(value);
+      setLang(value);
+      await AsyncStorage.setItem(LANGUAGE_KEY, value);
     } catch (err) {
       console.error(err);
     }
@@ -81,22 +80,17 @@ const App = (props) => {
     const getLang = async () => {
       try {
         const value = await AsyncStorage.getItem(LANGUAGE_KEY);
-
         if (value) {
           console.log(value);
           i18n.changeLanguage(value);
           setLang(value);
         }
-      } catch (err) {
-        // console.error(err);
-      }
+      } catch (err) {}
     };
 
     getLang();
 
     getToken().then(async (data) => {
-      // console.log(data);
-      // setLoggedIn(true);
       setToken(data);
       getUser(data);
     });

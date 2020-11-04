@@ -85,7 +85,7 @@ const AccountInfo = ({ navigation, theme }) => {
                 onPress={() => setInput('Male')}
                 color={colors.primary}
               />
-              <Text>Male</Text>
+              <Text>{t('Male')}</Text>
             </View>
             <View style={styles.row}>
               <RadioButton
@@ -94,7 +94,7 @@ const AccountInfo = ({ navigation, theme }) => {
                 onPress={() => setInput('Female')}
                 color={colors.primary}
               />
-              <Text>Female</Text>
+              <Text>{t('Female')}</Text>
             </View>
           </Dialog.Content>
         );

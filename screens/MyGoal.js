@@ -55,7 +55,7 @@ const MyGoal = ({ navigation, theme }) => {
   // eslint-disable-next-line no-shadow
   const updateCalories = (user) => {
     let calories = {};
-    calories['nutritionGoals.calories'] = MifflinStJourFormula({
+    calories['nutritionGoals.calories.value'] = MifflinStJourFormula({
       age: calculateAge(user.userInfo.dateOfBirth),
       gender: user.userInfo.gender,
       height: user.goalInfo.height,

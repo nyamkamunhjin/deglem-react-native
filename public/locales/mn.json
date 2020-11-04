@@ -42,8 +42,11 @@
   "Male": "Эрэгтэй",
   "Female": "Эмэгтэй",
   // Add Food.js, EditFood.js
+  "Add Food": "Хоол оруулах",
+  "Edit Food": "Хоол засах",
   "Serving size": "Хэмжээ",
-  "gram": "грам",
+  "Change": "Өөрчлөх",
+  // "gram": "грам",
   "Number of serving": "Хэмжээний тоо",
   "Sugars": "Элсэн чихэр",
   "Dietary Fibers": "Хүнсний ислэг",
@@ -76,8 +79,9 @@
   "Activity Level": "Хөдөлгөөний түвшин",
   // Nutrition.js
   "Nutrition Progress": "Өнөөдөр авсан шим тэжээл",
+  "Total Carbohydrates": "Нийт нүүрс ус",
   // SearchFood.js
-  "Search food": "Хоол хайх",
+  "Search Food": "Хоол хайх",
   "Food": "Хоол",
   "No food found.": "Хоол олдсонгүй.",
   // SignIn.js

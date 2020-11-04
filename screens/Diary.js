@@ -6,11 +6,11 @@ import FoodTable from '../components/FoodTable/FoodTable';
 import CalendarSwipe from '../components/Calendar/CalendarSwipe';
 import DiaryProgress from '../components/DiaryProgress/DiaryProgress';
 import { Calendar } from 'react-native-calendars';
-import { countCalories, formatDate, getToken } from '../functions/functions';
+import { countCalories, formatDate } from '../functions/functions';
 import cookieContext from '../context/cookie-context';
 import { useIsFocused } from '@react-navigation/native';
 import DiaryAPI from '../api/DiaryAPI';
-import UserAPI from '../api/UserAPI';
+
 /**
  * @author
  * @function Diarys
