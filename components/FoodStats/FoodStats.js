@@ -67,7 +67,7 @@ const FoodStats = ({ food, serving, theme }) => {
           outerRadius="100%"
           innerRadius="85%"
           data={[
-            {
+            parseInt(food.protein, 10) !== 0 && {
               value: food.protein,
               svg: {
                 fill: colors.protein,
@@ -75,7 +75,7 @@ const FoodStats = ({ food, serving, theme }) => {
               key: `pie-${1}`,
               arc: { outerRadius: '100%', cornerRadius: 5 },
             },
-            {
+            parseInt(food.totalCarbohydrates, 10) !== 0 && {
               value: food.totalCarbohydrates,
               svg: {
                 fill: colors.carbs,
@@ -83,7 +83,7 @@ const FoodStats = ({ food, serving, theme }) => {
               key: `pie-${2}`,
               arc: { outerRadius: '100%', cornerRadius: 5 },
             },
-            {
+            parseInt(food.totalFat, 10) !== 0 && {
               value: food.totalFat,
               svg: {
                 fill: colors.fat,

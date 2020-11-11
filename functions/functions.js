@@ -52,7 +52,7 @@ const MifflinStJourFormula = ({
   // const weeklyMaintainCalories = 7 * maintainCalories;
 
   const OptimalCaloriesForGoal =
-    maintainCalories + weeklyGoal * ((3500 * 2.2) / 7);
+    maintainCalories + (weeklyGoal * (3500 * 2.2)) / 7;
   return parseInt(OptimalCaloriesForGoal, 10);
 };
 

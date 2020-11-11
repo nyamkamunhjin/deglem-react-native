@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { Text, withTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
+import { PieChart } from 'react-native-svg-charts';
 
 /**
  * @author
@@ -20,6 +21,7 @@ const DiaryProgress = ({ theme, progress, limit }) => {
       margin: 5,
       borderRadius: 10,
     },
+    pieChart: { height: 150 },
     circles: {
       margin: 10,
       // height: 500
@@ -37,12 +39,12 @@ const DiaryProgress = ({ theme, progress, limit }) => {
         strokeCap={'round'}
         allowFontScaling={true}
         formatText={() => (
-          <Text style={{ fontFamily: fonts.light.fontFamily, fontSize: 15 }}>
+          <Text style={{ fontSize: 15 }}>
             {`${progress}/${limit} ${t('kcal')}`}
           </Text>
         )}
         showsText={true}
-        thickness={5}
+        thickness={8}
         animated={true}
         color={colors.protein}
         unfilledColor={colors.disabled}
