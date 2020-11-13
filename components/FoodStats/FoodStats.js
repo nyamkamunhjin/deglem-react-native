@@ -1,3 +1,4 @@
+import { random } from 'lodash';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, StyleSheet } from 'react-native';
@@ -72,7 +73,7 @@ const FoodStats = ({ food, serving, theme }) => {
               svg: {
                 fill: colors.protein,
               },
-              key: `pie-${1}`,
+              key: `pie-stats-${1 + random() * 10}`,
               arc: { outerRadius: '100%', cornerRadius: 5 },
             },
             parseInt(food.totalCarbohydrates, 10) !== 0 && {
@@ -80,7 +81,7 @@ const FoodStats = ({ food, serving, theme }) => {
               svg: {
                 fill: colors.carbs,
               },
-              key: `pie-${2}`,
+              key: `pie-stats-${2 + random() * 10}`,
               arc: { outerRadius: '100%', cornerRadius: 5 },
             },
             parseInt(food.totalFat, 10) !== 0 && {
@@ -88,7 +89,7 @@ const FoodStats = ({ food, serving, theme }) => {
               svg: {
                 fill: colors.fat,
               },
-              key: `pie-${3}`,
+              key: `pie-stats-${3 + random() * 10}`,
               arc: { outerRadius: '100%', cornerRadius: 5 },
             },
           ]}>

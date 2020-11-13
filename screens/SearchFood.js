@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
   ActivityIndicator,
@@ -13,6 +13,7 @@ import cookieContext from '../context/cookie-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FoodAPI from '../api/FoodAPI';
 import { useTranslation } from 'react-i18next';
+import { addToRecentFoods, getRecentFoods } from '../functions/recentFoods';
 
 /**
  * @author
@@ -43,9 +44,16 @@ const SearchFood = (props) => {
       } else {
         setSearchResult(data);
         setLoadingBar(false);
+        // console.log(await getRecentFoods());
       }
     }
   };
+
+  useEffect(() => {
+    getRecentFoods().then((foods) => {
+      setSearchResult(foods);
+    });
+  }, []);
 
   const { container, searchbar } = styles;
   return (
@@ -73,45 +81,49 @@ const SearchFood = (props) => {
           <Icon name="barcode" size={30} />
         </Button>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <DataTable>
-          <DataTable.Header>
-            <DataTable.Title>{t('Food')}</DataTable.Title>
-            <DataTable.Title numeric>{t('Serving')}</DataTable.Title>
-            <DataTable.Title numeric>{t('Calories')}</DataTable.Title>
-          </DataTable.Header>
-          {loadingBar ? (
-            <ActivityIndicator
-              style={styles.loadingBar}
-              animating={true}
-              color={colors.primary}
-              size={'large'}
+      <DataTable>
+        <DataTable.Header>
+          <DataTable.Title>{t('Food')}</DataTable.Title>
+          <DataTable.Title numeric>{t('Serving')}</DataTable.Title>
+          <DataTable.Title numeric>{t('Calories')}</DataTable.Title>
+        </DataTable.Header>
+        <FlatList
+          data={searchResult}
+          refreshControl={
+            <RefreshControl
+              refreshing={loadingBar}
+              onRefresh={handleSearch}
+              enabled={false}
+              colors={[colors.protein, colors.carbs, colors.fat]}
             />
-          ) : searchResult.length !== 0 ? (
-            searchResult.map((res, index) => (
-              <DataTable.Row
-                key={index}
-                onPress={() =>
-                  navigation.navigate('add-food', {
-                    addTo: props.route.params.name,
-                    selectedDate: props.route.params.selectedDate,
-                    food: res.document,
-                  })
-                }>
-                <DataTable.Cell>{res.document.name}</DataTable.Cell>
-                <DataTable.Cell numeric>
-                  {`${res.document.serving.size} ${t(
-                    res.document.serving.unit,
-                  )}`}
-                </DataTable.Cell>
-                <DataTable.Cell numeric>{res.document.calories}</DataTable.Cell>
-              </DataTable.Row>
-            ))
-          ) : (
-            <Text style={styles.text}>{t('No food found.')}</Text>
+          }
+          keyExtractor={(item, index) => item._id + index}
+          renderItem={({ item }) => (
+            <DataTable.Row
+              onPress={() => {
+                navigation.navigate('add-food', {
+                  addTo: props.route.params.name,
+                  selectedDate: props.route.params.selectedDate,
+                  food: item.document,
+                });
+                addToRecentFoods(item);
+              }}>
+              <DataTable.Cell>{item.document.name}</DataTable.Cell>
+              <DataTable.Cell numeric>
+                {`${item.document.serving.size} ${t(
+                  item.document.serving.unit,
+                )}`}
+              </DataTable.Cell>
+              <DataTable.Cell numeric>{item.document.calories}</DataTable.Cell>
+            </DataTable.Row>
           )}
-        </DataTable>
-      </ScrollView>
+          ListEmptyComponent={() => (
+            <Text style={styles.text}>
+              {!loadingBar && t('No food found.')}
+            </Text>
+          )}
+        />
+      </DataTable>
     </View>
   );
 };
