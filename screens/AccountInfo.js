@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
@@ -214,7 +214,7 @@ const AccountInfo = ({ navigation, theme }) => {
                     <Avatar.Image
                       source={{
                         uri:
-                          'https://pbs.twimg.com/profile_images/1198779570427703296/sWN8DRoR_400x400.jpg',
+                          'https://media.istockphoto.com/photos/red-apple-with-leaf-picture-id683494078?k=6&m=683494078&s=612x612&w=0&h=aVyDhOiTwUZI0NeF_ysdLZkSvDD4JxaJMdWSx2p3pp4=',
                       }}
                       size={40}
                     />

@@ -90,5 +90,6 @@
   "Sign up": "Бүртгүүлэх",
   // SignUp.js
   "Confirm Password": "Нууц үг давтах",
-  "Birthday": "Төрсөн өдөр"
+  "Birthday": "Төрсөн өдөр",
+  "No additional nutrition info added": "Нэмэлт мэдээллэл оруулаагүй байна"
 }

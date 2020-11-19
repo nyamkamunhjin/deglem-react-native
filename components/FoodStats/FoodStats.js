@@ -31,6 +31,8 @@ const FoodStats = ({ food, serving, theme }) => {
     },
     temp: {
       flexDirection: 'row',
+      margin: 10,
+      // marginBottom: 20,
     },
     cell: {
       justifyContent: 'center',
@@ -68,31 +70,19 @@ const FoodStats = ({ food, serving, theme }) => {
           outerRadius="100%"
           innerRadius="85%"
           data={[
-            parseInt(food.protein, 10) !== 0 && {
-              value: food.protein,
+            { value: food.protein, color: colors.protein },
+            { value: food.totalCarbohydrates, color: colors.carbs },
+            { value: food.totalFat, color: colors.fat },
+          ].map((item, index) => {
+            return {
+              value: item.value,
               svg: {
-                fill: colors.protein,
+                fill: item.color,
               },
-              key: `pie-stats-${1 + random() * 10}`,
+              key: `pie-stats-${index}`,
               arc: { outerRadius: '100%', cornerRadius: 5 },
-            },
-            parseInt(food.totalCarbohydrates, 10) !== 0 && {
-              value: food.totalCarbohydrates,
-              svg: {
-                fill: colors.carbs,
-              },
-              key: `pie-stats-${2 + random() * 10}`,
-              arc: { outerRadius: '100%', cornerRadius: 5 },
-            },
-            parseInt(food.totalFat, 10) !== 0 && {
-              value: food.totalFat,
-              svg: {
-                fill: colors.fat,
-              },
-              key: `pie-stats-${3 + random() * 10}`,
-              arc: { outerRadius: '100%', cornerRadius: 5 },
-            },
-          ]}>
+            };
+          })}>
           <View style={styles.cell}>
             <Text style={styles.calories}>
               {parseInt(food.calories * serving, 10)}

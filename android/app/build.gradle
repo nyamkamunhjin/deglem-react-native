@@ -152,6 +152,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file('deglem.keystore')
+            storePassword 'Maihan828282!'
+            keyAlias 'deglem'
+            keyPassword 'Maihan828282!'
+        }
     }
     buildTypes {
         debug {

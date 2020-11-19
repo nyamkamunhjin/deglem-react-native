@@ -102,7 +102,11 @@ const CreateFood = ({ navigation, route, theme }) => {
           delete food.size;
           delete food.servingPerContainer;
           delete food.unit;
-          food.barcode = barcode;
+
+          if (barcode) {
+            food.barcode = barcode;
+          }
+
           food.serving = {
             size: values.size,
             unit: values.unit,

@@ -119,7 +119,7 @@ const AddFood = ({ route, navigation }) => {
         <FlatList
           showsVerticalScrollIndicator={false}
           data={Object.entries(getAdditionalNutrients(food))}
-          keyExtractor={(item, index) => index}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({ item: [key, value] }) => {
             const { unit } = user.nutritionGoals[key];
             return (
@@ -131,7 +131,11 @@ const AddFood = ({ route, navigation }) => {
               </View>
             );
           }}
-          ListEmptyComponent={() => null}
+          ListEmptyComponent={() => (
+            <Text style={{ alignSelf: 'center', marginTop: 20 }}>
+              {t('No additional nutrition info added')}
+            </Text>
+          )}
         />
       </View>
     </View>

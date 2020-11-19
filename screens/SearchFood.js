@@ -80,6 +80,15 @@ const SearchFood = (props) => {
           }>
           <Icon name="barcode" size={30} />
         </Button>
+        <Button
+          style={styles.barcode}
+          onPress={() =>
+            navigation.navigate('create-food', {
+              barcode: null,
+            })
+          }>
+          <Icon name="food" size={30} />
+        </Button>
       </View>
       <DataTable>
         <DataTable.Header>
@@ -97,7 +106,7 @@ const SearchFood = (props) => {
               colors={[colors.protein, colors.carbs, colors.fat]}
             />
           }
-          keyExtractor={(item, index) => item._id + index}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <DataTable.Row
               onPress={() => {
