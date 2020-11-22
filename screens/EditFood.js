@@ -13,6 +13,7 @@ import {
   SafeAreaInsetsContext,
   SafeAreaView,
 } from 'react-native-safe-area-context';
+import { cleanUpFood } from '../functions/functions';
 
 /**
  * @author
@@ -48,6 +49,9 @@ const EditFood = ({ route, navigation }) => {
     delete temp.barcode;
     delete temp.creator;
     delete temp.calories;
+    delete temp.recipe;
+    delete temp.recipeDescription;
+    delete temp.ingredients;
 
     return temp;
   };
@@ -115,7 +119,7 @@ const EditFood = ({ route, navigation }) => {
 
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={Object.entries(getAdditionalNutrients(food))}
+          data={Object.entries(cleanUpFood(food))}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item: [key, value] }) => {
             const { unit } = user.nutritionGoals[key];

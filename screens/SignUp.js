@@ -2,6 +2,7 @@ import { Formik } from 'formik';
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import {
+  ActivityIndicator,
   Button,
   Checkbox,
   Text,
@@ -16,6 +17,7 @@ import axios from 'axios';
 import { BACKEND_URL } from '../env.config';
 import UserAPI from '../api/UserAPI';
 import { useTranslation } from 'react-i18next';
+import globalStyles from '../global-styles';
 
 /**
  * @author
@@ -39,6 +41,7 @@ const signUpSchema = yup.object({
 const SignUp = (props) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
   const { theme } = props;
 
   return (
@@ -60,11 +63,13 @@ const SignUp = (props) => {
           dateOfBirth: '1998-11-09',
         }}
         onSubmit={async (values, actions) => {
+          setLoading(true);
           console.log(values);
           const userData = values;
           delete userData.confirmPassword;
 
           const { data, err } = await UserAPI.signUp(userData);
+          setLoading(false);
 
           if (err) {
             console.error(err);
@@ -220,13 +225,17 @@ const SignUp = (props) => {
                 formikProps.errors.dateOfBirth}
             </Text>
             <View style={styles.button}>
-              <Button
-                style={styles.button}
-                mode={'contained'}
-                uppercase={false}
-                onPress={formikProps.handleSubmit}>
-                {t('Sign up')}
-              </Button>
+              {!loading ? (
+                <Button
+                  style={styles.button}
+                  mode={'contained'}
+                  uppercase={false}
+                  onPress={formikProps.handleSubmit}>
+                  {t('Sign up')}
+                </Button>
+              ) : (
+                <ActivityIndicator size={30} />
+              )}
             </View>
           </View>
         )}
@@ -252,9 +261,9 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   button: {
+    ...globalStyles.buttons,
     flexDirection: 'row',
     justifyContent: 'center',
-    margin: 5,
     alignSelf: 'center',
   },
   error: {

@@ -12,6 +12,7 @@ import _ from 'lodash';
 import FoodStats from '../components/FoodStats/FoodStats';
 import { useTranslation } from 'react-i18next';
 import { addToRecentFoods } from '../functions/recentFoods';
+import { cleanUpFood } from '../functions/functions';
 /**
  * @author
  * @function AddFood
@@ -41,6 +42,9 @@ const AddFood = ({ route, navigation }) => {
     delete temp.barcode;
     delete temp.creator;
     delete temp.calories;
+    delete temp.recipe;
+    delete temp.recipeDescription;
+    delete temp.ingredients;
 
     return temp;
   };
@@ -118,7 +122,7 @@ const AddFood = ({ route, navigation }) => {
 
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={Object.entries(getAdditionalNutrients(food))}
+          data={Object.entries(cleanUpFood(food))}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item: [key, value] }) => {
             const { unit } = user.nutritionGoals[key];

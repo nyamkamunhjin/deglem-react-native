@@ -1,14 +1,19 @@
 import { Formik } from 'formik';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button, Text, TextInput, Title } from 'react-native-paper';
+import {
+  ActivityIndicator,
+  Button,
+  Text,
+  TextInput,
+  Title,
+} from 'react-native-paper';
 import CookieContext from '../context/cookie-context';
 import * as yup from 'yup';
-import axios from 'axios';
-import { BACKEND_URL } from '../env.config';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import UserAPI from '../api/UserAPI';
 import { useTranslation } from 'react-i18next';
+import globalStyles from '../global-styles';
 
 /**
  * @author
@@ -23,6 +28,7 @@ const signInSchema = yup.object({
 const SignIn = (props) => {
   const { t } = useTranslation();
   const { logIn } = useContext(CookieContext);
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
@@ -35,6 +41,8 @@ const SignIn = (props) => {
           password: '12345678',
         }}
         onSubmit={async (values, actions) => {
+          setLoading(true);
+
           console.log(values);
 
           const { data, err } = await UserAPI.signIn(values);
@@ -83,20 +91,26 @@ const SignIn = (props) => {
             </Text>
 
             <View style={styles.button}>
-              <Button
-                style={styles.button}
-                mode={'contained'}
-                uppercase={false}
-                onPress={formikProps.handleSubmit}>
-                {t('Sign in')}
-              </Button>
-              <Button
-                style={styles.button}
-                mode={'contained'}
-                uppercase={false}
-                onPress={() => navigation.navigate('sign-up')}>
-                {t('Sign up')}
-              </Button>
+              {!loading ? (
+                <>
+                  <Button
+                    style={styles.button}
+                    mode={'contained'}
+                    uppercase={false}
+                    onPress={formikProps.handleSubmit}>
+                    {t('Sign in')}
+                  </Button>
+                  <Button
+                    style={styles.button}
+                    mode={'contained'}
+                    uppercase={false}
+                    onPress={() => navigation.navigate('sign-up')}>
+                    {t('Sign up')}
+                  </Button>
+                </>
+              ) : (
+                <ActivityIndicator size={30} />
+              )}
             </View>
           </View>
         )}
@@ -122,13 +136,9 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   button: {
-    // flex: 1,
+    ...globalStyles.buttons,
     flexDirection: 'row',
     justifyContent: 'center',
-    // borderRadius: 10,
-    margin: 5,
-
-    // width: 150,
     alignSelf: 'center',
   },
   error: {

@@ -67,14 +67,14 @@ const Diary = ({ navigation, theme }) => {
     const diary = await DiaryAPI.fetchDiary(token, getSelectedDate());
 
     if (diary.err) {
-      console.error(diary.err);
+      // console.error(diary.err);
     } else {
       setDiaryByDate(getSelectedDate(), diary.data);
     }
   };
 
   useEffect(() => {
-    if (isFocused) {
+    if (isFocused && token) {
       fetchDiary();
       if (user) {
         setLimitCalories(user.nutritionGoals.calories.value);

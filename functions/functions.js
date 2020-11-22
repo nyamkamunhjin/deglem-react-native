@@ -90,14 +90,7 @@ const getNutritionProgress = (diary) => {
   // console.log('foods:', foods);
   let nutritionProgress = {};
   foods.map(({ food, serving }) => {
-    let values = { ...food };
-    delete values.__v;
-    delete values._id;
-    delete values.serving;
-    delete values.creator;
-    delete values.name;
-    delete values.barcode;
-    delete values.calories;
+    let values = cleanUpFood(food);
     // console.log(values);
 
     Object.entries(values).map(([key, value]) => {
@@ -112,6 +105,27 @@ const getNutritionProgress = (diary) => {
   return nutritionProgress;
 };
 
+const cleanUpFood = (doc) => {
+  let temp = {
+    ...doc,
+  };
+  delete temp._id;
+  delete temp.name;
+  delete temp.protein;
+  delete temp.totalCarbohydrates;
+  delete temp.totalFat;
+  delete temp.serving;
+  delete temp.__v;
+  delete temp.barcode;
+  delete temp.creator;
+  delete temp.calories;
+  delete temp.recipe;
+  delete temp.recipeDescription;
+  delete temp.ingredients;
+
+  return temp;
+};
+
 export {
   formatDate,
   countCalories,
@@ -119,4 +133,5 @@ export {
   calculateAge,
   getToken,
   getNutritionProgress,
+  cleanUpFood,
 };

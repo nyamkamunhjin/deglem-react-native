@@ -18,6 +18,10 @@ const globalStyles = StyleSheet.create({
   center: {
     textAlign: 'center',
   },
+  buttons: {
+    borderRadius: 10,
+    margin: 5,
+  },
 });
 
 export default globalStyles;
