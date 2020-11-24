@@ -13,6 +13,7 @@
   "Protein": "Protein",
   "Carbs": "Carbs",
   "Fats": "Fats",
+  "Fat": "Fat",
   // FoodStats.js
   // FoodTable.js
   "Cancel": "Cancel",
@@ -93,6 +94,8 @@
   "Birthday": "Birthday",
   "No additional nutrition info added": "No additional nutrition info added",
   "Carbohydrates": "Carbohydrates",
-  "Days Left": "Days Left",
-  "Day": "Days"
+  "Days left": "Days Left",
+  "Day": "Day",
+  "Weight": "Weight",
+  "Progress": "Progress"
 }

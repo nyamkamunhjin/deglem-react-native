@@ -13,6 +13,7 @@
   "Protein": "Уураг",
   "Carbs": "Нүүрс ус",
   "Fats": "Тос",
+  "Fat": "Тос",
   // FoodStats.js
   // FoodTable.js
   "Cancel": "Цуцлах",
@@ -94,6 +95,8 @@
   "Birthday": "Төрсөн өдөр",
   "No additional nutrition info added": "Нэмэлт мэдээллэл оруулаагүй байна",
   "Carbohydrates": "Нүүрс ус",
-  "Days Left": "Үлдсэн өдөр",
-  "Day": "Өдөр"
+  "Days left": "Үлдсэн өдөр",
+  "Day": "Өдөр",
+  "Weight": "Жин",
+  "Progress": "Үйл явц"
 }

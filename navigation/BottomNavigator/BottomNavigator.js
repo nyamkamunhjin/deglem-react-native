@@ -13,6 +13,7 @@ import MyGoal from '../../screens/MyGoal';
 import Nutrition from '../../screens/Nutrition';
 import { withTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
+import Progress from '../../screens/Progress';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -57,6 +58,17 @@ const BottomNavigator = (props) => {
             <Icon name="nutrition" color={color} size={15} />
           ),
           title: 'Nutrition',
+        }}
+      />
+      <Tab.Screen
+        name="progress-tab"
+        component={Progress}
+        options={{
+          tabBarLabel: t('Progress'),
+          tabBarIcon: ({ color }) => (
+            <Icon name="chart-bar" color={color} size={15} />
+          ),
+          title: 'Progress',
         }}
       />
     </Tab.Navigator>

@@ -97,6 +97,15 @@ const DrawerContent = (props) => {
           />
           <Drawer.Item
             icon={({ color, size }) => (
+              <Icon name="chart-bar" color={color} size={size} />
+            )}
+            label={t('Progress')}
+            onPress={() => {
+              navigation.navigate('progress-tab');
+            }}
+          />
+          <Drawer.Item
+            icon={({ color, size }) => (
               <Icon name="account-edit" color={color} size={size} />
             )}
             label={t('Edit Info')}

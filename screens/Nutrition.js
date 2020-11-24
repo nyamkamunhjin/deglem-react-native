@@ -15,6 +15,7 @@ import {
 } from 'react-native-paper';
 import DiaryAPI from '../api/DiaryAPI';
 import CalendarSwipe from '../components/Calendar/CalendarSwipe';
+import WeightChart from '../components/WeightChart/WeightChart';
 import cookieContext from '../context/cookie-context';
 import { formatDate, getNutritionProgress } from '../functions/functions';
 import { percentageToGram } from '../functions/nutritionList';

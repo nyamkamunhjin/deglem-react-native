@@ -98,11 +98,11 @@ const DiaryProgress = ({ theme, progress, limit, diary }) => {
                 user.nutritionGoals.calories.value,
                 user.nutritionGoals[key].value,
               );
-
+              const names = _.startCase(key).split(' ');
               return (
                 <View style={styles.macros} key={index}>
                   <View style={globalStyles.rowSpaceBetween}>
-                    <Text>{t(_.startCase(key))}</Text>
+                    <Text>{t(names[names.length - 1])}</Text>
                     <Text>
                       {value || 0}/{convert} {user.nutritionGoals[key].unit}
                     </Text>

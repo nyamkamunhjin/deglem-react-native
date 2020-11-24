@@ -4,7 +4,7 @@ import { RNCamera } from 'react-native-camera';
 import cookieContext from '../../context/cookie-context';
 import { BACKEND_URL } from '../../env.config';
 import axios from 'axios';
-import { useIsFocused } from '@react-navigation/native';
+import { StackActions, useIsFocused } from '@react-navigation/native';
 import FoodAPI from '../../api/FoodAPI';
 
 /**
@@ -40,11 +40,13 @@ const BarcodeScanner = ({
     if (err) {
       console.log(err);
       if (err.response.status === 409 && barcode) {
+        navigation.dispatch(StackActions.pop());
         navigation.navigate('create-food', {
           barcode,
         });
       }
     } else {
+      navigation.dispatch(StackActions.pop());
       navigation.navigate('add-food', {
         food: data,
         addTo,
@@ -76,7 +78,6 @@ const BarcodeScanner = ({
 
                 if (barcodes[0] && barcodes[0].format !== 'None') {
                   getByBarcode(barcodes[0].dataRaw);
-                  setShouldDetect(false);
                 }
               }
             : null
