@@ -128,11 +128,13 @@ const FoodTable = (props) => {
         style={addButton}
         mode="contained"
         icon={({ color }) => <Icon name="plus" size={15} color={color} />}
-        onPress={() =>
-          navigation.navigate('search-food', {
-            name,
-            selectedDate: props.selectedDate,
-          })
+        onPress={
+          props.onPress ||
+          (() =>
+            navigation.navigate('search-food', {
+              name,
+              selectedDate: props.selectedDate,
+            }))
         }
         uppercase={false}>
         <Text>{t('Add')}</Text>

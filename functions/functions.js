@@ -1,5 +1,7 @@
 import CookieManager from '@react-native-community/cookies';
 import { BACKEND_URL } from '../env.config';
+import _ from 'lodash';
+
 const formatDate = (date) => {
   let d = new Date(date),
     month = '' + (d.getMonth() + 1),
@@ -77,7 +79,8 @@ const getToken = async () => {
 };
 
 const getNutritionProgress = (diary) => {
-  if (!diary) {
+  // console.log('diary:', diary);
+  if (!diary || _.isEqual(diary, {})) {
     return {};
   }
   // console.log(diary);
@@ -90,7 +93,7 @@ const getNutritionProgress = (diary) => {
   // console.log('foods:', foods);
   let nutritionProgress = {};
   foods.map(({ food, serving }) => {
-    let values = cleanUpFood(food);
+    let values = cleanUpFood(food, true);
     // console.log(values);
 
     Object.entries(values).map(([key, value]) => {
@@ -105,15 +108,18 @@ const getNutritionProgress = (diary) => {
   return nutritionProgress;
 };
 
-const cleanUpFood = (doc) => {
+const cleanUpFood = (doc, macro = false) => {
   let temp = {
     ...doc,
   };
   delete temp._id;
   delete temp.name;
-  delete temp.protein;
-  delete temp.totalCarbohydrates;
-  delete temp.totalFat;
+
+  if (!macro) {
+    delete temp.protein;
+    delete temp.totalCarbohydrates;
+    delete temp.totalFat;
+  }
   delete temp.serving;
   delete temp.__v;
   delete temp.barcode;

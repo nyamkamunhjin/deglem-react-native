@@ -79,6 +79,7 @@
   // Nutrition.js
   "Nutrition Progress": "Nutrition Progress",
   "Total Carbohydrates": "Total Carbohydrates",
+  "Total Fat": "Total Fat",
   // SearchFood.js
   "Search Food": "Search Food",
   "Food": "Food",
@@ -90,5 +91,8 @@
   // SignUp.js
   "Confirm Password": "Confirm Password",
   "Birthday": "Birthday",
-  "No additional nutrition info added": "No additional nutrition info added"
+  "No additional nutrition info added": "No additional nutrition info added",
+  "Carbohydrates": "Carbohydrates",
+  "Days Left": "Days Left",
+  "Day": "Days"
 }

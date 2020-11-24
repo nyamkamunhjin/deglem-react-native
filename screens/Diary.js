@@ -108,7 +108,11 @@ const Diary = ({ navigation, theme }) => {
         date={getSelectedDate()}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <DiaryProgress progress={totalCalories} limit={limitCalories} />
+        <DiaryProgress
+          progress={totalCalories}
+          limit={limitCalories}
+          diary={current}
+        />
         <FoodTable
           name="Breakfast"
           foods={current.breakfast}
@@ -133,6 +137,14 @@ const Diary = ({ navigation, theme }) => {
           foods={current.snacks}
           selectedDate={getSelectedDate()}
           fetchData={fetchDiary}
+        />
+        <FoodTable
+          name="Water"
+          backgroundColor={colors.triadic}
+          foods={current.snacks}
+          selectedDate={getSelectedDate()}
+          fetchData={fetchDiary}
+          onPress={() => navigation.navigate('add-water')}
         />
       </ScrollView>
     </React.Fragment>

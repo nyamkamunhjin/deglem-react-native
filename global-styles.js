@@ -22,6 +22,10 @@ const globalStyles = StyleSheet.create({
     borderRadius: 10,
     margin: 5,
   },
+  rowSpaceBetween: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 });
 
 export default globalStyles;

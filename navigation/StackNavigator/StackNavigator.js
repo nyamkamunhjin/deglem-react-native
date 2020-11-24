@@ -13,6 +13,7 @@ import cookieContext from '../../context/cookie-context';
 import SignUp from '../../screens/SignUp';
 import BarcodeScanner from '../../components/BarcodeScanner/BarcodeScanner';
 import CreateFood from '../../screens/CreateFood';
+import AddWater from '../../screens/AddWater';
 
 /**
  * @author
@@ -78,6 +79,11 @@ const StackNavigator = (props) => {
             name="create-food"
             component={CreateFood}
             options={{ title: 'Create food' }}
+          />
+          <Stack.Screen
+            name="add-water"
+            component={AddWater}
+            options={{ title: 'Water' }}
           />
         </>
       ) : (
