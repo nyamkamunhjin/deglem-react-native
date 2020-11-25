@@ -4,14 +4,11 @@ import resolver from './resolver';
 
 const fetchDiary = async (token, date) => {
   return await resolver(
-    axios.get(
-      `${BACKEND_URL}/api/diary?user_id=5f607f85a586e00e416f2124&range=1&date=${date}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    axios.get(`${BACKEND_URL}/api/diary?range=1&date=${date}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    ),
+    }),
   ).then((res) => res.data);
 };
 
@@ -55,4 +52,38 @@ const editFood = async (token, data) => {
   );
 };
 
-export default { fetchDiary, removeFood, addFood, editFood };
+const getWater = async (token, date) => {
+  return await resolver(
+    axios
+      .get(`${BACKEND_URL}/api/diary/water`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          date,
+        },
+      })
+      .then((res) => res.data),
+  );
+};
+
+const setWater = async (token, data) => {
+  return await resolver(
+    axios
+      .post(`${BACKEND_URL}/api/diary/water/add`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => res.data),
+  );
+};
+
+export default {
+  fetchDiary,
+  removeFood,
+  addFood,
+  editFood,
+  getWater,
+  setWater,
+};

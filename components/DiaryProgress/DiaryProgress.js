@@ -1,7 +1,14 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 // import * as Progress from 'react-native-progress';
-import { Text, withTheme, ProgressBar, Button } from 'react-native-paper';
+import {
+  Text,
+  withTheme,
+  ProgressBar,
+  Button,
+  TextInput,
+} from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import {
   Grid,
@@ -14,6 +21,7 @@ import cookieContext from '../../context/cookie-context';
 import { percentageToGram } from '../../functions/nutritionList';
 import _ from 'lodash';
 import globalStyles from '../../global-styles';
+import WaterIntake from '../WaterIntake/WaterIntake';
 
 /**
  * @author
@@ -127,6 +135,7 @@ const DiaryProgress = ({ theme, progress, limit, diary }) => {
         </View>
       </View>
       <View style={{ margin: 15 }}>
+        <WaterIntake diary={diary} />
         <View style={globalStyles.rowSpaceBetween}>
           <Text>{t('Days left')}</Text>
           <Text>
