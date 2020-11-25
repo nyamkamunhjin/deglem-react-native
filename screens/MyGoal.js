@@ -16,10 +16,15 @@ import MultiChoice from '../components/MultiChoice/MultiChoice';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { MifflinStJourFormula, calculateAge } from '../functions/functions';
+import {
+  MifflinStJourFormula,
+  calculateAge,
+  formatDate,
+} from '../functions/functions';
 import UserAPI from '../api/UserAPI';
 import { useTranslation } from 'react-i18next';
 import CaloriesDialog from '../components/CaloriesDialog/CaloriesDialog';
+import StatsApi from '../api/StatsApi';
 /**
 import CaloriesDialog from '../components/CaloriesDialog/CaloriesDialog';
 
@@ -39,18 +44,6 @@ const MyGoal = ({ navigation, theme }) => {
   });
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-
-  // const handleDateFormat = (value) => {
-  //   let formatted = value;
-  //   if (formatted.length > 4 && formatted[4] !== '-') {
-  //     formatted = formatted.substring(0, 4) + '-' + formatted.substr(4);
-  //   }
-
-  //   if (formatted.length > 7 && formatted[7] !== '-') {
-  //     formatted = formatted.substring(0, 7) + '-' + formatted.substr(7);
-  //   }
-  //   setInput(formatted);
-  // };
 
   // eslint-disable-next-line no-shadow
   const updateCalories = (user) => {
@@ -78,6 +71,13 @@ const MyGoal = ({ navigation, theme }) => {
 
     let update = {};
     update[dialog.path] = input;
+
+    if (dialog.path === 'goalInfo.currentWeight') {
+      StatsApi.addWeights(token, {
+        date: formatDate(new Date()),
+        weight: parseInt(input, 10),
+      });
+    }
 
     const { data, err } = await UserAPI.updateUser(token, update);
 

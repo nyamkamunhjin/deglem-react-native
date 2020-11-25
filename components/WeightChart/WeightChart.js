@@ -1,7 +1,11 @@
-import React from 'react';
+import { useIsFocused } from '@react-navigation/native';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { LineChart, BarChart } from 'react-native-chart-kit';
-import { withTheme } from 'react-native-paper';
+import { ActivityIndicator, withTheme } from 'react-native-paper';
+import StatsApi from '../../api/StatsApi';
+import cookieContext from '../../context/cookie-context';
+import { formatDate } from '../../functions/functions';
 
 /**
  * @author
@@ -9,6 +13,9 @@ import { withTheme } from 'react-native-paper';
  **/
 const WeightChart = ({ theme, ...props }) => {
   const { colors } = theme;
+  const { token } = useContext(cookieContext);
+  const [weights, setWeights] = useState(null);
+  const isFocused = useIsFocused();
   const chartConfig = {
     // backgroundColor: '#e26a00',
     backgroundGradientFrom: '#fb8c00',
@@ -26,38 +33,43 @@ const WeightChart = ({ theme, ...props }) => {
     },
   };
 
+  useEffect(() => {
+    if (isFocused) {
+      StatsApi.fetchWeights(token).then(({ data }) => {
+        // console.log(data[0].weights);
+        let labels = [];
+        let datasets = [{ data: [] }];
+        data[0].weights.map(({ date, weight }) => {
+          labels.push(formatDate(date));
+          datasets[0].data.push(weight);
+        });
+        console.log(labels, datasets);
+
+        setWeights({ labels, datasets });
+      });
+    }
+  }, [token, isFocused]);
   const screenWidth = Dimensions.get('window').width;
   return (
     <View style={styles.weightChart}>
-      <LineChart
-        data={{
-          labels: [
-            'Day 1',
-            'Day 2',
-            'Day 3',
-            'Day 4',
-            'Day 5',
-            'Day 6',
-            'Day 7',
-          ],
-          datasets: [
-            {
-              data: [77.8, 77.7, 77.5, 76.9, 77.3, 77.1, 76.8, 80],
-            },
-          ],
-        }}
-        width={screenWidth} // from react-native
-        height={220}
-        // yAxisLabel="$"
-        yAxisSuffix="kg"
-        yAxisInterval={1} // optional, defaults to 1
-        chartConfig={chartConfig}
-        bezier
-        style={{
-          marginVertical: 8,
-          borderRadius: 16,
-        }}
-      />
+      {weights ? (
+        <LineChart
+          data={weights}
+          width={screenWidth} // from react-native
+          height={220}
+          // yAxisLabel="$"
+          yAxisSuffix="kg"
+          yAxisInterval={1} // optional, defaults to 1
+          chartConfig={chartConfig}
+          bezier
+          style={{
+            marginVertical: 8,
+            borderRadius: 16,
+          }}
+        />
+      ) : (
+        <ActivityIndicator size="large" />
+      )}
     </View>
   );
 };

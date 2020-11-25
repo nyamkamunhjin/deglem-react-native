@@ -1,6 +1,11 @@
-import React from 'react';
+import { useIsFocused } from '@react-navigation/native';
+import React, { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { ContributionGraph } from 'react-native-chart-kit';
+import DiaryAPI from '../../api/DiaryAPI';
+import cookieContext from '../../context/cookie-context';
+import { formatDate } from '../../functions/functions';
 
 /**
  * @author
@@ -8,6 +13,10 @@ import { ContributionGraph } from 'react-native-chart-kit';
  **/
 const FoodLogContribution = (props) => {
   const { container } = styles;
+  const { t } = useTranslation();
+  const { token } = useContext(cookieContext);
+  const isFocused = useIsFocused();
+  const [commits, setCommits] = useState([]);
   const commitsData = [
     { date: '2017-01-02', count: 1 },
     { date: '2017-01-03', count: 2 },
@@ -21,6 +30,20 @@ const FoodLogContribution = (props) => {
     { date: '2017-03-05', count: 2 },
     { date: '2017-02-30', count: 4 },
   ];
+
+  useEffect(() => {
+    if (isFocused) {
+      DiaryAPI.getStats(token).then(({ data }) => {
+        // console.log(data);
+        const commitos = data.map(({ date }) => ({
+          date: formatDate(date),
+          count: 4,
+        }));
+        console.log(commitos);
+        setCommits(commitos);
+      });
+    }
+  }, [token, isFocused]);
 
   const chartConfig = {
     // backgroundColor: '#e26a00',
@@ -43,11 +66,12 @@ const FoodLogContribution = (props) => {
   return (
     <View style={container}>
       <ContributionGraph
-        values={commitsData}
-        endDate={new Date('2017-04-01')}
+        values={commits}
+        endDate={new Date('2021-01-01')}
         numDays={105}
         width={screenWidth}
         height={220}
+        // horizontal={false}
         chartConfig={chartConfig}
       />
     </View>

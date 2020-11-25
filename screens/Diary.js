@@ -138,14 +138,6 @@ const Diary = ({ navigation, theme }) => {
           selectedDate={getSelectedDate()}
           fetchData={fetchDiary}
         />
-        <FoodTable
-          name="Water"
-          backgroundColor={colors.triadic}
-          foods={current.snacks}
-          selectedDate={getSelectedDate()}
-          fetchData={fetchDiary}
-          onPress={() => navigation.navigate('add-water')}
-        />
       </ScrollView>
     </React.Fragment>
   );

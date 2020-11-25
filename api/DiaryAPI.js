@@ -79,6 +79,18 @@ const setWater = async (token, data) => {
   );
 };
 
+const getStats = async (token) => {
+  return await resolver(
+    axios
+      .get(`${BACKEND_URL}/api/stats/diary`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => res.data),
+  );
+};
+
 export default {
   fetchDiary,
   removeFood,
@@ -86,4 +98,5 @@ export default {
   editFood,
   getWater,
   setWater,
+  getStats,
 };
