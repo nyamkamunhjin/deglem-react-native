@@ -91,6 +91,12 @@ const getNutritionProgress = (diary) => {
     ...diary.snacks,
   ];
   // console.log('foods:', foods);
+
+  // console.log(nutritionProgress);
+  return sumNutritionValues(foods);
+};
+
+const sumNutritionValues = (foods) => {
   let nutritionProgress = {};
   foods.map(({ food, serving }) => {
     let values = cleanUpFood(food, true);
@@ -105,6 +111,25 @@ const getNutritionProgress = (diary) => {
     });
   });
   // console.log(nutritionProgress);
+  return nutritionProgress;
+};
+
+const calculateNutrition = (foods) => {
+  console.log(foods);
+  let nutritionProgress = {};
+  foods.map(({ document: food, document: { currentServing: serving } }) => {
+    let values = recipeAddCleanUp(food, true);
+    // console.log(values);
+
+    Object.entries(values).map(([key, value]) => {
+      if (!nutritionProgress[key]) {
+        nutritionProgress[key] = 0;
+      }
+
+      nutritionProgress[key] += parseInt(value * serving, 10);
+    });
+  });
+  console.log(nutritionProgress);
   return nutritionProgress;
 };
 
@@ -132,12 +157,37 @@ const cleanUpFood = (doc, macro = false) => {
   return temp;
 };
 
+const recipeAddCleanUp = (doc, macro = false) => {
+  let temp = {
+    ...doc,
+  };
+  delete temp._id;
+  delete temp.name;
+
+  if (!macro) {
+    delete temp.protein;
+    delete temp.totalCarbohydrates;
+    delete temp.totalFat;
+  }
+  delete temp.serving;
+  delete temp.__v;
+  delete temp.barcode;
+  delete temp.creator;
+  delete temp.recipe;
+  delete temp.recipeDescription;
+  delete temp.ingredients;
+
+  return temp;
+};
+
 export {
   formatDate,
   countCalories,
   MifflinStJourFormula,
   calculateAge,
+  calculateNutrition,
   getToken,
+  sumNutritionValues,
   getNutritionProgress,
   cleanUpFood,
 };
