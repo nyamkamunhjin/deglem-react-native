@@ -38,7 +38,7 @@
   "First Name": "First Name",
   "Last Name": "Last Name",
   "Gender": "Gender",
-  "Date of Birth": "Date of Birth",
+  "Date of birth": "Date of Birth",
   "Nutrition Goals": "Nutrition Goals",
   "Male": "Male",
   "Female": "Female",
@@ -97,5 +97,6 @@
   "Days left": "Days Left",
   "Day": "Day",
   "Weight": "Weight",
-  "Progress": "Progress"
+  "Progress": "Progress",
+  "Maintain": "Maintain"
 }

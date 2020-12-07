@@ -88,11 +88,11 @@ const DiaryProgress = ({ theme, progress, limit, diary }) => {
         <View style={styles.left}>
           <ProgressCircle
             style={styles.circles}
-            progress={progress / limit || 0}
+            progress={progress / (limit || 2000) || 0}
             progressColor={colors.protein}>
             <View style={styles.calories}>
               <Text style={{ fontSize: 14 }}>
-                {`${progress}/${limit} ${t('kcal')}`}
+                {`${progress}/${limit || 2000} ${t('kcal')}`}
               </Text>
             </View>
           </ProgressCircle>

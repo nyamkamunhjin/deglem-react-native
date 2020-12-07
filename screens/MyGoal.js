@@ -49,12 +49,12 @@ const MyGoal = ({ navigation, theme }) => {
   const updateCalories = (user) => {
     let calories = {};
     calories['nutritionGoals.calories.value'] = MifflinStJourFormula({
-      age: calculateAge(user.userInfo.dateOfBirth),
-      gender: user.userInfo.gender,
-      height: user.goalInfo.height,
-      currentWeight: user.goalInfo.currentWeight,
-      weeklyGoal: user.goalInfo.weeklyGoal,
-      activityLevel: user.goalInfo.activityLevel,
+      age: calculateAge(user.userInfo.dateOfBirth) || 22,
+      gender: user.userInfo.gender || 'Male',
+      height: user.goalInfo.height || 185,
+      currentWeight: user.goalInfo.currentWeight || 78,
+      weeklyGoal: user.goalInfo.weeklyGoal || 0,
+      activityLevel: user.goalInfo.activityLevel || 'Sedentary',
     });
 
     UserAPI.updateUser(token, calories).then(({ err, data }) => {
@@ -124,7 +124,7 @@ const MyGoal = ({ navigation, theme }) => {
       case 'multi-choice':
         return (
           <React.Fragment>
-            <MultiChoice input={input} setInput={setInput} />
+            <MultiChoice input={input} setInput={setInput} data={dialog.data} />
             <Dialog.Actions>
               {!loading ? (
                 <Button onPress={() => handleChange(dialog.setCalories)}>
@@ -226,22 +226,7 @@ const MyGoal = ({ navigation, theme }) => {
                   {user.goalInfo ? user.goalInfo.currentWeight : ''} kg
                 </DataTable.Cell>
               </DataTable.Row>
-              <DataTable.Row
-                onPress={() => {
-                  setInput(user.goalInfo ? user.goalInfo.goalWeight : '');
-                  setShowDialog(true);
-                  setDialog({
-                    path: 'goalInfo.goalWeight',
-                    name: 'Goal Weight',
-                    type: 'numeric',
-                    setCalories: true,
-                  });
-                }}>
-                <DataTable.Cell>{t('Goal Weight')}</DataTable.Cell>
-                <DataTable.Cell numeric>
-                  {user.goalInfo ? user.goalInfo.goalWeight : ''} kg
-                </DataTable.Cell>
-              </DataTable.Row>
+
               <DataTable.Row
                 onPress={() => {
                   setInput(
@@ -255,15 +240,24 @@ const MyGoal = ({ navigation, theme }) => {
                   setDialog({
                     path: 'goalInfo.weeklyGoal',
                     name: 'Weekly Goal',
-                    type: 'numeric',
+                    type: 'multi-choice',
+                    data: [
+                      { value: -1 },
+                      { value: -0.75 },
+                      { value: -0.5, desc: 'lose kg' },
+                      { value: -0.25, desc: 'lose kg' },
+                      { value: 0, desc: 'gain kg', sub: 'Maintain' },
+                      { value: 0.25, desc: 'gain kg' },
+                      { value: 0.5, desc: 'gain kg' },
+                    ],
                     setCalories: true,
                   });
                 }}>
                 <DataTable.Cell>{t('Weekly Goal')}</DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.goalInfo
-                    ? user.goalInfo.weeklyGoal === ''
-                      ? 'Maintain'
+                    ? user.goalInfo.weeklyGoal === (0 || undefined)
+                      ? t('Maintain')
                       : `${user.goalInfo.weeklyGoal} kg`
                     : ''}
                 </DataTable.Cell>
@@ -276,6 +270,12 @@ const MyGoal = ({ navigation, theme }) => {
                     path: 'goalInfo.activityLevel',
                     name: 'Activity Level',
                     type: 'multi-choice',
+                    data: [
+                      { value: 'Sedentary' },
+                      { value: 'Lightly Active' },
+                      { value: 'Active' },
+                      { value: 'Very Active' },
+                    ],
                     setCalories: true,
                   });
                 }}>

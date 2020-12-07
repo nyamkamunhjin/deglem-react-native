@@ -38,7 +38,7 @@
   "First Name": "Нэр",
   "Last Name": "Овог",
   "Gender": "Хүйс",
-  "Date of Birth": "Төрсөн он сар",
+  "Date of birth": "Төрсөн он сар",
   "Nutrition Goals": "Шим тэжээлийн зорилго",
   "Male": "Эрэгтэй",
   "Female": "Эмэгтэй",
@@ -98,5 +98,6 @@
   "Days left": "Үлдсэн өдөр",
   "Day": "Өдөр",
   "Weight": "Жин",
-  "Progress": "Үйл явц"
+  "Progress": "Үйл явц",
+  "Maintain": "Жингээ барих"
 }

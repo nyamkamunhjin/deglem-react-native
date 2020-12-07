@@ -53,14 +53,22 @@ const SignUp = (props) => {
         enableReinitialize={true}
         validationSchema={signUpSchema}
         initialValues={{
-          username: 'nyamkamunhjin',
-          password: '12345678',
-          confirmPassword: '12345678',
-          email: 'nyamkamunhjin@gmail.com',
-          firstName: 'Munkhjin',
-          lastName: 'Nyamdorj',
-          gender: 'Male',
-          dateOfBirth: '1998-11-09',
+          // username: 'nyamkamunhjin',
+          // password: '12345678',
+          // confirmPassword: '12345678',
+          // email: 'nyamkamunhjin@gmail.com',
+          // firstName: 'Munkhjin',
+          // lastName: 'Nyamdorj',
+          // gender: 'Male',
+          // dateOfBirth: '1998-11-09',
+          username: '',
+          password: '',
+          confirmPassword: '',
+          email: '',
+          firstName: '',
+          lastName: '',
+          gender: '',
+          dateOfBirth: '',
         }}
         onSubmit={async (values, actions) => {
           setLoading(true);

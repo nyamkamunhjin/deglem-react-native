@@ -18,7 +18,7 @@ const Progress = (props) => {
     <ScrollView>
       <Title style={globalStyles.center}>{t('Weight')}</Title>
       <WeightChart />
-      <Title style={globalStyles.center}>{t('Activity Map')}</Title>
+      {/* <Title style={globalStyles.center}>{t('Activity Map')}</Title> */}
       {/* <FoodLogContribution /> */}
     </ScrollView>
   );

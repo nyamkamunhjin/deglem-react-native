@@ -19,14 +19,14 @@ import cookieContext from '../../context/cookie-context';
  **/
 const WaterIntake = ({ diary }) => {
   const { t } = useTranslation();
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState('0');
   const { getSelectedDate, token } = useContext(cookieContext);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     DiaryAPI.getWater(token, getSelectedDate()).then(({ data }) => {
-      console.log('water', data);
-      setValue(data ? data.toString() : 0);
+      // console.log('water', data);
+      setValue(data ? data.toString() : '0');
     });
   }, [token, diary, getSelectedDate]);
 
@@ -96,7 +96,8 @@ const WaterIntake = ({ diary }) => {
             mode="flat"
             editable={true}
             onChangeText={(val) => {
-              setValue(parseInt(val, 10) % 10);
+              // if (isNaN(val)) val = 0;
+              setValue(val);
             }}
           />
           <Text style={{ fontSize: 16, paddingBottom: 4 }}>
