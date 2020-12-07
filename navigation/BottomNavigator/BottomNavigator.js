@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,12 +14,19 @@ import Nutrition from '../../screens/Nutrition';
 import { withTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import Progress from '../../screens/Progress';
+import cookieContext from '../../context/cookie-context';
 
 const Tab = createMaterialBottomTabNavigator();
 
 const BottomNavigator = (props) => {
   const { t } = useTranslation();
   const { colors } = props.theme;
+
+  // const { user } = useContext(cookieContext);
+
+  // const goalChecker = () => {
+  //   return user.goalInfo.height && user.goalInfo.currentWeight;
+  // };
 
   return (
     <Tab.Navigator
@@ -38,6 +45,7 @@ const BottomNavigator = (props) => {
           title: 'Diary',
         }}
       />
+
       <Tab.Screen
         name="mygoal-tab"
         component={MyGoal}

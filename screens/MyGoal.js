@@ -9,6 +9,7 @@ import {
   Dialog,
   Portal,
   Subheading,
+  Text,
   TextInput,
   withTheme,
 } from 'react-native-paper';
@@ -205,9 +206,17 @@ const MyGoal = ({ navigation, theme }) => {
                     setCalories: true,
                   });
                 }}>
-                <DataTable.Cell>{t('Height')}</DataTable.Cell>
+                <DataTable.Cell>
+                  <Text style={user.goalInfo.height ? null : { color: 'red' }}>
+                    {t('Height')}
+                  </Text>
+                </DataTable.Cell>
                 <DataTable.Cell numeric>
-                  {user.goalInfo ? user.goalInfo.height : ''} cm
+                  {user.goalInfo
+                    ? user.goalInfo.height
+                      ? `${user.goalInfo.height} cm`
+                      : ''
+                    : ''}
                 </DataTable.Cell>
               </DataTable.Row>
               <DataTable.Row
@@ -221,9 +230,20 @@ const MyGoal = ({ navigation, theme }) => {
                     setCalories: true,
                   });
                 }}>
-                <DataTable.Cell>{t('Current Weight')}</DataTable.Cell>
+                <DataTable.Cell>
+                  <Text
+                    style={
+                      user.goalInfo.currentWeight ? null : { color: 'red' }
+                    }>
+                    {t('Current Weight')}
+                  </Text>
+                </DataTable.Cell>
                 <DataTable.Cell numeric>
-                  {user.goalInfo ? user.goalInfo.currentWeight : ''} kg
+                  {user.goalInfo
+                    ? user.goalInfo.currentWeight
+                      ? `${user.goalInfo.currentWeight} kg`
+                      : ''
+                    : ''}
                 </DataTable.Cell>
               </DataTable.Row>
 
@@ -242,8 +262,8 @@ const MyGoal = ({ navigation, theme }) => {
                     name: 'Weekly Goal',
                     type: 'multi-choice',
                     data: [
-                      { value: -1 },
-                      { value: -0.75 },
+                      { value: -1, desc: 'lose kg' },
+                      { value: -0.75, desc: 'lose kg' },
                       { value: -0.5, desc: 'lose kg' },
                       { value: -0.25, desc: 'lose kg' },
                       { value: 0, desc: 'gain kg', sub: 'Maintain' },
@@ -253,10 +273,12 @@ const MyGoal = ({ navigation, theme }) => {
                     setCalories: true,
                   });
                 }}>
-                <DataTable.Cell>{t('Weekly Goal')}</DataTable.Cell>
+                <DataTable.Cell>
+                  <Text>{t('Weekly Goal')}</Text>
+                </DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.goalInfo
-                    ? user.goalInfo.weeklyGoal === (0 || undefined)
+                    ? user.goalInfo.weeklyGoal === 0
                       ? t('Maintain')
                       : `${user.goalInfo.weeklyGoal} kg`
                     : ''}

@@ -40,7 +40,7 @@ const WaterIntake = ({ diary }) => {
       setLoading(false);
     });
   };
-  const { container } = styles;
+
   return (
     <View
       style={{

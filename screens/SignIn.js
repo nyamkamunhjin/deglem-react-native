@@ -37,10 +37,10 @@ const SignIn = (props) => {
       <Formik
         validationSchema={signInSchema}
         initialValues={{
-          // email: 'nyamkamunhjin@gmail.com',
-          // password: '12345678',
-          email: '',
-          password: '',
+          email: 'nyamkamunhjin@gmail.com',
+          password: '12345678',
+          // email: '',
+          // password: '',
         }}
         onSubmit={async (values, actions) => {
           setLoading(true);

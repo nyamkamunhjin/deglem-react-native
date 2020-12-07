@@ -47,7 +47,7 @@ const DrawerContent = (props) => {
     return () => {
       setTitle('');
       setCaption('');
-      console.log('hello from unmount DrawerContent.js');
+      // console.log('hello from unmount DrawerContent.js');
     };
   }, [token, user]);
 
