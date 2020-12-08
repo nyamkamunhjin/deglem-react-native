@@ -8,6 +8,7 @@ import {
   withTheme,
   Text,
   Button,
+  Chip,
 } from 'react-native-paper';
 import cookieContext from '../context/cookie-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -28,7 +29,7 @@ const SearchFood = (props) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResult, setSearchResult] = useState([]);
   const [loadingBar, setLoadingBar] = useState(false);
-
+  const [recipeSelected, setRecipeSelected] = useState(false);
   const onChangeSearch = (query) => setSearchQuery(query);
 
   const handleSearch = async () => {
@@ -64,7 +65,7 @@ const SearchFood = (props) => {
         }}>
         <Searchbar
           style={searchbar}
-          placeholder={t('Search Food')}
+          placeholder={!recipeSelected ? t('Search Food') : t('Search recipe')}
           onChangeText={onChangeSearch}
           value={searchQuery}
           onIconPress={handleSearch}
@@ -89,6 +90,19 @@ const SearchFood = (props) => {
           }>
           <Icon name="food" size={30} />
         </Button>
+      </View>
+      <View style={styles.filters}>
+        <Chip
+          icon={() =>
+            recipeSelected && <Icon name="check" size={15} color={'white'} />
+          }
+          selected={recipeSelected}
+          selectedColor={colors.accent}
+          onPress={() => setRecipeSelected(!recipeSelected)}
+          textStyle={{ color: colors.white }}
+          style={{ ...styles.chip, backgroundColor: colors.accent }}>
+          Recipe
+        </Chip>
       </View>
       <DataTable>
         <DataTable.Header>
@@ -157,6 +171,16 @@ const styles = StyleSheet.create({
   text: {
     marginTop: 20,
     textAlign: 'center',
+  },
+  filters: {
+    height: 50,
+    // backgroundColor: 'green',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+  },
+  chip: {
+    width: 'auto',
   },
 });
 export default withTheme(SearchFood);
