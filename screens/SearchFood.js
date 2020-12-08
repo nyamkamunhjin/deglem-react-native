@@ -15,6 +15,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FoodAPI from '../api/FoodAPI';
 import { useTranslation } from 'react-i18next';
 import { addToRecentFoods, getRecentFoods } from '../functions/recentFoods';
+import RecipeAPI from '../api/RecipeAPI';
 
 /**
  * @author
@@ -50,6 +51,24 @@ const SearchFood = (props) => {
     }
   };
 
+  const handleRecipeSearch = async () => {
+    setLoadingBar(true);
+    if (searchQuery === '') {
+      setLoadingBar(false);
+      setSearchResult([]);
+    } else {
+      const { data, err } = await RecipeAPI.searchRecipe(token, searchQuery);
+
+      if (err) {
+        console.error(err);
+      } else {
+        setSearchResult(data);
+        setLoadingBar(false);
+        // console.log(await getRecentFoods());
+      }
+    }
+  };
+
   useEffect(() => {
     getRecentFoods().then((foods) => {
       setSearchResult(foods);
@@ -68,8 +87,8 @@ const SearchFood = (props) => {
           placeholder={!recipeSelected ? t('Search Food') : t('Search recipe')}
           onChangeText={onChangeSearch}
           value={searchQuery}
-          onIconPress={handleSearch}
-          onSubmitEditing={handleSearch}
+          onIconPress={!recipeSelected ? handleSearch : handleRecipeSearch}
+          onSubmitEditing={!recipeSelected ? handleSearch : handleRecipeSearch}
         />
         <Button
           style={styles.barcode}
