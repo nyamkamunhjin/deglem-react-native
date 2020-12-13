@@ -98,5 +98,9 @@
   "Day": "Day",
   "Weight": "Weight",
   "Progress": "Progress",
-  "Maintain": "Maintain"
+  "Maintain": "Maintain",
+  // Progress.js
+  "Last logged weights": "Last logged weights",
+  // WaterIntake.js
+  "Daily water intake": "Daily water intake"
 }

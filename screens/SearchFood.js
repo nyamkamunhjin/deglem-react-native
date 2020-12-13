@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+
 import {
-  ActivityIndicator,
   DataTable,
   Searchbar,
   withTheme,

@@ -99,5 +99,9 @@
   "Day": "Өдөр",
   "Weight": "Жин",
   "Progress": "Үйл явц",
-  "Maintain": "Жингээ барих"
+  "Maintain": "Жингээ барих",
+  // Progress.js
+  "Last logged weights": "Сүүлд оруулсан жин",
+  // WaterIntake.js
+  "Daily water intake": "Өдрийн уусан ус"
 }

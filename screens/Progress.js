@@ -16,10 +16,8 @@ const Progress = (props) => {
   const { t } = useTranslation();
   return (
     <ScrollView>
-      <Title style={globalStyles.center}>{t('Weight')}</Title>
+      <Title style={globalStyles.center}>{t('Last logged weights')}</Title>
       <WeightChart />
-      {/* <Title style={globalStyles.center}>{t('Activity Map')}</Title> */}
-      {/* <FoodLogContribution /> */}
     </ScrollView>
   );
 };

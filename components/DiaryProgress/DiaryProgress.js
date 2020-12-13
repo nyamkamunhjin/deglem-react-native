@@ -136,13 +136,6 @@ const DiaryProgress = ({ theme, progress, limit, diary }) => {
       </View>
       <View style={{ margin: 15 }}>
         <WaterIntake diary={diary} />
-        <View style={globalStyles.rowSpaceBetween}>
-          <Text>{t('Days left')}</Text>
-          <Text>
-            {28 || 0}/{90} {t('Day')}
-          </Text>
-        </View>
-        <ProgressBar style={{ borderRadius: 10 }} progress={0.3} />
       </View>
     </View>
   );

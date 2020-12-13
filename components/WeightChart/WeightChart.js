@@ -20,7 +20,7 @@ const WeightChart = ({ theme, ...props }) => {
     // backgroundColor: '#e26a00',
     backgroundGradientFrom: '#fb8c00',
     backgroundGradientTo: '#ffa726',
-    decimalPlaces: 2, // optional, defaults to 2dp
+    decimalPlaces: 1, // optional, defaults to 2dp
     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
     labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
     style: {
@@ -33,17 +33,37 @@ const WeightChart = ({ theme, ...props }) => {
     },
   };
 
+  const datePrettier = (date) =>
+    new Date(date).toLocaleDateString().slice(0, 5);
+
+  const weightDateSorter = (data) =>
+    data.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  const arrayLimiter = (arr, limit) => {
+    if (arr.length < limit) return arr;
+
+    return arr.slice(arr.length - limit, arr.length);
+  };
+
   useEffect(() => {
     if (isFocused) {
       StatsApi.fetchWeights(token).then(({ data }) => {
         // console.log(data[0].weights);
+        console.log(data[0].weights);
         let labels = [];
         let datasets = [{ data: [] }];
-        data[0].weights.map(({ date, weight }) => {
-          labels.push(formatDate(date));
+
+        // for (let i = 0; i < 31; i++) {
+        //   // labels.push('11/22');
+        //   datasets[0].data.push(Math.random() * 100);
+        // }
+        data[0].weights = weightDateSorter(data[0].weights);
+
+        arrayLimiter(data[0].weights, 10).map(({ date, weight }) => {
+          labels.push(datePrettier(date));
           datasets[0].data.push(weight);
         });
-        console.log(labels, datasets);
+        // console.log(labels, datasets);
 
         setWeights({ labels, datasets });
       });
@@ -63,7 +83,7 @@ const WeightChart = ({ theme, ...props }) => {
           chartConfig={chartConfig}
           bezier
           style={{
-            marginVertical: 8,
+            margin: 10,
             borderRadius: 16,
           }}
         />
@@ -83,8 +103,6 @@ const styles = StyleSheet.create({
   weightChart: {
     // height: 200,
     // padding: 20,
-    // borderRadius: 10,
-    backgroundColor: '#efefef',
   },
 });
 export default withTheme(WeightChart);

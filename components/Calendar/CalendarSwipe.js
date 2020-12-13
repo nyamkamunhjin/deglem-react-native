@@ -1,17 +1,37 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, StyleSheet } from 'react-native';
 import { Text, TouchableRipple } from 'react-native-paper';
+import WeekMN from '../../public/week-mn.json';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 /**
  * @author
  * @function CalendarSwipe
  **/
+
 const CalendarSwipe = ({
   arrowLeftOnPress,
   arrowRightOnPress,
   dateOnPress,
   date,
 }) => {
+  const { i18n } = useTranslation();
+
+  const datePrettier = (date) => {
+    const tempDate = new Date(date);
+    if (i18n.language === 'en') {
+      return tempDate.toUTCString().split(' ').slice(0, 3).join(' ');
+    }
+
+    if (i18n.language === 'mn') {
+      const weekDay = tempDate.toDateString().split(' ')[0];
+      const month = tempDate.getMonth() + 1;
+      const monthDay = tempDate.getDate();
+
+      return `${month} сарын ${monthDay}, ${WeekMN[weekDay]}`;
+    }
+  };
+
   return (
     <View style={styles.date}>
       <View style={{ overflow: 'hidden', borderRadius: 10 }}>
@@ -28,7 +48,7 @@ const CalendarSwipe = ({
               textAlignVertical: 'center',
               padding: 15,
             }}>
-            {date}
+            {datePrettier(date)}
           </Text>
         </TouchableRipple>
       </View>

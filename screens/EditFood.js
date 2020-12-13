@@ -9,10 +9,7 @@ import _ from 'lodash';
 
 import FoodStats from '../components/FoodStats/FoodStats';
 import { useTranslation } from 'react-i18next';
-import {
-  SafeAreaInsetsContext,
-  SafeAreaView,
-} from 'react-native-safe-area-context';
+
 import { cleanUpFood } from '../functions/functions';
 
 /**
@@ -31,30 +28,9 @@ const EditFood = ({ route, navigation }) => {
   } = route.params;
 
   const [serving, setServing] = useState(route.params.food.serving || 1);
+
   const { token } = useContext(cookieContext);
 
-  // console.log(food);
-  // console.log('addTo:', addTo);
-  const getAdditionalNutrients = (doc) => {
-    let temp = {
-      ...doc,
-    };
-    delete temp._id;
-    delete temp.name;
-    delete temp.protein;
-    delete temp.totalCarbohydrates;
-    delete temp.totalFat;
-    delete temp.serving;
-    delete temp.__v;
-    delete temp.barcode;
-    delete temp.creator;
-    delete temp.calories;
-    delete temp.recipe;
-    delete temp.recipeDescription;
-    delete temp.ingredients;
-
-    return temp;
-  };
   const handleFoodUpdate = async () => {
     let data = {
       filter: {},
