@@ -18,6 +18,16 @@ const formatDate = (date) => {
   return [year, month, day].join('-');
 };
 
+const calculateTotalCalories = (today) => {
+  const { breakfast, lunch, dinner, snacks } = today;
+  return (
+    countCalories(breakfast) +
+    countCalories(lunch) +
+    countCalories(dinner) +
+    countCalories(snacks)
+  );
+};
+
 const countCalories = (foods) => {
   if (foods) {
     return parseInt(
@@ -183,6 +193,7 @@ const recipeAddCleanUp = (doc, macro = false) => {
 export {
   formatDate,
   countCalories,
+  calculateTotalCalories,
   MifflinStJourFormula,
   calculateAge,
   calculateNutrition,

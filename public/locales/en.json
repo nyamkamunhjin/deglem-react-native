@@ -102,5 +102,9 @@
   // Progress.js
   "Last logged weights": "Last logged weights",
   // WaterIntake.js
-  "Daily water intake": "Daily water intake"
+  "Daily water intake": "Daily water intake",
+  "Last logged calories": "Last logged calories",
+  "Week": "Week",
+  "Month": "Month",
+  "Year": "Year"
 }

@@ -49,7 +49,7 @@ const WeightChart = ({ theme, ...props }) => {
     if (isFocused) {
       StatsApi.fetchWeights(token).then(({ data }) => {
         // console.log(data[0].weights);
-        console.log(data[0].weights);
+        // console.log(data[0].weights);
         let labels = [];
         let datasets = [{ data: [] }];
 
@@ -75,16 +75,15 @@ const WeightChart = ({ theme, ...props }) => {
       {weights ? (
         <LineChart
           data={weights}
-          width={screenWidth} // from react-native
+          width={screenWidth}
           height={220}
-          // yAxisLabel="$"
           yAxisSuffix="kg"
-          yAxisInterval={1} // optional, defaults to 1
+          yAxisInterval={1}
           chartConfig={chartConfig}
           bezier
           style={{
             margin: 10,
-            borderRadius: 16,
+            borderRadius: 5,
           }}
         />
       ) : (

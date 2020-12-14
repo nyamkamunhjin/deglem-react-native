@@ -103,5 +103,9 @@
   // Progress.js
   "Last logged weights": "Сүүлд оруулсан жин",
   // WaterIntake.js
-  "Daily water intake": "Өдрийн уусан ус"
+  "Daily water intake": "Өдрийн уусан ус",
+  "Last logged calories": "Сүүлд оруулсан илчлэг",
+  "Week": "7 хоног",
+  "Month": "Сар",
+  "Year": "Жил"
 }
