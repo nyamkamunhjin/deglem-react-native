@@ -211,11 +211,10 @@ const AccountInfo = ({ navigation, theme }) => {
                 <DataTable.Cell>{t('Avatar')}</DataTable.Cell>
                 <DataTable.Cell numeric>
                   <View style={styles.avatar || ''}>
-                    <Avatar.Image
-                      source={{
-                        uri:
-                          'https://media.istockphoto.com/photos/red-apple-with-leaf-picture-id683494078?k=6&m=683494078&s=612x612&w=0&h=aVyDhOiTwUZI0NeF_ysdLZkSvDD4JxaJMdWSx2p3pp4=',
-                      }}
+                    <Avatar.Text
+                      label={
+                        user.userInfo.firstName[0] + user.userInfo.lastName[0]
+                      }
                       size={40}
                     />
                   </View>

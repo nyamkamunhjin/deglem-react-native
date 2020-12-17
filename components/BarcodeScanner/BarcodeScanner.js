@@ -40,13 +40,11 @@ const BarcodeScanner = ({
     if (err) {
       console.log(err);
       if (err.response.status === 409 && barcode) {
-        navigation.dispatch(StackActions.pop());
         navigation.navigate('create-food', {
           barcode,
         });
       }
     } else {
-      navigation.dispatch(StackActions.pop());
       navigation.navigate('add-food', {
         food: data,
         addTo,

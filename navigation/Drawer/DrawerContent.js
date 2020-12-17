@@ -55,11 +55,11 @@ const DrawerContent = (props) => {
     <View style={styles.drawerContainer}>
       <DrawerContentScrollView {...props}>
         <View style={styles.userInfo}>
-          <Avatar.Image
-            source={{
-              uri:
-                'https://media.istockphoto.com/photos/red-apple-with-leaf-picture-id683494078?k=6&m=683494078&s=612x612&w=0&h=aVyDhOiTwUZI0NeF_ysdLZkSvDD4JxaJMdWSx2p3pp4=',
-            }}
+          <Avatar.Text
+            label={title
+              .split(' ')
+              .map((name) => name[0])
+              .join('')}
             size={50}
           />
           <View style={{ flexDirection: 'column' }}>

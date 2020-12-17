@@ -98,6 +98,7 @@ const CaloriesDialog = ({
       backgroundColor: colors.primary,
       borderTopRightRadius: 3,
       borderTopLeftRadius: 3,
+      // color: 'white',
       // padding: 3,
       paddingLeft: 5,
     },
@@ -111,7 +112,7 @@ const CaloriesDialog = ({
       <Dialog.Content>
         <View style={styles.form}>
           <Text style={styles.inputTitle}>
-            {t('Calories')} {t('kcal')}
+            {t('Calories')} ({t('kcal')})
           </Text>
           <TextInput
             style={styles.input}
@@ -124,7 +125,14 @@ const CaloriesDialog = ({
         </Text>
         <View style={globalStyles.row}>
           <View style={globalStyles.flex}>
-            <Text style={styles.inputTitle}>{t('Protein')} (%)</Text>
+            <Text
+              style={{
+                ...styles.inputTitle,
+
+                backgroundColor: colors.protein,
+              }}>
+              {t('Protein')} (%)
+            </Text>
             <TextInput
               style={styles.input}
               value={protein.toString()}
@@ -132,7 +140,14 @@ const CaloriesDialog = ({
             />
           </View>
           <View style={globalStyles.flex}>
-            <Text style={styles.inputTitle}>{t('Carbs')} (%)</Text>
+            <Text
+              style={{
+                ...styles.inputTitle,
+
+                backgroundColor: colors.carbs,
+              }}>
+              {t('Carbs')} (%)
+            </Text>
             <TextInput
               style={styles.input}
               value={carbohydrates.toString()}
@@ -140,7 +155,14 @@ const CaloriesDialog = ({
             />
           </View>
           <View style={globalStyles.flex}>
-            <Text style={styles.inputTitle}>{t('Fats')} (%)</Text>
+            <Text
+              style={{
+                ...styles.inputTitle,
+
+                backgroundColor: colors.fat,
+              }}>
+              {t('Fats')} (%)
+            </Text>
             <TextInput
               style={styles.input}
               value={fat.toString()}

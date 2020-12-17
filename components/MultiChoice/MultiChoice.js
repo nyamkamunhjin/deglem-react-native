@@ -21,7 +21,9 @@ const MultiChoice = ({ input, setInput, data }) => {
             onPress={() => setInput(item.value)}
           />
           <Text>
-            {item.sub ? t(item.sub) : `${t(item.value)} ${t(item.desc)}`}
+            {item.sub
+              ? t(item.sub)
+              : `${item.value > 0 ? '+' : ''}${t(item.value)} ${t(item.desc)}`}
           </Text>
         </View>
       ))}

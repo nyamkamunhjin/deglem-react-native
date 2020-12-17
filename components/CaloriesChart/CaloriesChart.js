@@ -103,10 +103,7 @@ const CaloriesChart = (props) => {
           {/* <Menu.Item onPress={() => setDays(7)} title={t('All')} /> */}
         </Menu>
       </View>
-      <ScrollView
-        style={styles.weightChart}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         {data ? (
           <BarChart
             chartConfig={{
@@ -148,22 +145,13 @@ const CaloriesChart = (props) => {
             showValuesOnTopOfBars={true}
           />
         ) : (
-          <ActivityIndicator />
+          <View style={{ width: screenWidth, justifyContent: 'center' }}>
+            <ActivityIndicator size="large" />
+          </View>
         )}
       </ScrollView>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  weightChart: {
-    // height: 200,
-    // padding: 20,
-  },
-});
 export default withTheme(CaloriesChart);

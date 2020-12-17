@@ -290,7 +290,13 @@ const CreateFood = ({ navigation, route, theme }) => {
                 </View>
                 <Subheading>{t('Nutrition')}</Subheading>
                 <View>
-                  <Text style={styles.inputTitle}>{t('Protein')}</Text>
+                  <Text
+                    style={{
+                      ...styles.inputTitle,
+                      backgroundColor: colors.protein,
+                    }}>
+                    {t('Protein')}
+                  </Text>
                   <TextInput
                     keyboardType="numeric"
                     // 3="Protein"
@@ -307,7 +313,13 @@ const CreateFood = ({ navigation, route, theme }) => {
                   </Text>
                 </View>
                 <View>
-                  <Text style={styles.inputTitle}>{t('Carbohydrates')}</Text>
+                  <Text
+                    style={{
+                      ...styles.inputTitle,
+                      backgroundColor: colors.carbs,
+                    }}>
+                    {t('Carbohydrates')}
+                  </Text>
                   <TextInput
                     keyboardType="numeric"
                     // 3="Carbohydrates"
@@ -327,7 +339,13 @@ const CreateFood = ({ navigation, route, theme }) => {
                   </Text>
                 </View>
                 <View>
-                  <Text style={styles.inputTitle}>{t('Fats')}</Text>
+                  <Text
+                    style={{
+                      ...styles.inputTitle,
+                      backgroundColor: colors.fat,
+                    }}>
+                    {t('Fats')}
+                  </Text>
                   <TextInput
                     keyboardType="numeric"
                     // 3="Fats"

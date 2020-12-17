@@ -349,7 +349,9 @@ const MyGoal = ({ navigation, theme }) => {
                     type: 'calories',
                   });
                 }}>
-                <DataTable.Cell>{t('Protein')}</DataTable.Cell>
+                <DataTable.Cell>
+                  <Text style={{ color: colors.protein }}>{t('Protein')}</Text>
+                </DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.nutritionGoals &&
                     (user.nutritionGoals.protein.value || '-')}{' '}
@@ -371,7 +373,9 @@ const MyGoal = ({ navigation, theme }) => {
                     type: 'calories',
                   });
                 }}>
-                <DataTable.Cell>{t('Carbs')}</DataTable.Cell>
+                <DataTable.Cell>
+                  <Text style={{ color: colors.carbs }}>{t('Carbs')}</Text>
+                </DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.nutritionGoals &&
                     (user.nutritionGoals.totalCarbohydrates.value || '-')}{' '}
@@ -393,7 +397,9 @@ const MyGoal = ({ navigation, theme }) => {
                     type: 'calories',
                   });
                 }}>
-                <DataTable.Cell>{t('Fats')}</DataTable.Cell>
+                <DataTable.Cell>
+                  <Text style={{ color: colors.fat }}>{t('Fats')}</Text>
+                </DataTable.Cell>
                 <DataTable.Cell numeric>
                   {user.nutritionGoals &&
                     (user.nutritionGoals.totalFat.value || '-')}{' '}
